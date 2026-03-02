@@ -2712,7 +2712,7 @@ function showBoxPage(n){
     el.classList.toggle('visible',i===n);
     el.classList.remove('slide-in-left','slide-in-right');
   });
-  document.querySelectorAll('#modBox .page-nav .page-btn').forEach((b,i)=>b.classList.toggle('active',i+1===n));
+  document.querySelectorAll('#boxNav .page-btn').forEach((b,i)=>b.classList.toggle('active',i+1===n));
   boxActivePage=n;
   if(n===3)initDocFlow();
 }
@@ -2839,7 +2839,7 @@ const DOC_STEPS=[
    doc:{name:'A-201-Plan-2etg.pdf',rev:'C01',status:'Godkjent - Gjeldende',statusBg:'var(--green-g)',statusColor:'var(--green)'}},
   {zone:'done',num:'✓',numBg:'var(--green-g)',numColor:'var(--green)',
    title:'Full sporbarhet',
-   body:'Alle revisjoner, kommentarer og statusendringer er logget. Historikken viser dokumentets reise fra første utkast til godkjent versjon. Videre arkivering (ISO S4) håndteres utenfor Dalux, f.eks. ved overlevering til FDV-system.',
+   body:'Alle revisjoner, kommentarer og statusendringer er logget. Historikken viser dokumentets reise fra første utkast til godkjent versjon. Videre arkivering (ISO S4) håndteres utenfor Box, f.eks. gjennom Dalux Handover for overlevering til drift, eller Dalux FM for forvaltning og vedlikehold.',
    doc:{name:'A-201-Plan-2etg.pdf',rev:'C01',status:'Dokumentert ✓',statusBg:'var(--green-g)',statusColor:'var(--green)'}},
 ];
 
