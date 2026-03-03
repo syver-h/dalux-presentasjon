@@ -558,6 +558,22 @@
   }
   .page-btn:hover { border-color:var(--dalux); color:var(--text); }
   .page-btn.active { background:var(--dalux); border-color:var(--dalux); color:#fff; }
+
+  /* Side navigation arrows */
+  .side-arrow {
+    position:fixed; top:50%; transform:translateY(-50%); z-index:90;
+    width:64px; height:64px; border-radius:50%;
+    background:rgba(255,255,255,.92); border:2px solid var(--border);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; opacity:.55; transition:all .25s;
+    font-size:1.5rem; color:var(--text);
+    box-shadow:0 2px 12px rgba(0,0,0,.1);
+    backdrop-filter:blur(8px);
+  }
+  .side-arrow:hover { opacity:1; border-color:var(--dalux); color:var(--dalux); box-shadow:0 4px 16px rgba(141,198,63,.25); }
+  .side-arrow.left { left:16px; }
+  .side-arrow.right { right:16px; }
+  .side-arrow.hidden { opacity:0; pointer-events:none; }
   .page-btn .pnum {
     font-family:'Space Mono',monospace; font-size:.62rem;
     width:20px; height:20px; border-radius:50%;
@@ -1808,6 +1824,7 @@
         <div class="box-features">
           <div class="box-feat"><span class="bf-icon">📁</span><span>Mappestruktur per fag/disiplin</span></div>
           <div class="box-feat"><span class="bf-icon">🔄</span><span>Automatisk versjonering ved opplasting</span></div>
+          <div class="box-feat"><span class="bf-icon">📑</span><span>Sammenligning av tegninger, modeller og dokumenter mot tidligere versjoner</span></div>
           <div class="box-feat"><span class="bf-icon">👁️</span><span>Tilgangsstyring per mappe</span></div>
         </div>
       </div>
@@ -1826,7 +1843,7 @@
           <div class="box-feat"><span class="bf-icon">📋</span><span>Navnekonvensjon for filer</span></div>
           <div class="box-feat"><span class="bf-icon">🏷️</span><span>Metadata-felter (status, revisjon, fag)</span></div>
           <div class="box-feat"><span class="bf-icon">🔗</span><span>Automatiske hyperlinker mellom tegninger basert på navnekonvensjon</span></div>
-          <div class="box-feat"><span class="bf-icon">🏷️</span><span>Egendefinerte statuser (egnethetskoder)</span></div>
+          <div class="box-feat"><span class="bf-icon">🏷️</span><span>Egendefinerte statuser for dokumenter</span></div>
         </div>
       </div>
     </div>
@@ -1842,7 +1859,6 @@
           <div class="box-feat"><span class="bf-icon">🗂️</span><span>Tre filområder (Filer → Delte filer → Utgitte filer)</span></div>
           <div class="box-feat"><span class="bf-icon">📬</span><span>Innsendinger med planlagte leveranser, frister og ansvarlige</span></div>
           <div class="box-feat"><span class="bf-icon">✅</span><span>Formalisert review- og godkjenningsflyt</span></div>
-          <div class="box-feat"><span class="bf-icon">📑</span><span>Versjonshistorikk med side-om-side sammenligning</span></div>
           <div class="box-feat"><span class="bf-icon">📐</span><span>Avtalt navnekonvensjon for hele prosjektet</span></div>
           <div class="box-feat"><span class="bf-icon">🔒</span><span>Tilgangsstyring per statusområde</span></div>
         </div>
@@ -1880,6 +1896,9 @@
 
 </div> <!-- end boxTrackIso -->
 </div> <!-- end modBox -->
+
+<div class="side-arrow left hidden" id="arrowLeft" onclick="navArrow(-1)">◀</div>
+<div class="side-arrow right hidden" id="arrowRight" onclick="navArrow(1)">▶</div>
 
 <script>
 // ============================
@@ -2911,6 +2930,54 @@ document.addEventListener('keydown',e=>{
     if(e.key==='ArrowLeft'){e.preventDefault();docPrev();}
   }
 });
+
+// Side arrow navigation
+function getNavContext(){
+  if(activeModule==='field') return {current:activePage, max:2, fn:showPage};
+  if(activeModule==='box'){
+    const commTrack=document.getElementById('boxTrackComm');
+    const isoTrack=document.getElementById('boxTrackIso');
+    if(commTrack&&commTrack.classList.contains('active')) return {current:commActivePage, max:2, fn:showCommPage};
+    if(isoTrack&&isoTrack.classList.contains('active')) return {current:boxActivePage, max:3, fn:showBoxPage};
+  }
+  return null;
+}
+
+function navArrow(dir){
+  const ctx=getNavContext();
+  if(!ctx)return;
+  const next=ctx.current+dir;
+  if(next>=1&&next<=ctx.max) ctx.fn(next);
+}
+
+function updateArrows(){
+  const ctx=getNavContext();
+  const aL=document.getElementById('arrowLeft');
+  const aR=document.getElementById('arrowRight');
+  if(!ctx){
+    aL.classList.add('hidden');
+    aR.classList.add('hidden');
+    return;
+  }
+  aL.classList.toggle('hidden',ctx.current<=1);
+  aR.classList.toggle('hidden',ctx.current>=ctx.max);
+}
+
+// Hook into existing navigation functions to update arrows
+const _origShowPage=showPage;
+showPage=function(n){_origShowPage(n);updateArrows();};
+const _origShowBoxPage=showBoxPage;
+showBoxPage=function(n){_origShowBoxPage(n);updateArrows();};
+const _origShowCommPage=showCommPage;
+showCommPage=function(n){_origShowCommPage(n);updateArrows();};
+const _origOpenModule=openModule;
+openModule=function(m){_origOpenModule(m);setTimeout(updateArrows,50);};
+const _prevOpenBoxTrack=openBoxTrack;
+openBoxTrack=function(t){_prevOpenBoxTrack(t);setTimeout(updateArrows,50);};
+const _origBackToSplash=backToSplash;
+backToSplash=function(){_origBackToSplash();updateArrows();};
+const _origBackToBoxSelector=backToBoxSelector;
+backToBoxSelector=function(){_origBackToBoxSelector();updateArrows();};
 </script>
 </body>
 </html>
