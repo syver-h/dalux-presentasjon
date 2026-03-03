@@ -2965,7 +2965,12 @@ function updateArrows(){
 
 // Hook into existing navigation functions to update arrows
 const _origShowPage=showPage;
-showPage=function(n){_origShowPage(n);updateArrows();};
+showPage=function(n){
+  document.getElementById('arrowLeft').classList.add('hidden');
+  document.getElementById('arrowRight').classList.add('hidden');
+  _origShowPage(n);
+  setTimeout(updateArrows,850);
+};
 const _origShowBoxPage=showBoxPage;
 showBoxPage=function(n){_origShowBoxPage(n);updateArrows();};
 const _origShowCommPage=showCommPage;
