@@ -1480,7 +1480,7 @@
     transition: margin .6s cubic-bezier(.4,0,.2,1);
   }
   #page2 header h1 { font-size:2rem; font-weight:700; letter-spacing:-.03em; margin-bottom:6px; }
-  #page2 header p { color:var(--muted); font-size:.92rem; line-height:1.6; max-width:500px; }
+  #page2 header p { color:var(--muted); font-size:.92rem; margin-top:4px; }
 
   .scenario {
     background:var(--surface); border:1px solid var(--border); border-radius:16px;
@@ -1629,6 +1629,13 @@
   .step.active { opacity:1; transform:translateY(0); }
   .step.done { opacity:.5; }
   .step:last-child { margin-bottom:0; }
+  .scenario-disclaimer {
+    margin:32px 0 0 -40px; padding:14px 18px; border-radius:10px;
+    background:var(--surface); border:1px dashed var(--border);
+    font-size:.78rem; color:var(--muted); line-height:1.5;
+    position:relative; z-index:1;
+  }
+  .scenario-disclaimer strong { color:var(--orange); font-weight:700; margin-right:2px; }
   .step-dot {
     position:absolute; left:-26px; top:18px; width:14px; height:14px;
     border-radius:50%; border:2px solid var(--border); background:#fff;
@@ -2562,7 +2569,7 @@
         </div>
         <div class="cde-zone-body">
           <div class="cde-external-badge">Utenfor Box</div>
-          <div class="cde-zone-desc">Arkivering og overlevering håndteres utenfor Box-modulen. <strong>Dalux Handover</strong>, som er en del av Build-plattformen, håndterer strukturert overlevering til drift. For forvaltning og vedlikehold tilbyr Dalux en egen <strong>FM-plattform</strong>.</div>
+          <div class="cde-zone-desc">Arkivering og overlevering kan også håndteres utenfor Box-modulen. <strong>Dalux Handover</strong>, som er en del av Build-plattformen, håndterer strukturert overlevering til drift. For forvaltning og vedlikehold tilbyr Dalux en egen <strong>FM-plattform</strong>.</div>
           <div class="cde-tags"><span class="cde-tag archived">Dalux Handover</span><span class="cde-tag archived">Dalux FM</span><span class="cde-tag archived">Overlevering</span></div>
         </div>
       </div>
@@ -2712,7 +2719,7 @@
         <div class="box-features">
           <div class="box-feat"><span class="bf-icon">📁</span><span>Mappestruktur per fag/disiplin</span></div>
           <div class="box-feat"><span class="bf-icon">🔄</span><span>Automatisk versjonering ved opplasting</span></div>
-          <div class="box-feat"><span class="bf-icon">📑</span><span>Sammenligning av tegninger, modeller og dokumenter mot tidligere versjoner</span></div>
+          <div class="box-feat"><span class="bf-icon">📝</span><span>Aktivering av Microsoft 365</span></div>
           <div class="box-feat"><span class="bf-icon">👁️</span><span>Tilgangsstyring per mappe</span></div>
         </div>
       </div>
@@ -2732,6 +2739,7 @@
           <div class="box-feat"><span class="bf-icon">🏷️</span><span>Metadata-felter (status, revisjon, fag)</span></div>
           <div class="box-feat"><span class="bf-icon">🔗</span><span>Automatiske hyperlinker mellom tegninger basert på navnekonvensjon</span></div>
           <div class="box-feat"><span class="bf-icon">🏷️</span><span>Egendefinerte statuser for dokumenter</span></div>
+          <div class="box-feat"><span class="bf-icon">📑</span><span>Sammenligning av tegninger, modeller og dokumenter mot tidligere versjoner</span></div>
         </div>
       </div>
     </div>
@@ -3370,7 +3378,7 @@ const SCENARIOS = [
     icon:ICON_HMS_HELM, title:'Scenario: Fra HMS-observasjon til HMS-oppgave',
     desc:'En fagarbeider melder inn en HMS-observasjon. Denne er privat og går kun til HMS-lederne. De kvalitetssikrer innholdet, kategoriserer, og kan basert på observasjonen opprette en HMS-oppgave som sendes i et eget HMS-forløp.',
     badges:[{text:'🔒 HMS-observasjon (privat)',bg:'var(--orange-g)',color:'var(--orange)'},{text:'HMS-oppgaveforløp',bg:'var(--red-g)',color:'var(--red)'}],
-    row1:{label:'<img src="'+ICON_HMS_OBS+'" style="width:18px;height:18px;vertical-align:middle;margin-right:4px;">HMS-observasjon <span>🔒 Privat</span>',left:{emoji:'👷',bg:'#e8f0eb',border:'var(--accent)',name:'Fagarbeider',role:'Melder'},right:{emoji:ICON_HMS_HELM,isImg:true,bg:'#fce8db',border:'var(--orange)',name:'HMS-ledere',role:'Mottaker'},arrowColor:'#e67e22',oneWay:true},
+    row1:{label:'<img src="'+ICON_HMS_OBS+'" style="width:18px;height:18px;vertical-align:middle;margin-right:4px;">HMS-observasjon <span>🔒 Privat*</span>',left:{emoji:'👷',bg:'#e8f0eb',border:'var(--accent)',name:'Fagarbeider',role:'Melder'},right:{emoji:ICON_HMS_HELM,isImg:true,bg:'#fce8db',border:'var(--orange)',name:'HMS-ledere',role:'Mottaker'},arrowColor:'#e67e22',oneWay:true},
     row2:{label:'<img src="'+ICON_HMS_OPP+'" style="width:18px;height:18px;vertical-align:middle;margin-right:4px;">HMS-oppgaveforløp <span>HMS-leder → Fag</span>',left:{emoji:ICON_HMS_HELM,isImg:true,bg:'#fce8db',border:'var(--orange)',name:'HMS-ledere',role:'Tildeler'},right:{emoji:'🔧',bg:'#e8f0eb',border:'var(--accent)',name:'Fag',role:'Utfører'},arrowColor:'#e74c3c',showAtStep:3},
     steps:[
       {role:'fag',row:1,col:'left',num:'1',numBg:'var(--accent-g)',numColor:'var(--accent)',title:'Fagarbeider melder HMS-observasjon',body:'Fagarbeider oppdager manglende sikring ved stillas i 3. etasje og registrerer en HMS-observasjon med bilde og plassering. Observasjonen er privat og kun synlig for HMS-lederne.',task:{status:'Ny observasjon',statusBg:'var(--orange-g)',statusColor:'var(--orange)',title:'Manglende sikring stillas 3. etg',meta:'Privat melding til HMS-ledere',arrow:{from:'FAG',fromBg:'var(--accent-g)',fromColor:'var(--accent)',to:'HMS',toBg:'var(--orange-g)',toColor:'var(--orange)',fillColor:'#e67e22'}}},
@@ -3379,7 +3387,8 @@ const SCENARIOS = [
       {role:'hms',row:2,col:'left2',num:'4',numBg:'var(--red-g)',numColor:'var(--red)',title:'HMS-oppgave opprettes i HMS-forløp',body:'HMS-lederne oppretter en separat HMS-oppgave basert på observasjonen og tildeler den til faget med krav om umiddelbar utbedring.',task:{status:'Ny HMS-oppgave',statusBg:'var(--red-g)',statusColor:'var(--red)',title:'Utbedr sikring stillas 3. etg',meta:'HMS: "Sikring må monteres før videre arbeid"',arrow:{from:'HMS',fromBg:'var(--orange-g)',fromColor:'var(--orange)',to:'FAG',toBg:'var(--accent-g)',toColor:'var(--accent)',fillColor:'#e74c3c'}}},
       {role:'fag',row:2,col:'right2',num:'5',numBg:'var(--accent-g)',numColor:'var(--accent)',title:'Fag utbedrer',body:'Faget mottar HMS-oppgaven, monterer sikring på stillaset, dokumenterer med bilder og sender oppgaven tilbake til HMS-lederne.',task:{status:'Utbedret',statusBg:'rgba(142,106,191,.1)',statusColor:'var(--purple)',title:'Utbedr sikring stillas 3. etg',meta:'Fag: "Sikring montert - se vedlagte bilder"',arrow:{from:'FAG',fromBg:'var(--accent-g)',fromColor:'var(--accent)',to:'HMS',toBg:'var(--orange-g)',toColor:'var(--orange)',fillColor:'#e67e22'}}},
       {role:'done',row:0,col:'done',num:'✓',numBg:'var(--green-g)',numColor:'var(--green)',roleOverride:{left2:'Kontrollør'},title:'HMS-oppgave godkjent og lukket',body:'HMS-lederne kontrollerer utbedringen, godkjenner og lukker HMS-oppgaven. Den opprinnelige observasjonen er ferdigbehandlet.',task:{status:'Lukket ✓',statusBg:'var(--green-g)',statusColor:'var(--green)',title:'Utbedr sikring stillas 3. etg',meta:'Lukket av HMS-leder - Total tid: 1 dag'}},
-    ]
+    ],
+    disclaimer:'<strong>*</strong> Tre admin-grupper har innsyn i HMS-observasjoner: HMS-ledere, Oppgave- og sjekklistekoordinator, og Field-observatører.'
   },
   // ---- 3: Godkjenningsoppgave ----
   {
@@ -3478,6 +3487,12 @@ function setScenario(idx){
     div.innerHTML=`<div class="step-dot"></div><div class="step-card"><div class="step-header"><div class="step-num" style="background:${s.numBg};color:${s.numColor};">${s.num}</div><div class="step-title">${s.title}</div></div><div class="step-body">${s.body}</div>${taskHtml}</div>`;
     timeline.appendChild(div);
   });
+  if(sc.disclaimer){
+    const ddiv=document.createElement('div');
+    ddiv.className='scenario-disclaimer';
+    ddiv.innerHTML=sc.disclaimer;
+    timeline.appendChild(ddiv);
+  }
   lcTotal=sc.steps.length;
   lcProgEl.innerHTML='';
   for(let i=0;i<lcTotal;i++){const d=document.createElement('div');d.className='prog-dot';lcProgEl.appendChild(d);}
