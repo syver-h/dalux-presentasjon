@@ -1,16 +1,17 @@
 <!DOCTYPE html>
+<!-- Arbeidsfil. Alle endringer skjer her. Backups: -v1.html, -v2.html, ..., -v10.html (eldste overskrives etter 10). Se HANDOFF-dalux-presentasjon.md for changelog. -->
 <html lang="no">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Interaktiv presentasjon av Dalux Field og Box - arbeidsflyt, kommunikasjon og ISO 19650">
+<meta name="description" content="Interaktiv presentasjon av Dalux Field og Box - arbeidsflyt, kommunikasjon, ISO 19650 og brukergrupper">
 <meta property="og:title" content="Dalux - Interaktiv presentasjon">
-<meta property="og:description" content="Utforsk Dalux Field og Box gjennom interaktive visualiseringer av arbeidsflyt, kommunikasjonsflyt og ISO 19650-implementering.">
+<meta property="og:description" content="Utforsk Dalux Field og Box gjennom interaktive visualiseringer av arbeidsflyt, kommunikasjonsflyt, ISO 19650 og brukergrupper.">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="nb_NO">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Dalux - Interaktiv presentasjon">
-<meta name="twitter:description" content="Interaktiv presentasjon av Dalux Field og Box - arbeidsflyt, kommunikasjon og ISO 19650">
+<meta name="twitter:description" content="Interaktiv presentasjon av Dalux Field og Box - arbeidsflyt, kommunikasjon, ISO 19650 og brukergrupper">
 <title>Dalux - Interaktiv presentasjon</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
@@ -24,6 +25,9 @@
     --yellow: #d4a017; --yellow-g: rgba(212,160,23,.1);
     --red: #e74c3c; --red-g: rgba(231,76,60,.1);
     --purple: #8e6abf;
+    /* Layout-offsets brukt av fixed/sticky-elementer */
+    --topbar-h: 52px;
+    --sticky-top: 56px;
   }
   * { margin:0; padding:0; box-sizing:border-box; }
   html { font-size:19px; }
@@ -31,6 +35,19 @@
     font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text);
     min-height:100vh; overflow-x:hidden;
   }
+
+  /* Tilgjengelighet: synlig fokus-ramme for tastaturnavigasjon */
+  button { font: inherit; color: inherit; }
+  :focus { outline: none; }
+  :focus-visible {
+    outline: 2px solid var(--dalux);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  .splash-mod:focus-visible,
+  .box-track-card:focus-visible,
+  .sc-btn:focus-visible { outline-offset: 4px; border-radius: 16px; }
+  .side-arrow:focus-visible { outline-offset: 4px; border-radius: 50%; }
 
   /* Top bar */
   /* Splash / Intro */
@@ -92,7 +109,7 @@
 
   /* Back to modules button */
   .back-btn {
-    position:fixed; top:52px; left:20px; z-index:101;
+    position:fixed; top:var(--topbar-h); left:20px; z-index:101;
     background:var(--surface); border:1px solid var(--border); border-radius:8px;
     color:var(--muted); padding:7px 12px; font-size:.78rem; cursor:pointer;
     font-family:'DM Sans',sans-serif; display:flex; align-items:center; gap:6px;
@@ -114,8 +131,7 @@
     max-width:640px; margin:0 auto 20px; text-align:center;
   }
   .box-p1-top {
-    height:280px; display:flex; flex-direction:column; justify-content:flex-start;
-    overflow:hidden;
+    min-height:280px; display:flex; flex-direction:column; justify-content:flex-start;
   }
   .iso-intro p {
     font-size:.85rem; color:var(--muted); line-height:1.7; margin-bottom:8px;
@@ -212,29 +228,30 @@
   .cde-hub-center { display:none; }
   .cde-hub-svg { display:none; }
 
-  /* Comm tabs */
+  /* Comm tabs - delt styling med .hub-tab (samme utseende) */
   #boxTrackComm .page { flex-direction:column; align-items:center; padding-top:84px; }
   .comm-tabs { display:flex; gap:4px; margin-bottom:12px; z-index:2; justify-content:center; }
-  .comm-tab {
+  .comm-tab, .hub-tab {
     background:var(--surface); border:1px solid var(--border); border-radius:10px;
     padding:8px 18px; font-family:'DM Sans',sans-serif; font-size:.84rem;
     font-weight:500; cursor:pointer; color:var(--muted); transition:all .3s;
     display:flex; align-items:center; gap:8px; user-select:none;
     box-shadow:0 1px 2px rgba(0,0,0,.04);
   }
-  .comm-tab:hover { border-color:var(--dalux); color:var(--text); }
-  .comm-tab.on { background:var(--dalux); border-color:var(--dalux); color:#fff; }
-  .comm-tab .num {
+  .comm-tab:hover, .hub-tab:hover { border-color:var(--dalux); color:var(--text); }
+  .comm-tab.on, .hub-tab.on { background:var(--dalux); border-color:var(--dalux); color:#fff; }
+  .comm-tab .num, .hub-tab .num {
     font-family:'Space Mono',monospace; font-size:.66rem;
     width:20px; height:20px; border-radius:50%;
     display:inline-flex; align-items:center; justify-content:center;
     background:rgba(0,0,0,.08);
   }
-  .comm-tab.on .num { background:rgba(0,0,0,.15); }
+  .comm-tab.on .num, .hub-tab.on .num { background:rgba(0,0,0,.15); }
 
   /* Comm hub - stage */
   .comm-stage {
-    position:relative; width:100%; max-width:1100px; height:600px;
+    position:relative; width:100%; max-width:1100px;
+    aspect-ratio: 1100 / 600; height:auto;
     margin:0 auto; z-index:2; overflow:visible;
   }
   .comm-stage .comm-svg {
@@ -361,6 +378,256 @@
   .lc-info-title { font-weight:700; font-size:.84rem; color:var(--text); margin-bottom:3px; }
   .lc-info-desc { font-size:.76rem; color:var(--muted); line-height:1.6; }
 
+  /* Header for Comm side 2 */
+  .cl-page-header {
+    text-align:center; margin-bottom:14px;
+  }
+  .cl-page-header h1 {
+    font-size:1.6rem; font-weight:700; letter-spacing:-.02em;
+  }
+
+  /* Kommentar-livssyklus stepper (Comm side 2) */
+  .cl-stepper {
+    display:flex; gap:8px; max-width:760px; margin:0 auto 16px;
+    justify-content:center; flex-wrap:wrap;
+  }
+  .cl-step-tab {
+    flex:1 1 0; min-width:120px;
+    background:var(--surface); border:2px solid var(--border); border-radius:12px;
+    padding:10px 14px; cursor:pointer; transition:all .3s ease;
+    display:flex; align-items:center; gap:10px; justify-content:flex-start;
+    font-family:'DM Sans',sans-serif; color:var(--text);
+    opacity:.55;
+  }
+  .cl-step-tab:hover { border-color:var(--purple); opacity:.85; }
+  .cl-step-tab.active {
+    opacity:1;
+    border-color:var(--purple);
+    background:rgba(142,106,191,.06);
+    box-shadow:0 2px 12px rgba(142,106,191,.18);
+    transform:translateY(-2px);
+  }
+  .cl-step-tab.done { opacity:.75; border-color:rgba(142,106,191,.4); }
+  .cl-step-num {
+    width:22px; height:22px; border-radius:50%;
+    background:var(--border); color:var(--text);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Space Mono',monospace; font-size:.66rem; font-weight:700;
+    flex-shrink:0; transition:all .3s ease;
+  }
+  .cl-step-tab.active .cl-step-num { background:var(--purple); color:#fff; }
+  .cl-step-tab.done .cl-step-num { background:rgba(142,106,191,.3); color:var(--purple); }
+  .cl-step-title { font-weight:600; font-size:.84rem; }
+
+  /* Beskrivelsesfelt under stepper */
+  .cl-step-desc {
+    max-width:680px; margin:0 auto 18px;
+    background:var(--surface); border:1px solid var(--border); border-radius:12px;
+    padding:14px 18px;
+    font-size:.84rem; color:var(--muted); line-height:1.6;
+    transition:opacity .25s ease;
+  }
+  .cl-step-desc strong { color:var(--text); font-weight:700; }
+
+  /* Animasjonsscene: 3 grupper + animert puck */
+  .cl-stage {
+    max-width:680px; margin:0 auto 18px;
+    background:var(--surface); border:1px solid var(--border); border-radius:14px;
+    padding:18px 20px;
+    box-shadow:0 1px 3px rgba(0,0,0,.05);
+  }
+  .cl-file {
+    font-family:'Space Mono',monospace; font-size:.66rem;
+    color:var(--muted); text-align:center; margin-bottom:14px;
+    letter-spacing:.04em;
+  }
+  .cl-flow {
+    position:relative;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 0 6px; margin-bottom:14px;
+  }
+  .cl-flow::before {
+    content:'';
+    position:absolute; left:14%; right:14%; top:calc(50% + 6px);
+    height:2px; background:var(--border); z-index:1;
+  }
+  .cl-group {
+    flex:1; text-align:center;
+    display:flex; flex-direction:column; align-items:center; gap:4px;
+    padding:8px 6px; border-radius:10px;
+    transition:all .3s ease;
+    position:relative; z-index:2;
+  }
+  .cl-group-icon { font-size:1.3rem; }
+  .cl-group-name { font-weight:600; font-size:.76rem; color:var(--text); }
+  .cl-group.active {
+    background:rgba(142,106,191,.08);
+  }
+  .cl-group.active .cl-group-name { color:var(--purple); }
+
+  .cl-puck {
+    position:absolute; top:0;
+    transform:translateX(-50%);
+    width:36px; height:36px; border-radius:50%;
+    background:var(--purple); color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-size:.95rem;
+    box-shadow:0 4px 14px rgba(142,106,191,.45);
+    transition:left .6s cubic-bezier(.4,0,.2,1), background .35s, opacity .35s;
+    z-index:3;
+    left:16.5%;
+  }
+  .cl-puck.closed { background:var(--green); box-shadow:0 4px 14px rgba(141,198,63,.45); }
+
+  .cl-status {
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    font-family:'Space Mono',monospace; font-size:.7rem;
+    text-transform:uppercase; letter-spacing:.06em;
+  }
+  .cl-status-label { color:var(--muted); }
+  .cl-status-badge {
+    padding:4px 12px; border-radius:6px; font-weight:700;
+    transition:background .35s ease, color .35s ease;
+  }
+  .cl-status-badge.cl-st-ny { background:var(--box-amber-g); color:var(--box-amber); }
+  .cl-status-badge.cl-st-behandling { background:var(--box-blue-g); color:var(--box-blue); }
+  .cl-status-badge.cl-st-besvart { background:rgba(139,92,246,.12); color:#8b5cf6; }
+  .cl-status-badge.cl-st-lukket { background:var(--green-g); color:var(--green); }
+
+  /* Progressiv aktivitetslogg */
+  .comm-log-entry {
+    transition:max-height .45s ease, opacity .45s ease, padding .45s ease;
+    max-height:400px; opacity:1; overflow:hidden;
+  }
+  .comm-log-entry.cl-hidden {
+    max-height:0; opacity:0;
+    padding-top:0; padding-bottom:0;
+    border-bottom:0;
+  }
+
+  /* Kontroller */
+  .cl-controls {
+    display:flex; align-items:center; justify-content:center; gap:18px;
+    margin:22px auto 0; max-width:700px;
+  }
+
+  /* Status-side (Comm side 3) */
+  .status-compare {
+    max-width:760px; margin:0 auto 28px;
+    display:flex; gap:14px;
+  }
+  .status-compare-card {
+    flex:1;
+    background:var(--surface); border:1px solid var(--border); border-radius:14px;
+    padding:18px 20px;
+    box-shadow:0 1px 3px rgba(0,0,0,.04);
+    display:flex; flex-direction:column;
+  }
+  .status-compare-bad { border-color:rgba(231,76,60,.3); }
+  .status-compare-good { border-color:rgba(141,198,63,.45); }
+  .status-compare-label {
+    font-family:'Space Mono',monospace; font-size:.6rem;
+    text-transform:uppercase; letter-spacing:.08em;
+    margin-bottom:14px; font-weight:700;
+  }
+  .status-compare-bad .status-compare-label { color:var(--red); }
+  .status-compare-good .status-compare-label { color:var(--green); }
+  .status-timeline {
+    display:flex; flex-direction:column; gap:8px;
+    flex:1;
+  }
+  .status-tl-entry {
+    display:flex; align-items:center; gap:12px;
+  }
+  .status-tl-day {
+    font-family:'Space Mono',monospace; font-size:.66rem;
+    color:var(--muted); min-width:44px;
+  }
+  .status-tl-gap { padding:8px 0 8px 56px; }
+  .status-tl-gap-text {
+    font-size:.74rem; color:var(--red); font-style:italic;
+  }
+  .status-compare-quote {
+    margin-top:14px; padding-top:12px;
+    border-top:1px dashed var(--border);
+    text-align:center; font-style:italic;
+    font-size:.82rem; color:var(--muted);
+  }
+
+  /* Seksjonsoverskrifter */
+  .status-section-header {
+    text-align:center; max-width:700px; margin:0 auto 14px;
+  }
+  .status-section-header h3 {
+    font-size:1.05rem; font-weight:700; margin-bottom:4px;
+  }
+  .status-section-header p {
+    font-size:.84rem; color:var(--muted);
+  }
+
+  /* Eksempel-flyter */
+  .status-examples {
+    max-width:900px; margin:0 auto 28px;
+    display:flex; gap:14px; flex-wrap:wrap;
+  }
+  .status-example-card {
+    flex:1; min-width:240px;
+    background:var(--surface); border:1px solid var(--border); border-radius:14px;
+    padding:18px 20px;
+    box-shadow:0 1px 3px rgba(0,0,0,.04);
+    display:flex; flex-direction:column;
+  }
+  .status-example-card.recommended {
+    border-top:4px solid var(--purple);
+  }
+  .status-example-label {
+    font-family:'Space Mono',monospace; font-size:.58rem;
+    text-transform:uppercase; letter-spacing:.08em;
+    color:var(--muted); font-weight:700; margin-bottom:4px;
+  }
+  .status-example-card.recommended .status-example-label { color:var(--purple); }
+  .status-example-title {
+    font-weight:700; font-size:1rem; color:var(--text); margin-bottom:6px;
+  }
+  .status-example-desc {
+    font-size:.78rem; color:var(--muted); line-height:1.5; margin-bottom:14px;
+  }
+  .status-example-flow {
+    display:flex; flex-direction:column; align-items:center; gap:4px;
+    margin-top:auto;
+  }
+  .status-arrow {
+    color:var(--muted); font-size:.95rem; line-height:1;
+  }
+
+  /* Default-status-badge-varianter */
+  .cl-status-badge.cl-st-default { background:var(--green-g); color:var(--green); }
+  .cl-status-badge.cl-st-closed-default { background:var(--box-slate-g); color:var(--box-slate); }
+
+  /* Footnote */
+  .status-footnote {
+    max-width:700px; margin:0 auto;
+    text-align:center; padding:16px 22px;
+    background:rgba(142,106,191,.05); border:1px dashed rgba(142,106,191,.3);
+    border-radius:12px;
+    font-size:.82rem; color:var(--muted); line-height:1.55;
+  }
+  .status-footnote strong { color:var(--purple); }
+
+  /* Responsivitet for status-siden */
+  @media (max-width: 700px) {
+    .status-compare { flex-direction:column; }
+    .status-examples { flex-direction:column; }
+    .status-example-card { min-width:0; }
+  }
+
+  /* Responsivitet for stepper på smale skjermer */
+  @media (max-width: 700px) {
+    .cl-stepper { flex-wrap:wrap; }
+    .cl-step-tab { flex-basis:calc(50% - 4px); }
+    .cl-group-name { font-size:.7rem; }
+  }
+
   /* Activity log example */
   .comm-log-example {
     max-width:700px; margin:0 auto;
@@ -412,12 +679,385 @@
   .box-track-icon { font-size:2rem; line-height:1; margin-bottom:4px; }
   .box-track-name { font-weight:700; font-size:1rem; color:var(--text); }
   .box-track-desc { font-size:.78rem; color:var(--muted); line-height:1.5; }
+  .box-track-card { position:relative; }
+  .box-track-card.coming-soon { opacity:.7; }
+  .box-track-card.coming-soon:hover { border-color:var(--border); transform:none; box-shadow:0 1px 3px rgba(0,0,0,.06); opacity:.85; }
+  .box-track-card.coming-soon .box-track-icon { filter:grayscale(.4); }
+  .coming-soon-badge {
+    position:absolute; top:10px; right:10px;
+    font-family:'Space Mono',monospace; font-size:.55rem; text-transform:uppercase;
+    letter-spacing:.08em; padding:3px 8px; border-radius:5px;
+    background:var(--box-amber-g); color:var(--box-amber);
+    font-weight:700;
+  }
+
+  /* Felles begreper - seksjon under modul-kortene på splash */
+  .splash-common-section {
+    margin-top: 32px;
+    text-align: center;
+  }
+  .splash-common-label {
+    font-family: 'Space Mono', monospace; font-size: .7rem;
+    text-transform: uppercase; letter-spacing: .1em;
+    color: var(--muted); margin-bottom: 12px;
+  }
+  .splash-common-cards {
+    display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+  }
+  .splash-common-card {
+    background: var(--surface); border: 2px solid var(--border); border-radius: 10px;
+    padding: 14px 22px; cursor: pointer; transition: all .25s;
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'DM Sans', sans-serif;
+    box-shadow: 0 1px 3px rgba(0,0,0,.06);
+  }
+  .splash-common-card:hover {
+    border-color: var(--purple);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(142,106,191,.15);
+  }
+  .splash-common-icon { font-size: 1.4rem; line-height: 1; }
+  .splash-common-name { font-weight: 700; font-size: .92rem; color: var(--text); }
+
+  /* Mappestruktur placeholder-side */
+  .files-placeholder {
+    flex-direction:column; align-items:center; justify-content:center;
+    min-height:100vh; padding:80px 24px 60px;
+  }
+  .files-soon-card {
+    background:var(--surface); border:1px solid var(--border); border-radius:18px;
+    padding:48px 56px; max-width:580px; width:100%; text-align:center;
+    box-shadow:0 4px 24px rgba(0,0,0,.05);
+    display:flex; flex-direction:column; align-items:center; gap:14px;
+  }
+  .files-soon-icon {
+    font-size:2.4rem; line-height:1;
+    width:72px; height:72px; border-radius:18px;
+    background:var(--box-amber-g);
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:4px;
+  }
+  .files-soon-card h1 {
+    font-size:1.4rem; font-weight:700; letter-spacing:-.02em; margin:0;
+  }
+  .files-soon-lead {
+    font-size:.95rem; color:var(--text); font-weight:500;
+  }
+  .files-soon-desc {
+    font-size:.86rem; color:var(--muted); line-height:1.6;
+    max-width:440px; margin:0 auto;
+  }
+  .files-soon-list {
+    display:flex; flex-direction:column; gap:6px;
+    text-align:left; margin:8px 0 4px;
+    background:var(--surface-2); border-radius:12px;
+    padding:16px 20px; width:100%;
+  }
+  .files-soon-item {
+    font-size:.82rem; color:var(--muted);
+    display:flex; gap:10px; align-items:flex-start;
+  }
+  .files-soon-bullet { color:var(--box-amber); font-weight:700; flex-shrink:0; }
 
   /* Box tracks */
   .box-selector { display:none; }
   .box-selector.active { display:flex; align-items:center; justify-content:center; min-height:calc(100vh - 80px); }
   .box-track { display:none; }
   .box-track.active { display:block; }
+
+  /* Felles begreper-track (toppnivå, ikke i modBox/modField) */
+  .common-track { display: none; }
+  .common-track.active { display: block; }
+  #brukergrupperPage1, #brukergrupperPage2, #brukergrupperPage3 {
+    flex-direction: column; align-items: center;
+    padding: 70px 24px 40px; overflow-y: auto; min-height: 100vh;
+  }
+  #brukergrupperPage1 header, #brukergrupperPage2 header, #brukergrupperPage3 header {
+    text-align: center; margin-bottom: 24px;
+  }
+  #brukergrupperPage1 header h1, #brukergrupperPage2 header h1, #brukergrupperPage3 header h1 {
+    font-size: 1.6rem; font-weight: 700; letter-spacing: -.02em;
+  }
+  #brukergrupperPage1 header p, #brukergrupperPage2 header p, #brukergrupperPage3 header p {
+    color: var(--muted); font-size: .88rem; margin-top: 4px;
+  }
+
+  /* Brukergrupper side 1 - konsept */
+  .bg-intro {
+    max-width: 720px; margin: 0 auto 28px; text-align: center;
+  }
+  .bg-intro-quote {
+    font-size: 1.15rem; font-weight: 600; color: var(--text);
+    margin-bottom: 16px; line-height: 1.4;
+  }
+  .bg-intro-quote::before { content: '"'; color: var(--purple); margin-right: 4px; }
+  .bg-intro-quote::after { content: '"'; color: var(--purple); margin-left: 4px; }
+  .bg-intro p { font-size: .9rem; color: var(--muted); line-height: 1.7; margin-bottom: 10px; }
+
+  /* Side 1 - animert scene med tre steg */
+  .bg-scene-wrap { max-width: 1000px; margin: 0 auto; }
+  .bg-scene-stage {
+    position: relative; z-index: 2;
+    width: min(1000px, calc(100vw - 32px));
+    aspect-ratio: 1000 / 500;
+    height: auto;
+    margin: 0 auto;
+  }
+  .bg-scene-svg {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 1;
+  }
+  .bg-scene-svg line { stroke-width: 2; opacity: 0; transition: opacity .6s ease; stroke-dasharray: 6 4; }
+  .bg-scene-svg.show line { opacity: .75; }
+
+  /* Person-element */
+  .bg-person {
+    position: absolute; z-index: 5;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 8px 12px;
+    display: flex; align-items: center; gap: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.06);
+    transition: left .9s cubic-bezier(.4,0,.2,1),
+                top .9s cubic-bezier(.4,0,.2,1),
+                opacity .5s ease, transform .3s ease,
+                border-color .3s ease, box-shadow .3s ease, background .3s ease;
+    cursor: default;
+  }
+  .bg-scene-stage.step-3 .bg-person { cursor: pointer; }
+  .bg-scene-stage.step-3 .bg-person:hover {
+    transform: translateY(-2px);
+    border-color: var(--purple);
+    box-shadow: 0 4px 12px rgba(142,106,191,.18);
+  }
+  .bg-person.selected {
+    border-color: var(--purple);
+    background: rgba(142,106,191,.08);
+    box-shadow: 0 0 0 3px rgba(142,106,191,.25), 0 4px 12px rgba(0,0,0,.08);
+    z-index: 10;
+  }
+  .bg-person.dimmed { opacity: .3; }
+  .bg-group.active {
+    border-style: solid;
+    background: color-mix(in srgb, var(--group-color) 12%, transparent);
+    box-shadow: 0 0 0 1px var(--group-color), 0 2px 12px color-mix(in srgb, var(--group-color) 25%, transparent);
+  }
+  .bg-group.dimmed { opacity: .3; }
+  .bg-module.active {
+    border-color: var(--dalux);
+    box-shadow: 0 0 0 3px rgba(141,198,63,.25), 0 2px 12px rgba(141,198,63,.15);
+  }
+  .bg-module.dimmed { opacity: .35; }
+  .bg-person-avatar {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--purple); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .68rem; font-weight: 700; flex-shrink: 0;
+  }
+  .bg-person-text { display: flex; flex-direction: column; line-height: 1.15; }
+  .bg-person-name { font-size: .74rem; font-weight: 600; color: var(--text); white-space: nowrap; }
+  .bg-person-role {
+    font-family: 'Space Mono', monospace; font-size: .58rem;
+    color: var(--muted); text-transform: uppercase; letter-spacing: .04em;
+  }
+
+  /* Gruppe-container - bruker --group-color satt inline pr. gruppe */
+  .bg-group {
+    --group-color: var(--purple); /* fallback */
+    position: absolute; z-index: 3;
+    background: color-mix(in srgb, var(--group-color) 5%, transparent);
+    border: 2px dashed var(--group-color); border-radius: 14px;
+    transition: opacity .6s ease .2s, left .6s ease, top .6s ease, width .6s ease, height .6s ease,
+                background .3s ease, box-shadow .3s ease;
+    opacity: 0; pointer-events: none;
+  }
+  .bg-scene-stage.show-groups .bg-group { opacity: 1; pointer-events: auto; }
+  .bg-group-header {
+    position: absolute; top: -12px; left: 12px;
+    background: var(--surface); padding: 2px 10px;
+    font-family: 'Space Mono', monospace; font-size: .62rem;
+    font-weight: 700; color: var(--group-color);
+    border: 1px solid var(--group-color); border-radius: 6px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .bg-group-num { color: var(--group-color); }
+  .bg-group-name { color: var(--text); font-family: 'DM Sans', sans-serif; font-size: .7rem; text-transform: none; letter-spacing: 0; font-weight: 600; }
+
+  /* Handling-chip og section-header */
+  .bg-action {
+    position: absolute; z-index: 4;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    padding: 4px 10px;
+    display: flex; align-items: center; gap: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.05);
+    transition: opacity .6s ease .3s, transform .6s ease .3s,
+                border-color .3s ease, box-shadow .3s ease, background .3s ease;
+    opacity: 0; transform: scale(.95);
+    border-left-width: 3px;
+    overflow: hidden;
+  }
+  .bg-action.mod-field { border-left-color: var(--dalux); }
+  .bg-action.mod-box   { border-left-color: var(--box-blue); }
+  .bg-scene-stage.show-modules .bg-action { opacity: 1; transform: scale(1); }
+  .bg-action-icon { font-size: 1rem; flex-shrink: 0; }
+  .bg-action-name {
+    font-weight: 600; font-size: .76rem; color: var(--text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .bg-action.active {
+    border-color: var(--purple);
+    background: rgba(142,106,191,.08);
+    box-shadow: 0 0 0 2px rgba(142,106,191,.2), 0 2px 8px rgba(142,106,191,.12);
+  }
+  .bg-action.dimmed { opacity: .3; }
+
+  .bg-action-header {
+    position: absolute; z-index: 3;
+    font-family: 'Space Mono', monospace; font-size: .58rem;
+    text-transform: uppercase; letter-spacing: .1em; font-weight: 700;
+    display: flex; align-items: center; gap: 6px;
+    opacity: 0; transition: opacity .6s ease .3s;
+    padding: 0 4px;
+  }
+  .bg-action-header.mod-field { color: var(--dalux-dark); }
+  .bg-action-header.mod-box   { color: var(--box-blue); }
+  .bg-action-header::before {
+    content: ''; width: 12px; height: 2px; border-radius: 1px;
+  }
+  .bg-action-header.mod-field::before { background: var(--dalux); }
+  .bg-action-header.mod-box::before { background: var(--box-blue); }
+  .bg-scene-stage.show-modules .bg-action-header { opacity: 1; }
+
+  /* Caption + kontroller */
+  .bg-scene-caption {
+    max-width: 720px; margin: 16px auto 20px;
+    text-align: center; font-size: .92rem; color: var(--text);
+    line-height: 1.5; min-height: 2.8em;
+    transition: opacity .3s ease;
+  }
+  .bg-scene-controls {
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+    margin-top: 4px;
+  }
+  .bg-scene-dots { display: flex; gap: 8px; }
+  .bg-scene-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--border); transition: all .3s ease;
+  }
+  .bg-scene-dot.active {
+    background: var(--purple); transform: scale(1.3);
+    box-shadow: 0 0 0 4px rgba(142,106,191,.15);
+  }
+  .bg-scene-dot.done { background: var(--purple); opacity: .5; }
+
+  /* Brukergrupper side 2 - standardgrupper */
+  .bg-tabs { display: flex; gap: 4px; margin-bottom: 20px; justify-content: center; }
+  .bg-tab-panel { display: none; max-width: 1000px; width: 100%; margin: 0 auto; }
+  .bg-tab-panel.active { display: block; }
+  .bg-cards {
+    display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
+  }
+  .bg-card {
+    flex: 1; min-width: 220px; max-width: 320px;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    padding: 18px 20px; box-shadow: 0 1px 3px rgba(0,0,0,.04);
+    display: flex; flex-direction: column; gap: 8px;
+    overflow: hidden;
+  }
+  .bg-card-header { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .bg-card-header > div { min-width: 0; flex: 1; }
+  .bg-card-icon { font-size: 1.4rem; flex-shrink: 0; }
+  .bg-card-title {
+    font-weight: 700; font-size: .88rem; color: var(--text);
+    overflow-wrap: break-word; hyphens: auto;
+  }
+  .bg-card-sub {
+    font-family: 'Space Mono', monospace; font-size: .62rem;
+    text-transform: uppercase; letter-spacing: .06em; color: var(--muted);
+  }
+  .bg-card-desc {
+    font-size: .82rem; color: var(--muted); line-height: 1.6;
+    overflow-wrap: break-word; hyphens: auto;
+  }
+  .bg-card.warning {
+    border-color: var(--orange); border-width: 2px;
+    background: var(--orange-g);
+  }
+  .bg-card.warning .bg-card-title { color: var(--orange); }
+  .bg-warning-label {
+    display: inline-block; font-family: 'Space Mono', monospace;
+    font-size: .58rem; text-transform: uppercase; letter-spacing: .08em;
+    padding: 3px 8px; border-radius: 5px;
+    background: var(--orange); color: #fff; font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  /* Brukergrupper side 3 - god praksis */
+  .bg-why {
+    max-width: 720px; margin: 0 auto 28px; text-align: center;
+  }
+  .bg-why p { font-size: .9rem; color: var(--muted); line-height: 1.7; }
+  .bg-principles {
+    max-width: 900px; margin: 0 auto 32px;
+    display: flex; gap: 14px; flex-wrap: wrap;
+  }
+  .bg-principle {
+    flex: 1; min-width: 220px;
+    background: var(--surface); border: 2px solid var(--border); border-radius: 14px;
+    padding: 20px 22px; box-shadow: 0 1px 3px rgba(0,0,0,.04);
+    border-top: 4px solid var(--purple);
+  }
+  .bg-principle-num {
+    font-family: 'Space Mono', monospace; font-size: .62rem;
+    text-transform: uppercase; letter-spacing: .08em; color: var(--purple); font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .bg-principle-title { font-weight: 700; font-size: .92rem; margin-bottom: 8px; color: var(--text); }
+  .bg-principle-text { font-size: .82rem; color: var(--muted); line-height: 1.6; }
+
+  .bg-example {
+    max-width: 560px; margin: 0 auto 32px;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,.06);
+  }
+  .bg-example-header {
+    padding: 14px 20px; border-bottom: 1px solid var(--border);
+    background: rgba(142,106,191,.04);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .bg-example-icon { font-size: 1.2rem; }
+  .bg-example-title { font-weight: 700; font-size: .88rem; }
+  .bg-example-list {
+    padding: 14px 0; font-family: 'Space Mono', monospace; font-size: .82rem;
+  }
+  .bg-example-row {
+    padding: 6px 22px; display: flex; gap: 14px; align-items: center;
+    color: var(--text);
+  }
+  .bg-example-row.sub { padding-left: 42px; color: var(--muted); font-size: .78rem; }
+  .bg-example-num {
+    color: var(--purple); font-weight: 700; min-width: 28px;
+  }
+
+  .bg-split { max-width: 900px; margin: 0 auto; }
+  .bg-split-header { text-align: center; margin-bottom: 16px; }
+  .bg-split-header h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 4px; }
+  .bg-split-header p { font-size: .85rem; color: var(--muted); }
+  .bg-split-cols { display: flex; gap: 16px; }
+  .bg-split-col {
+    flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,.04);
+  }
+  .bg-split-col.bad { border-color: rgba(231,76,60,.3); }
+  .bg-split-col.good { border-color: rgba(141,198,63,.4); }
+  .bg-split-label {
+    display: inline-block; font-family: 'Space Mono', monospace;
+    font-size: .58rem; text-transform: uppercase; letter-spacing: .08em;
+    padding: 3px 8px; border-radius: 5px; font-weight: 700; margin-bottom: 10px;
+  }
+  .bg-split-col.bad .bg-split-label { background: var(--red-g); color: var(--red); }
+  .bg-split-col.good .bg-split-label { background: var(--green-g); color: var(--green); }
+  .bg-split-title { font-weight: 700; font-size: .92rem; margin-bottom: 8px; }
+  .bg-split-text { font-size: .8rem; color: var(--muted); line-height: 1.6; }
 
   .cde-stage.dalux-mode .cde-card {
     border-left:3px solid var(--dalux);
@@ -500,7 +1140,7 @@
     display:flex; align-items:center; gap:0;
     background:var(--surface); border:1px solid var(--border); border-radius:14px;
     padding:20px 24px; margin-bottom:20px;
-    position:sticky; top:56px; z-index:15; box-shadow:0 4px 12px -4px rgba(0,0,0,.06);
+    position:sticky; top:var(--sticky-top); z-index:15; box-shadow:0 4px 12px -4px rgba(0,0,0,.06);
   }
   .doc-pipe-zone {
     flex:1; text-align:center; padding:10px; border-radius:10px;
@@ -599,31 +1239,21 @@
   /* ============================================= */
   #page1 {
     flex-direction:column; align-items:center; justify-content:center;
-    height:100vh; width:100vw; padding-top:52px; overflow:hidden;
+    height:100vh; width:100vw; padding-top:var(--topbar-h); overflow:hidden;
   }
   #page1 header { text-align:center; margin-bottom:14px; z-index:2; }
   #page1 header h1 { font-size:1.8rem; font-weight:700; letter-spacing:-.02em; }
   #page1 header p { color:var(--muted); font-size:.88rem; margin-top:4px; }
 
   .hub-tabs { display:flex; gap:4px; margin-bottom:12px; z-index:2; }
-  .hub-tab {
-    background:var(--surface); border:1px solid var(--border); border-radius:10px;
-    padding:8px 18px; font-family:'DM Sans',sans-serif; font-size:.84rem;
-    font-weight:500; cursor:pointer; color:var(--muted); transition:all .3s;
-    display:flex; align-items:center; gap:8px; user-select:none;
-    box-shadow:0 1px 2px rgba(0,0,0,.04);
-  }
-  .hub-tab:hover { border-color:var(--dalux); color:var(--text); }
-  .hub-tab.on { background:var(--dalux); border-color:var(--dalux); color:#fff; }
-  .hub-tab .num {
-    font-family:'Space Mono',monospace; font-size:.66rem;
-    width:20px; height:20px; border-radius:50%;
-    display:inline-flex; align-items:center; justify-content:center;
-    background:rgba(0,0,0,.08);
-  }
-  .hub-tab.on .num { background:rgba(0,0,0,.15); }
+  /* .hub-tab utseende defineres sammen med .comm-tab lenger oppe */
 
-  .hub-stage { position:relative; width:1100px; height:620px; z-index:2; }
+  .hub-stage {
+    position:relative; z-index:2;
+    width:min(1100px, calc(100vw - 32px));
+    aspect-ratio: 1100 / 620;
+    height:auto;
+  }
 
   .hub-caption {
     text-align:center; font-size:.82rem; color:var(--muted);
@@ -662,9 +1292,9 @@
   .hub-stage.list-view .node .code { color:#666; }
   .hub-stage.list-view .node:hover { filter:brightness(.95); }
 
-  /* List chrome */
+  /* List chrome - posisjoneres prosentvis i hub-stage (240/1100 ≈ 21.8%, 620/1100 ≈ 56.4%) */
   .list-chrome {
-    position:absolute; top:0; left:240px; width:620px;
+    position:absolute; top:0; left:21.8%; width:56.4%;
     background:#fff; border-radius:10px; overflow:hidden;
     box-shadow:0 2px 16px rgba(0,0,0,.1);
     transition: opacity .6s ease, transform .6s ease; z-index:3;
@@ -690,7 +1320,8 @@
     padding:6px 12px; font-size:.72rem;
     box-shadow:0 1px 3px rgba(0,0,0,.06);
   }
-  .hub-stage.hub-view .node .code { color:var(--muted); font-size:.62rem; margin-right:6px; }
+  .hub-stage.hub-view .node .code { color:var(--muted); font-size:.62rem; margin-right:6px; flex-shrink:0; }
+  .hub-stage.hub-view .node .name { overflow:hidden; text-overflow:ellipsis; min-width:0; }
   .hub-stage.hub-view .node:hover {
     border-color:var(--dalux); box-shadow:0 2px 12px rgba(141,198,63,.15);
     transform:scale(1.05); z-index:20;
@@ -751,6 +1382,7 @@
   .wf-panel {
     background:var(--surface); border:1px solid var(--border); border-radius:18px;
     padding:32px 36px; width:580px; max-width:90vw;
+    max-height:88vh; overflow-y:auto;
     transform:scale(.92); transition:transform .35s cubic-bezier(.4,0,.2,1);
     position:relative; box-shadow:0 8px 40px rgba(0,0,0,.12);
   }
@@ -768,6 +1400,31 @@
   .wf-title .wf-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
   .wf-sub { font-size:.82rem; color:var(--muted); margin-bottom:22px; }
   .wf-flows { display:flex; flex-direction:column; gap:12px; }
+  .wf-mode-tabs {
+    display:flex; gap:4px; justify-content:center; margin-bottom:18px;
+  }
+  .wf-flow-set { display:none; flex-direction:column; gap:12px; }
+  .wf-flow-set.on { display:flex; }
+  /* Stagger-overgang: hvert forløp glir inn med litt forsinkelse når modus byttes */
+  .wf-flow-set.on .wf-flow {
+    opacity: 0;
+    animation: wfFlowIn .42s cubic-bezier(.4,0,.2,1) forwards;
+  }
+  .wf-flow-set.on .wf-flow:nth-child(1) { animation-delay: 0ms; }
+  .wf-flow-set.on .wf-flow:nth-child(2) { animation-delay: 60ms; }
+  .wf-flow-set.on .wf-flow:nth-child(3) { animation-delay: 120ms; }
+  .wf-flow-set.on .wf-flow:nth-child(4) { animation-delay: 180ms; }
+  .wf-flow-set.on .wf-flow:nth-child(5) { animation-delay: 240ms; }
+  .wf-flow-set.on .wf-flow:nth-child(6) { animation-delay: 300ms; }
+  .wf-flow-set.on .wf-flow:nth-child(7) { animation-delay: 360ms; }
+  @keyframes wfFlowIn {
+    from { opacity: 0; transform: translateY(8px) scale(.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .wf-mode-hint {
+    margin-top:18px; font-size:.78rem; color:var(--muted);
+    text-align:center; line-height:1.5; font-style:italic;
+  }
   .wf-flow {
     display:flex; align-items:center; gap:10px;
     background:var(--surface-2); border:1px solid var(--border); border-radius:12px;
@@ -795,7 +1452,7 @@
 
   /* Fullscreen btn */
   .fs-btn {
-    position:fixed; top:52px; right:20px; z-index:100;
+    position:fixed; top:var(--topbar-h); right:20px; z-index:100;
     background:var(--surface); border:1px solid var(--border); border-radius:8px;
     color:var(--muted); padding:7px 12px; font-size:.78rem; cursor:pointer;
     font-family:'DM Sans',sans-serif; display:flex; align-items:center; gap:6px;
@@ -812,7 +1469,7 @@
     transition: padding .6s cubic-bezier(.4,0,.2,1);
   }
   #page2.intro {
-    padding-top:52px; padding-bottom:0;
+    padding-top:var(--topbar-h); padding-bottom:0;
   }
   #page2.intro header { margin-bottom:14px; }
   #page2.intro .scenario { display:none; }
@@ -849,7 +1506,7 @@
   .lc-stage { position:relative; max-width:800px; width:100%; z-index:2; }
 
   .wf-rows-container {
-    position:sticky; top:56px; z-index:15;
+    position:sticky; top:var(--sticky-top); z-index:15;
     background:var(--bg); padding:24px 0 10px;
     box-shadow:0 8px 16px -8px rgba(0,0,0,.06);
   }
@@ -902,7 +1559,7 @@
   /* Pipeline view (approval scenarios) */
   .pipeline-container {
     display:none; /* shown via JS */
-    position:sticky; top:56px; z-index:15;
+    position:sticky; top:var(--sticky-top); z-index:15;
     background:var(--bg); padding:24px 0 10px;
     box-shadow:0 8px 16px -8px rgba(0,0,0,.06);
   }
@@ -1094,6 +1751,46 @@
   }
   .prog-dot.filled { background:var(--green); box-shadow:0 0 6px var(--green-g); }
   .prog-dot.current { background:var(--accent); box-shadow:0 0 6px var(--accent-g); transform:scale(1.3); }
+
+  /* ============================================= */
+  /* Responsivitet - reflows på smale skjermer      */
+  /* ============================================= */
+
+  /* Stable kortvelgere vertikalt under typisk laptop-bredde */
+  @media (max-width: 740px) {
+    .splash-modules { flex-direction:column; align-items:stretch; }
+    .splash-mod { min-width:0; }
+    .box-track-cards { flex-direction:column; align-items:stretch; }
+    .box-track-card { max-width:none; min-width:0; }
+    .comm-info-cards { flex-direction:column; }
+    .cde-pipeline { flex-direction:column; }
+    .cde-arrow-sep { width:auto; transform:rotate(90deg); margin:4px 0; }
+    /* Brukergrupper-track */
+    .splash-common-cards { flex-direction:column; }
+    .splash-common-card { width:100%; justify-content:center; }
+    .bg-points { flex-direction:column; }
+    .bg-cards { flex-direction:column; align-items:stretch; }
+    .bg-card { max-width:none; }
+    .bg-principles { flex-direction:column; }
+    .bg-split-cols { flex-direction:column; }
+  }
+
+  /* Field side 2: scenario-picker har allerede flex-wrap, men trange skjermer trenger litt mindre min-width */
+  @media (max-width: 600px) {
+    .sc-btn { min-width:120px; padding:12px 14px; }
+    .splash-title { font-size:1.8rem; }
+    #boxPage1 header h1, #boxPage2 header h1, #boxPage3 header h1 { font-size:1.3rem; }
+    #page1 header h1 { font-size:1.4rem; }
+    #page2 header h1 { font-size:1.6rem; }
+    #brukergrupperPage1 header h1, #brukergrupperPage2 header h1, #brukergrupperPage3 header h1 { font-size:1.3rem; }
+    .bg-intro-quote { font-size:1rem; }
+    .splash-content, .files-soon-card { padding:32px 24px; }
+  }
+
+  /* Field side 1: hub-stage er allerede fleksibel (aspect-ratio), men trenger litt luft når den blir høy */
+  @media (max-height: 760px) and (min-width: 1100px) {
+    #page1 { justify-content:flex-start; padding-top:calc(var(--topbar-h) + 8px); }
+  }
 </style>
 </head>
 <body>
@@ -1105,10 +1802,10 @@
     <h1 class="splash-title">Dalux</h1>
     <p class="splash-subtitle">Interaktiv presentasjon</p>
     <div class="splash-divider"></div>
-    <p class="splash-desc">Opplærings- og demonstrasjonsverktøy for å vise hvordan sentrale funksjoner i Dalux fungerer. Innholdet er forenklet og tilpasset for visningsformål.</p>
+    <p class="splash-desc">Her viser vi hvordan Dalux fungerer, med konkrete eksempler fra et byggeprosjekt.</p>
     <div class="splash-notice">
       <span class="splash-notice-icon">ℹ️</span>
-      <span>Dette er <strong>ikke</strong> en mal eller et oppsett som skal brukes direkte i prosjekter. Faktisk konfigurasjon gjøres av prosjektadministrator tilpasset det enkelte prosjekt.</span>
+      <span>Dette er <strong>ikke</strong> en ferdig oppskrift. En prosjektadministrator setter opp hvert prosjekt etter behov.</span>
     </div>
     <p class="splash-choose">Velg modul</p>
     <div class="splash-modules">
@@ -1117,15 +1814,24 @@
           <svg viewBox="0 0 48 48" width="40" height="40"><rect x="6" y="6" width="36" height="36" rx="8" fill="none" stroke="#8DC63F" stroke-width="3"/><rect x="14" y="16" width="20" height="3" rx="1.5" fill="#8DC63F" opacity=".6"/><rect x="14" y="23" width="14" height="3" rx="1.5" fill="#8DC63F" opacity=".4"/><rect x="14" y="30" width="8" height="3" rx="1.5" fill="#8DC63F" opacity=".25"/></svg>
         </div>
         <div class="splash-mod-name">Field</div>
-        <div class="splash-mod-desc">Oppgaveforløp og arbeidsflyt</div>
+        <div class="splash-mod-desc">Oppgaver, sjekklister og arbeidsflyt</div>
       </button>
       <button class="splash-mod" onclick="openModule('box')">
         <div class="splash-mod-icon">
           <svg viewBox="0 0 48 48" width="40" height="40"><path d="M8 16l16-10 16 10v16l-16 10-16-10z" fill="none" stroke="#3b82f6" stroke-width="3" stroke-linejoin="round"/><path d="M8 16l16 10 16-10" fill="none" stroke="#3b82f6" stroke-width="2" opacity=".4"/><path d="M24 26v16" fill="none" stroke="#3b82f6" stroke-width="2" opacity=".4"/></svg>
         </div>
         <div class="splash-mod-name">Box</div>
-        <div class="splash-mod-desc">Kommunikasjon, filhåndtering og ISO 19650</div>
+        <div class="splash-mod-desc">Filer, kommentarer og ISO 19650</div>
       </button>
+    </div>
+    <div class="splash-common-section">
+      <p class="splash-common-label">Felles begreper</p>
+      <div class="splash-common-cards">
+        <button class="splash-common-card" onclick="openCommonTrack('brukergrupper')">
+          <span class="splash-common-icon">👥</span>
+          <span class="splash-common-name">Brukergrupper</span>
+        </button>
+      </div>
     </div>
   </div>
 </div>
@@ -1138,7 +1844,7 @@
 <!-- Page navigation -->
 <div class="page-nav" id="pageNav">
   <button class="page-btn active" onclick="showPage(1)" id="pb1"><span class="pnum">1</span> Entrepriser</button>
-  <button class="page-btn" onclick="showPage(2)" id="pb2"><span class="pnum">2</span> Oppgavens livssyklus</button>
+  <button class="page-btn" onclick="showPage(2)" id="pb2"><span class="pnum">2</span> Oppgaver</button>
 </div>
 
 <button class="fs-btn" onclick="toggleFS()" id="fsBtn" style="opacity:0;pointer-events:none">⛶ Fullskjerm</button>
@@ -1184,27 +1890,34 @@
 <!-- Workflow overlay (shared) -->
 <div class="wf-overlay" id="wfOverlay" onclick="if(event.target===this)closeWf()">
   <div class="wf-panel">
-    <button class="wf-close" onclick="closeWf()">✕</button>
+    <button class="wf-close" onclick="closeWf()" aria-label="Lukk arbeidsforløp">✕</button>
     <div class="wf-title"><div class="wf-dot" id="wfDot"></div><span id="wfName"></span></div>
-    <div class="wf-sub">Standard arbeidsforløp i entreprisen</div>
-    <div class="wf-flows">
+    <div class="wf-sub">Slik kan arbeidsforløpene se ut i entreprisen</div>
+
+    <div class="wf-mode-tabs">
+      <button class="hub-tab on" data-mode="lite" onclick="setWfMode('lite')">Lite prosjekt</button>
+      <button class="hub-tab" data-mode="stort" onclick="setWfMode('stort')">Stort prosjekt</button>
+    </div>
+
+    <!-- LITE PROSJEKT: alle oppgaver behandles av TE, ofte fordi samme person har flere "hatter" -->
+    <div class="wf-flow-set on" data-mode="lite">
       <div class="wf-flow">
-        <div class="wf-role" style="background:var(--accent-g);color:var(--accent);" id="wfFag1">Fag</div>
+        <div class="wf-role wf-fag" style="background:var(--accent-g);color:var(--accent);">Fag</div>
         <div class="wf-arrow">
           <div class="wf-label">Oppgaveforløp</div>
-          <svg viewBox="0 0 200 14"><polygon points="0,7 8,1 8,5" fill="#6fa032"/><rect x="8" y="5.5" width="184" height="3" rx="1" fill="#6fa032" opacity=".5"/><polygon points="200,7 192,1 192,13" fill="#6fa032"/><polygon points="0,7 8,13 8,9" fill="#6fa032"/></svg>
+          <svg viewBox="0 0 200 14"><polygon points="0,7 8,1 8,5" fill="#d4a017"/><rect x="8" y="5.5" width="184" height="3" rx="1" fill="#d4a017" opacity=".5"/><polygon points="200,7 192,1 192,13" fill="#d4a017"/><polygon points="0,7 8,13 8,9" fill="#d4a017"/></svg>
         </div>
         <div class="wf-role" style="background:var(--yellow-g);color:var(--yellow);">TE</div>
-        <div class="wf-type" style="background:var(--accent-g);color:var(--accent);">↔ Toveis</div>
+        <div class="wf-type" style="background:var(--yellow-g);color:var(--yellow);">Rapport</div>
       </div>
       <div class="wf-flow">
         <div class="wf-role" style="background:var(--yellow-g);color:var(--yellow);">TE</div>
         <div class="wf-arrow">
           <div class="wf-label">Oppgaveforløp</div>
-          <svg viewBox="0 0 200 14"><polygon points="0,7 8,1 8,5" fill="#8DC63F"/><rect x="8" y="5.5" width="184" height="3" rx="1" fill="#8DC63F" opacity=".5"/><polygon points="200,7 192,1 192,13" fill="#8DC63F"/><polygon points="0,7 8,13 8,9" fill="#8DC63F"/></svg>
+          <svg viewBox="0 0 200 14"><polygon points="0,7 8,1 8,5" fill="#d4a017"/><rect x="8" y="5.5" width="184" height="3" rx="1" fill="#d4a017" opacity=".5"/><polygon points="200,7 192,1 192,13" fill="#d4a017"/><polygon points="0,7 8,13 8,9" fill="#d4a017"/></svg>
         </div>
-        <div class="wf-role" style="background:var(--accent-g);color:var(--accent);" id="wfFag2">Fag</div>
-        <div class="wf-type" style="background:var(--green-g);color:var(--green);">↔ Toveis</div>
+        <div class="wf-role wf-fag" style="background:var(--accent-g);color:var(--accent);">Fag</div>
+        <div class="wf-type" style="background:var(--yellow-g);color:var(--yellow);">Utbedring</div>
       </div>
       <div class="wf-flow">
         <div class="wf-role" style="background:var(--orange-g);color:var(--orange);">HMS-ledere</div>
@@ -1212,23 +1925,61 @@
           <div class="wf-label">HMS-forløp</div>
           <svg viewBox="0 0 200 14"><polygon points="0,7 8,1 8,5" fill="#e67e22"/><rect x="8" y="5.5" width="184" height="3" rx="1" fill="#e67e22" opacity=".5"/><polygon points="200,7 192,1 192,13" fill="#e67e22"/><polygon points="0,7 8,13 8,9" fill="#e67e22"/></svg>
         </div>
-        <div class="wf-role" style="background:var(--accent-g);color:var(--accent);" id="wfFag3">Fag</div>
-        <div class="wf-type" style="background:var(--orange-g);color:var(--orange);">⚠ HMS</div>
-      </div>
-      <div class="wf-flow">
-        <div class="wf-role" style="background:var(--accent-g);color:var(--accent);" id="wfFag4">Fag</div>
-        <div class="wf-arrow">
-          <div class="wf-label">Godkjenningsforløp</div>
-          <svg viewBox="0 0 200 14"><rect x="0" y="5.5" width="192" height="3" rx="1" fill="#8e6abf" opacity=".5"/><polygon points="200,7 192,1 192,13" fill="#8e6abf"/></svg>
-        </div>
-        <div class="wf-role" style="background:var(--yellow-g);color:var(--yellow);">TE</div>
-        <div class="wf-arrow">
-          <svg viewBox="0 0 100 14"><rect x="0" y="5.5" width="92" height="3" rx="1" fill="#8e6abf" opacity=".5"/><polygon points="100,7 92,1 92,13" fill="#8e6abf"/></svg>
-        </div>
-        <div class="wf-role" style="background:rgba(142,106,191,.1);color:var(--purple);">BH</div>
-        <div class="wf-type" style="background:rgba(142,106,191,.1);color:var(--purple);">✓ Godkjenning</div>
+        <div class="wf-role wf-fag" style="background:var(--accent-g);color:var(--accent);">Fag</div>
+        <div class="wf-type" style="background:var(--orange-g);color:var(--orange);">Utbedring</div>
       </div>
     </div>
+
+    <!-- STORT PROSJEKT: dedikerte fagledere reduserer støy og gir mer presise rettigheter -->
+    <div class="wf-flow-set" data-mode="stort">
+      <div class="wf-flow">
+        <div class="wf-role wf-fag" style="background:var(--accent-g);color:var(--accent);">Fag</div>
+        <div class="wf-arrow">
+          <div class="wf-label">Kvalitetsforløp</div>
+          <svg viewBox="0 0 200 14"><polygon points="0,7 8,1 8,5" fill="#3b82f6"/><rect x="8" y="5.5" width="184" height="3" rx="1" fill="#3b82f6" opacity=".5"/><polygon points="200,7 192,1 192,13" fill="#3b82f6"/><polygon points="0,7 8,13 8,9" fill="#3b82f6"/></svg>
+        </div>
+        <div class="wf-role" style="background:var(--box-blue-g);color:var(--box-blue);">Kvalitetsleder</div>
+        <div class="wf-type" style="background:var(--box-blue-g);color:var(--box-blue);">Rapport</div>
+      </div>
+      <div class="wf-flow">
+        <div class="wf-role" style="background:var(--box-blue-g);color:var(--box-blue);">Kvalitetsleder</div>
+        <div class="wf-arrow">
+          <div class="wf-label">Kvalitetsforløp</div>
+          <svg viewBox="0 0 200 14"><polygon points="0,7 8,1 8,5" fill="#3b82f6"/><rect x="8" y="5.5" width="184" height="3" rx="1" fill="#3b82f6" opacity=".5"/><polygon points="200,7 192,1 192,13" fill="#3b82f6"/><polygon points="0,7 8,13 8,9" fill="#3b82f6"/></svg>
+        </div>
+        <div class="wf-role wf-fag" style="background:var(--accent-g);color:var(--accent);">Fag</div>
+        <div class="wf-type" style="background:var(--box-blue-g);color:var(--box-blue);">Utbedring</div>
+      </div>
+      <div class="wf-flow">
+        <div class="wf-role" style="background:var(--orange-g);color:var(--orange);">HMS-leder</div>
+        <div class="wf-arrow">
+          <div class="wf-label">HMS-forløp</div>
+          <svg viewBox="0 0 200 14"><polygon points="0,7 8,1 8,5" fill="#e67e22"/><rect x="8" y="5.5" width="184" height="3" rx="1" fill="#e67e22" opacity=".5"/><polygon points="200,7 192,1 192,13" fill="#e67e22"/><polygon points="0,7 8,13 8,9" fill="#e67e22"/></svg>
+        </div>
+        <div class="wf-role wf-fag" style="background:var(--accent-g);color:var(--accent);">Fag</div>
+        <div class="wf-type" style="background:var(--orange-g);color:var(--orange);">Utbedring</div>
+      </div>
+      <div class="wf-flow">
+        <div class="wf-role wf-fag" style="background:var(--accent-g);color:var(--accent);">Fag</div>
+        <div class="wf-arrow">
+          <div class="wf-label">Miljøforløp</div>
+          <svg viewBox="0 0 200 14"><polygon points="0,7 8,1 8,5" fill="#6366f1"/><rect x="8" y="5.5" width="184" height="3" rx="1" fill="#6366f1" opacity=".5"/><polygon points="200,7 192,1 192,13" fill="#6366f1"/><polygon points="0,7 8,13 8,9" fill="#6366f1"/></svg>
+        </div>
+        <div class="wf-role" style="background:var(--box-indigo-g);color:var(--box-indigo);">Ytre miljø</div>
+        <div class="wf-type" style="background:var(--box-indigo-g);color:var(--box-indigo);">Rapport</div>
+      </div>
+      <div class="wf-flow">
+        <div class="wf-role" style="background:var(--box-indigo-g);color:var(--box-indigo);">Ytre miljø</div>
+        <div class="wf-arrow">
+          <div class="wf-label">Miljøforløp</div>
+          <svg viewBox="0 0 200 14"><polygon points="0,7 8,1 8,5" fill="#6366f1"/><rect x="8" y="5.5" width="184" height="3" rx="1" fill="#6366f1" opacity=".5"/><polygon points="200,7 192,1 192,13" fill="#6366f1"/><polygon points="0,7 8,13 8,9" fill="#6366f1"/></svg>
+        </div>
+        <div class="wf-role wf-fag" style="background:var(--accent-g);color:var(--accent);">Fag</div>
+        <div class="wf-type" style="background:var(--box-indigo-g);color:var(--box-indigo);">Utbedring</div>
+      </div>
+    </div>
+
+    <p class="wf-mode-hint" id="wfModeHint">I små prosjekter behandler totalentreprenøren alle saker, ofte fordi samme person har flere "hatter".</p>
   </div>
 </div>
 
@@ -1238,8 +1989,8 @@
 <!-- ========================================= -->
 <div class="page intro" id="page2">
   <header>
-    <h1>Oppgavens livssyklus</h1>
-    <p>Følg en oppgave gjennom arbeidsforløpet - fra oppretting til godkjenning.</p>
+    <h1>Oppgaver - Fra opprettet til lukket</h1>
+    <p>Følg en oppgave gjennom arbeidsforløpet, fra oppretting til godkjenning.</p>
   </header>
 
   <!-- Scenario picker -->
@@ -1379,7 +2130,8 @@
       <div class="box-track-name">Kommunikasjonsflyt</div>
       <div class="box-track-desc">Enkel deling og kommunikasjon rundt dokumenter i prosjektet</div>
     </button>
-    <button class="box-track-card" onclick="openBoxTrack('files')">
+    <button class="box-track-card coming-soon" onclick="openBoxTrack('files')" aria-label="Mappestruktur og filhåndtering, kommer snart">
+      <span class="coming-soon-badge">Kommer snart</span>
       <div class="box-track-icon">📁</div>
       <div class="box-track-name">Mappestruktur og filhåndtering</div>
       <div class="box-track-desc">Organisering, navnekonvensjoner og metadata for strukturert dokumenthåndtering</div>
@@ -1387,7 +2139,7 @@
     <button class="box-track-card" onclick="openBoxTrack('iso')">
       <div class="box-track-icon">📐</div>
       <div class="box-track-name">ISO 19650</div>
-      <div class="box-track-desc">Full CDE-implementering med statusområder, innsendinger og godkjenningsflyt</div>
+      <div class="box-track-desc">Full CDE-oppsett med statusområder, innsendinger og godkjenningsflyt</div>
     </button>
   </div>
 </div>
@@ -1399,7 +2151,7 @@
 
 <div class="page-nav" id="commNav">
   <button class="page-btn active" onclick="showCommPage(1)" id="cpb1"><span class="pnum">1</span> Kommunikasjonsflyt</button>
-  <button class="page-btn" onclick="showCommPage(2)" id="cpb2"><span class="pnum">2</span> Kommentarens livssyklus</button>
+  <button class="page-btn" onclick="showCommPage(2)" id="cpb2"><span class="pnum">2</span> Kommentar - opprett, send, lukk</button>
 </div>
 
 <button class="fs-btn" onclick="toggleFS()" id="fsBtnComm" style="opacity:0;pointer-events:none">⛶ Fullskjerm</button>
@@ -1408,12 +2160,13 @@
 <div class="page visible" id="commPage1">
 
   <div class="comm-intro">
-    <p>I Dalux Box oppretter man <strong>kommentarer</strong> direkte på tegninger, PDF-er og BIM-modeller. Kommentarene kobles til en <strong>kommunikasjonsflyt</strong> som styrer hvilke brukergrupper som kan se, opprette, redigere og lukke kommentarer. Kommunikasjonsflyten sikrer at riktig informasjon når riktige personer, og at all dialog er sporbar.</p>
+    <p>I Dalux Box oppretter du <strong>kommentarer</strong> direkte på tegninger, PDF-er og BIM-modeller. Hver kommentar tilhører en <strong>kommunikasjonsflyt</strong> som styrer hvilke grupper som kan se, opprette, redigere og lukke den. Slik sørger flyten for at riktig informasjon når riktige personer, og at all dialog er sporbar.</p>
   </div>
 
   <div class="comm-tabs">
     <button class="comm-tab on" id="tCommList" onclick="setCommView('list')"><span class="num">1</span>Oppsett</button>
     <button class="comm-tab" id="tCommHub" onclick="setCommView('hub')"><span class="num">2</span>Kommunikasjonsflyt</button>
+    <button class="comm-tab" id="tCommStatus" onclick="setCommView('status')"><span class="num">3</span>Statuser</button>
   </div>
 
   <div class="comm-view-info" id="commViewInfo">
@@ -1455,6 +2208,115 @@
         </div>
       </div>
     </div>
+    <div class="comm-info-status" id="commInfoStatus" style="display:none">
+      <!-- Før/etter-sammenligning -->
+      <div class="status-compare">
+        <div class="status-compare-card status-compare-bad">
+          <div class="status-compare-label">Uten egendefinerte statuser</div>
+          <div class="status-timeline">
+            <div class="status-tl-entry">
+              <span class="status-tl-day">Dag 1</span>
+              <span class="cl-status-badge cl-st-default">Aktivert</span>
+            </div>
+            <div class="status-tl-gap">
+              <span class="status-tl-gap-text">⋮ 4 dager stillhet</span>
+            </div>
+            <div class="status-tl-entry">
+              <span class="status-tl-day">Dag 5</span>
+              <span class="cl-status-badge cl-st-closed-default">Lukket</span>
+            </div>
+          </div>
+          <div class="status-compare-quote">"Hva skjedde i mellom?"</div>
+        </div>
+        <div class="status-compare-card status-compare-good">
+          <div class="status-compare-label">Med egendefinerte statuser</div>
+          <div class="status-timeline">
+            <div class="status-tl-entry"><span class="status-tl-day">Dag 1</span><span class="cl-status-badge cl-st-ny">Ny</span></div>
+            <div class="status-tl-entry"><span class="status-tl-day">Dag 2</span><span class="cl-status-badge cl-st-behandling">Under behandling</span></div>
+            <div class="status-tl-entry"><span class="status-tl-day">Dag 3</span><span class="cl-status-badge cl-st-besvart">Besvart</span></div>
+            <div class="status-tl-entry"><span class="status-tl-day">Dag 5</span><span class="cl-status-badge cl-st-lukket">Lukket</span></div>
+          </div>
+          <div class="status-compare-quote">"Hele løpet er sporbart"</div>
+        </div>
+      </div>
+
+      <!-- Eksempel-flyter -->
+      <div class="status-section-header">
+        <h3>Eksempler på status-oppsett</h3>
+        <p>Start med standardflyten. Tilpass bare når kommentartypen krever det.</p>
+      </div>
+      <div class="status-examples">
+        <div class="status-example-card recommended">
+          <div class="status-example-label">Anbefalt utgangspunkt</div>
+          <div class="status-example-title">Standardflyt</div>
+          <div class="status-example-desc">Brukes for de fleste kommentartyper. Hold på dette så langt det går for å få konsistens på tvers av prosjektet.</div>
+          <div class="status-example-flow">
+            <span class="cl-status-badge cl-st-ny">Ny</span>
+            <span class="status-arrow">↓</span>
+            <span class="cl-status-badge cl-st-behandling">Under behandling</span>
+            <span class="status-arrow">↓</span>
+            <span class="cl-status-badge cl-st-besvart">Besvart</span>
+            <span class="status-arrow">↓</span>
+            <span class="cl-status-badge cl-st-lukket">Lukket</span>
+          </div>
+        </div>
+        <div class="status-example-card">
+          <div class="status-example-label">Når kommentartypen krever det</div>
+          <div class="status-example-title">RFI</div>
+          <div class="status-example-desc">Request for Information. Litt annerledes flyt, så egne statuser gir mening her.</div>
+          <div class="status-example-flow">
+            <span class="cl-status-badge cl-st-ny">Spurt</span>
+            <span class="status-arrow">↓</span>
+            <span class="cl-status-badge cl-st-behandling">Under utredning</span>
+            <span class="status-arrow">↓</span>
+            <span class="cl-status-badge cl-st-besvart">Besvart</span>
+            <span class="status-arrow">↓</span>
+            <span class="cl-status-badge cl-st-lukket">Avklart</span>
+          </div>
+        </div>
+        <div class="status-example-card">
+          <div class="status-example-label">Når kommentartypen krever det</div>
+          <div class="status-example-title">Byggherreavklaring</div>
+          <div class="status-example-desc">Saker som krever byggherrens beslutning. Statusene speiler beslutningsløpet.</div>
+          <div class="status-example-flow">
+            <span class="cl-status-badge cl-st-ny">Avventer BH</span>
+            <span class="status-arrow">↓</span>
+            <span class="cl-status-badge cl-st-besvart">Besvart av BH</span>
+            <span class="status-arrow">↓</span>
+            <span class="cl-status-badge cl-st-behandling">Utført</span>
+            <span class="status-arrow">↓</span>
+            <span class="cl-status-badge cl-st-lukket">Lukket</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Prinsipper -->
+      <div class="status-section-header">
+        <h3>Tre prinsipper når du setter opp statuser</h3>
+      </div>
+      <div class="bg-principles">
+        <div class="bg-principle">
+          <div class="bg-principle-num">Prinsipp 1</div>
+          <div class="bg-principle-title">Standardiser hvor det er mulig</div>
+          <div class="bg-principle-text">Bruk samme status-navn og fargekoder på tvers av kommentartyper. Det gjør oversikten lettere og folk lærer mønsteret raskere.</div>
+        </div>
+        <div class="bg-principle">
+          <div class="bg-principle-num">Prinsipp 2</div>
+          <div class="bg-principle-title">Hold det håndterbart</div>
+          <div class="bg-principle-text">3 til 5 statuser per kommentartype er nok. Flere gjør det vanskeligere å holde orden, og hver enkelt status mister verdi.</div>
+        </div>
+        <div class="bg-principle">
+          <div class="bg-principle-num">Prinsipp 3</div>
+          <div class="bg-principle-title">Dekk hele løpet</div>
+          <div class="bg-principle-text">Ha statuser som dekker fra "Ny" til "Lukket", ikke bare midten. Da ser du både hvor saken starter og når den faktisk er ferdig.</div>
+        </div>
+      </div>
+
+      <!-- Footnote/cross-link -->
+      <div class="status-footnote">
+        <p>Status-endringer logges automatisk i aktivitetsloggen. Se hva som skjer med en kommentar steg for steg på <strong>side 2 (Kommentar - opprett, send, lukk)</strong>.</p>
+      </div>
+    </div>
   </div>
 
   <div class="comm-stage list-view" id="commStage">
@@ -1482,43 +2344,59 @@
   <div class="comm-caption" id="commCaption">Kommunikasjonsflyten viser hvilke grupper som kan kommunisere sammen</div>
 </div>
 
-<!-- COMM PAGE 2: Kommentarens livssyklus -->
+<!-- COMM PAGE 2: Kommentar - opprett, send, lukk -->
 <div class="page" id="commPage2">
 
+  <header class="cl-page-header">
+    <h1>Kommentar - opprett, send, lukk</h1>
+  </header>
+
   <div class="comm-intro">
-    <p>En kommentar i Box starter med at noen markerer et punkt på en tegning, et dokument eller en BIM-modell, og fyller ut kommentarskjemaet. Derfra lever kommentaren gjennom hele behandlingsprosessen, med full sporbarhet i aktivitetsloggen.</p>
+    <p>En kommentar i Box starter når du markerer et punkt på en tegning, et dokument eller en BIM-modell, og fyller ut kommentarskjemaet. Den lever videre gjennom hele behandlingen, med full sporbarhet i aktivitetsloggen.</p>
   </div>
 
-  <div class="lc-info-cards" style="max-width:800px;margin:0 auto 24px">
-    <div class="lc-info-row">
-      <div class="lc-info-card">
-        <div class="lc-info-num">1</div>
-        <div class="lc-info-body">
-          <div class="lc-info-title">Opprett kommentar</div>
-          <div class="lc-info-desc">Velg fil (tegning, PDF eller BIM-modell) og marker med sky, pil, tekst eller måling. Fyll ut kommentarskjema med type, kommunikasjonsflyt, tittel, tidsfrist og beskrivelse. Kommentaren knyttes permanent til filen og posisjonen.</div>
-        </div>
+  <!-- Stepper: 4 klikkbare faner som doblerer som progress-indikator -->
+  <div class="cl-stepper" id="clStepper">
+    <button type="button" class="cl-step-tab active" data-step="1" onclick="clGoTo(1)">
+      <span class="cl-step-num">1</span><span class="cl-step-title">Opprett</span>
+    </button>
+    <button type="button" class="cl-step-tab" data-step="2" onclick="clGoTo(2)">
+      <span class="cl-step-num">2</span><span class="cl-step-title">Send</span>
+    </button>
+    <button type="button" class="cl-step-tab" data-step="3" onclick="clGoTo(3)">
+      <span class="cl-step-num">3</span><span class="cl-step-title">Dialog</span>
+    </button>
+    <button type="button" class="cl-step-tab" data-step="4" onclick="clGoTo(4)">
+      <span class="cl-step-num">4</span><span class="cl-step-title">Lukk</span>
+    </button>
+  </div>
+
+  <!-- Beskrivelse av valgt steg -->
+  <div class="cl-step-desc" id="clStepDesc">
+    <strong>Opprett kommentar:</strong> Velg fil (tegning, PDF eller BIM-modell) og marker med sky, pil, tekst eller måling. Fyll ut kommentarskjema med type, kommunikasjonsflyt, tittel, tidsfrist og beskrivelse. Kommentaren knyttes permanent til filen og posisjonen.
+  </div>
+
+  <!-- Animert stage: 3 grupper + puck + status -->
+  <div class="cl-stage">
+    <div class="cl-file">📄 D-Plan 01 · Kommentar #71</div>
+    <div class="cl-flow" id="clFlow">
+      <div class="cl-group active" data-group="rie">
+        <span class="cl-group-icon">⚡</span>
+        <span class="cl-group-name">RiE</span>
       </div>
-      <div class="lc-info-card">
-        <div class="lc-info-num">2</div>
-        <div class="lc-info-body">
-          <div class="lc-info-title">Send til gruppe eller person</div>
-          <div class="lc-info-desc">Kommentaren sendes til en brukergruppe eller en spesifikk person i flyten. Mottaker blir varslet, og kommentaren dukker opp på tegningen med fargekode basert på status.</div>
-        </div>
+      <div class="cl-group" data-group="ark">
+        <span class="cl-group-icon">🏛️</span>
+        <span class="cl-group-name">ARK</span>
       </div>
-      <div class="lc-info-card">
-        <div class="lc-info-num">3</div>
-        <div class="lc-info-body">
-          <div class="lc-info-title">Dialog og statusoppdatering</div>
-          <div class="lc-info-desc">Mottaker kan svare med meldinger og vedlegg i kommentartråden. Status oppdateres underveis (f.eks. «Under behandling» → «Besvart»). Kommentaren kan sendes videre til andre grupper i flyten ved behov.</div>
-        </div>
+      <div class="cl-group" data-group="pl">
+        <span class="cl-group-icon">📐</span>
+        <span class="cl-group-name">Prosj.leder</span>
       </div>
-      <div class="lc-info-card">
-        <div class="lc-info-num">4</div>
-        <div class="lc-info-body">
-          <div class="lc-info-title">Lukking</div>
-          <div class="lc-info-desc">Når saken er ferdigbehandlet, lukker en bruker med Lukk-rettighet kommentaren. Hvem dette er avhenger av flyten - det kan være prosjekteringsleder, byggherre eller en annen rolle. All historikk bevares: statusendringer, meldinger, vedlegg og tidsstempler.</div>
-        </div>
-      </div>
+      <div class="cl-puck" id="clPuck">💬</div>
+    </div>
+    <div class="cl-status">
+      <span class="cl-status-label">Status:</span>
+      <span class="cl-status-badge cl-st-ny" id="clStatusBadge">Ny</span>
     </div>
   </div>
 
@@ -1531,7 +2409,7 @@
       </div>
     </div>
     <div class="comm-log-entries">
-      <div class="comm-log-entry">
+      <div class="comm-log-entry" data-show-from="1">
         <div class="comm-log-avatar" style="background:#10b981">OV</div>
         <div class="comm-log-content">
           <div class="comm-log-name">Ole Ventansen <span class="comm-log-date">10. des. 2024</span></div>
@@ -1541,7 +2419,7 @@
           <div class="comm-log-action">Status: <span class="comm-log-status" style="background:#f59e0b">Ny</span></div>
         </div>
       </div>
-      <div class="comm-log-entry">
+      <div class="comm-log-entry" data-show-from="2">
         <div class="comm-log-avatar" style="background:#f59e0b">TA</div>
         <div class="comm-log-content">
           <div class="comm-log-name">Tor Ampere <span class="comm-log-date">12. des. 2024</span></div>
@@ -1551,7 +2429,7 @@
           <div class="comm-log-action">Status oppdatert fra <span class="comm-log-status" style="background:#f59e0b">Ny</span> til <span class="comm-log-status" style="background:#3b82f6">Under behandling</span></div>
         </div>
       </div>
-      <div class="comm-log-entry">
+      <div class="comm-log-entry" data-show-from="3">
         <div class="comm-log-avatar" style="background:#ef4444">KF</div>
         <div class="comm-log-content">
           <div class="comm-log-name">Kari Fasade <span class="comm-log-date">13. des. 2024</span></div>
@@ -1560,7 +2438,7 @@
           <div class="comm-log-action">Status oppdatert fra <span class="comm-log-status" style="background:#3b82f6">Under behandling</span> til <span class="comm-log-status" style="background:#8b5cf6">Besvart</span></div>
         </div>
       </div>
-      <div class="comm-log-entry">
+      <div class="comm-log-entry" data-show-from="4">
         <div class="comm-log-avatar" style="background:#ec4899">IP</div>
         <div class="comm-log-content">
           <div class="comm-log-name">Ingrid Plansson <span class="comm-log-date">15. des. 2024</span></div>
@@ -1570,6 +2448,12 @@
       </div>
     </div>
   </div>
+
+  <!-- Kontroller -->
+  <div class="cl-controls">
+    <button type="button" class="ctrl-btn" id="clPrevBtn" onclick="clStep(-1)" disabled>← Forrige</button>
+    <button type="button" class="ctrl-btn primary" id="clNextBtn" onclick="clStep(1)">Neste →</button>
+  </div>
 </div>
 
 </div>
@@ -1578,14 +2462,18 @@
 <div class="box-track" id="boxTrackFiles">
 <button class="back-btn" onclick="backToBoxSelector()">← Box</button>
 <button class="fs-btn" onclick="toggleFS()" id="fsBtnFiles" style="opacity:0;pointer-events:none">⛶ Fullskjerm</button>
-<div class="page visible">
-  <header>
+<div class="page visible files-placeholder">
+  <div class="files-soon-card">
+    <div class="files-soon-icon">📁</div>
     <h1>Mappestruktur og filhåndtering</h1>
-    <p>Organisering, navnekonvensjoner og metadata</p>
-  </header>
-  <div style="text-align:center;padding:60px 20px;color:var(--muted)">
-    <p style="font-size:1.2rem;margin-bottom:8px">🚧</p>
-    <p>Denne delen er under utvikling</p>
+    <p class="files-soon-lead">Denne delen er ikke ferdig ennå.</p>
+    <p class="files-soon-desc">Når den er klar vil den dekke organisering av mapper, navnekonvensjoner, metadata-felter og hvordan dette spiller sammen med statusområdene i Box.</p>
+    <div class="files-soon-list">
+      <div class="files-soon-item"><span class="files-soon-bullet">•</span>Eksempel på mappestruktur per fag</div>
+      <div class="files-soon-item"><span class="files-soon-bullet">•</span>Navnekonvensjon og automatiske hyperlinker</div>
+      <div class="files-soon-item"><span class="files-soon-bullet">•</span>Metadata-felter og filtrering</div>
+    </div>
+    <button class="ctrl-btn" onclick="backToBoxSelector()" style="margin-top:8px">← Tilbake til Box</button>
   </div>
 </div>
 </div>
@@ -1611,8 +2499,8 @@
   </header>
 
   <div class="iso-intro" id="boxP1Intro">
-    <p>ISO 19650 handler om å sikre at riktig informasjon er tilgjengelig for riktige personer til rett tid. Standarden definerer hvordan dokumenter og modeller skal organiseres, navngis, deles og godkjennes gjennom hele prosjektets levetid.</p>
-    <p>Kjernen i standarden er et <strong>Common Data Environment (CDE)</strong> - ett felles sted der all prosjektinformasjon lever, med tydelige statusområder som viser hvor hvert dokument befinner seg i prosessen.</p>
+    <p>ISO 19650 handler om å sørge for at riktig informasjon er tilgjengelig for riktige personer til rett tid. Standarden setter rammene for hvordan dokumenter og modeller skal organiseres, navngis, deles og godkjennes gjennom hele prosjektets levetid.</p>
+    <p>Kjernen i standarden er et <strong>Common Data Environment (CDE)</strong>, ett felles sted der all prosjektinformasjon lever, med tydelige statusområder som viser hvor hvert dokument befinner seg i prosessen.</p>
   </div>
   </div>
 
@@ -1682,7 +2570,7 @@
     <div class="cde-info">
       <div class="cde-info-title">Hvorfor CDE?</div>
       <p>Hele poenget med et Common Data Environment er å ha én felles kilde til sannhet. Alle parter vet hvor de finner gjeldende informasjon, og alle dokumenter har en tydelig status som viser hvor langt de har kommet i prosessen.</p>
-      <p>ISO 19650 gir rammeverket - men i praksis må det tilpasses hvert prosjekt. Det er her Dalux Box kommer inn.</p>
+      <p>ISO 19650 gir rammeverket, men i praksis må det tilpasses hvert prosjekt. Det er her Dalux Box kommer inn.</p>
     </div>
   </div>
 
@@ -1707,7 +2595,7 @@
           <div class="cde-feat-icon">📂</div>
           <div class="cde-feat-content">
             <div class="cde-feat-title">Filområder</div>
-            <div class="cde-feat-desc">Tre filområder - Filer, Delte filer og Utgitte filer - mapper direkte til ISO 19650 sine statusområder S0, S1-S2 og S3.</div>
+            <div class="cde-feat-desc">Tre filområder (Filer, Delte filer og Utgitte filer) mapper direkte til ISO 19650 sine statusområder S0, S1-S2 og S3.</div>
           </div>
         </div>
       </div>
@@ -1836,7 +2724,7 @@
         <h3>Strukturert med sporbarhet</h3>
       </div>
       <div class="box-level-body">
-        <p>Innfør filområder, metadata og navnekonvensjoner for bedre sporbarhet og struktur. Dokumenter kan filtreres og søkes på tvers.</p>
+        <p>Innfør filområder, metadata og navnekonvensjoner for bedre sporbarhet og struktur. Du kan filtrere og søke i dokumenter på tvers av prosjektet.</p>
         <div class="box-features">
           <div class="box-feat"><span class="bf-icon">📂</span><span>Mapper = statusområder (Filer → Utgitte filer)</span></div>
           <div class="box-feat"><span class="bf-icon">🔒</span><span>Tilgangsstyring per statusområde</span></div>
@@ -1854,7 +2742,7 @@
         <h3>ISO 19650-tilpasset CDE</h3>
       </div>
       <div class="box-level-body">
-        <p>Full implementering med alle tre filområder, formalisert leveranse- og godkjenningsflyt, og komplett sporbarhet i tråd med ISO 19650.</p>
+        <p>Komplett oppsett med alle tre filområder, formalisert leveranse- og godkjenningsflyt, og full sporbarhet i tråd med ISO 19650.</p>
         <div class="box-features">
           <div class="box-feat"><span class="bf-icon">🗂️</span><span>Tre filområder (Filer → Delte filer → Utgitte filer)</span></div>
           <div class="box-feat"><span class="bf-icon">📬</span><span>Innsendinger med planlagte leveranser, frister og ansvarlige</span></div>
@@ -1870,8 +2758,8 @@
 <!-- BOX PAGE 3: Dokumentflyt -->
 <div class="page" id="boxPage3">
   <header>
-    <h1>Dokumentets reise</h1>
-    <p>Følg et dokument gjennom CDE-statusområdene - fra utkast til godkjent</p>
+    <h1>Slik flyter et dokument gjennom CDE</h1>
+    <p>Følg et dokument fra utkast til godkjent versjon</p>
   </header>
 
   <div class="doc-flow-container">
@@ -1897,8 +2785,220 @@
 </div> <!-- end boxTrackIso -->
 </div> <!-- end modBox -->
 
-<div class="side-arrow left hidden" id="arrowLeft" onclick="navArrow(-1)">◀</div>
-<div class="side-arrow right hidden" id="arrowRight" onclick="navArrow(1)">▶</div>
+<!-- ============ TRACK: BRUKERGRUPPER (Felles begreper) ============ -->
+<div class="common-track" id="trackBrukergrupper">
+  <button class="back-btn" onclick="backToSplash()">← Forside</button>
+
+  <div class="page-nav" id="brukergrupperNav">
+    <button class="page-btn active" onclick="showBrukergrupperPage(1)" id="bgpb1"><span class="pnum">1</span> Hva er en brukergruppe?</button>
+    <button class="page-btn" onclick="showBrukergrupperPage(2)" id="bgpb2"><span class="pnum">2</span> Standardgruppene</button>
+    <button class="page-btn" onclick="showBrukergrupperPage(3)" id="bgpb3"><span class="pnum">3</span> Slik bygger du gode grupper</button>
+  </div>
+
+  <button class="fs-btn" onclick="toggleFS()" id="fsBtnBrukergrupper" style="opacity:0;pointer-events:none">⛶ Fullskjerm</button>
+
+  <!-- SIDE 1: Konsept -->
+  <div class="page visible" id="brukergrupperPage1">
+    <header>
+      <h1>Hva er en brukergruppe?</h1>
+      <p>Grunnstrukturen for rettigheter, samarbeid og sporbarhet i Dalux</p>
+    </header>
+
+    <div class="bg-intro">
+      <p class="bg-intro-quote">Brukergrupper styrer hvem som kan hva i Dalux</p>
+      <p>Du gir ikke rettigheter til personer direkte. Du lager grupper, gir gruppene rettigheter, og legger personene inn der de hører hjemme. En person kan være med i flere grupper, og får dermed ulike roller og rettigheter avhengig av modul og arbeidsforløp.</p>
+    </div>
+
+    <div class="bg-scene-wrap">
+      <div class="bg-scene-stage" id="bgSceneStage">
+        <svg class="bg-scene-svg" id="bgSceneSvg" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet"></svg>
+      </div>
+
+      <div class="bg-scene-caption" id="bgSceneCaption">Et byggeprosjekt har mange personer. Hver med sin rolle og sitt firma.</div>
+
+      <div class="bg-scene-controls">
+        <button class="ctrl-btn" id="bgPrevBtn" onclick="bgStep(-1)" disabled>← Forrige</button>
+        <div class="bg-scene-dots">
+          <span class="bg-scene-dot active" data-step="1"></span>
+          <span class="bg-scene-dot" data-step="2"></span>
+          <span class="bg-scene-dot" data-step="3"></span>
+        </div>
+        <button class="ctrl-btn primary" id="bgNextBtn" onclick="bgStep(1)">Neste →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIDE 2: Standardgruppene -->
+  <div class="page" id="brukergrupperPage2">
+    <header>
+      <h1>Standardgruppene i Dalux</h1>
+      <p>Gruppene som finnes når du oppretter et nytt prosjekt</p>
+    </header>
+
+    <div class="bg-tabs">
+      <button class="hub-tab on" id="bgtGeneral" onclick="setBgTab('general')"><span class="num">1</span>Generelt</button>
+      <button class="hub-tab" id="bgtField" onclick="setBgTab('field')"><span class="num">2</span>Field</button>
+      <button class="hub-tab" id="bgtBox" onclick="setBgTab('box')"><span class="num">3</span>Box</button>
+    </div>
+
+    <div class="bg-tab-panel active" id="bgPanelGeneral">
+      <div class="bg-cards">
+        <div class="bg-card" style="max-width:480px">
+          <div class="bg-card-header">
+            <span class="bg-card-icon">🛠️</span>
+            <div>
+              <div class="bg-card-sub">Generell admin</div>
+              <div class="bg-card-title">Prosjektadministratorer</div>
+            </div>
+          </div>
+          <div class="bg-card-desc">Har full tilgang til alle prosjektets innstillinger. Administrerer Dalux-prosjektet inkludert Field, Box og brukere. De kan opprette nye brukergrupper, sette rettigheter, og invitere brukere til prosjektet. Tender og Apartments krever egen tilgang.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-tab-panel" id="bgPanelField">
+      <div class="bg-cards">
+        <div class="bg-card">
+          <div class="bg-card-header">
+            <span class="bg-card-icon">⚙️</span>
+            <div>
+              <div class="bg-card-sub">Field admin</div>
+              <div class="bg-card-title">Field-administratorer</div>
+            </div>
+          </div>
+          <div class="bg-card-desc">Administrerer Field-modulen. Setter opp arbeidspakker, arbeidsforløp og maler for oppgaver, sjekklister, testplaner osv. Kan flytte personer mellom Field-grupper, men kan ikke invitere nye til prosjektet.</div>
+        </div>
+        <div class="bg-card warning">
+          <span class="bg-warning-label">⚠ Viktig!</span>
+          <div class="bg-card-header">
+            <span class="bg-card-icon">📝</span>
+            <div>
+              <div class="bg-card-sub">Auto-rolle i alle workflows</div>
+              <div class="bg-card-title">Oppgave- og sjekklistekoordinator</div>
+            </div>
+          </div>
+          <div class="bg-card-desc">Du plasseres automatisk som oppretter i ALLE arbeidsforløp på prosjektet. Det overstyrer andre svarer-roller du måtte ha. Anbefales kun for de som faktisk skal koordinere alt. Har du andre roller i prosjektet, ikke vær med her.</div>
+        </div>
+        <div class="bg-card">
+          <div class="bg-card-header">
+            <span class="bg-card-icon">👁️</span>
+            <div>
+              <div class="bg-card-sub">Lesetilgang</div>
+              <div class="bg-card-title">Field-observatører</div>
+            </div>
+          </div>
+          <div class="bg-card-desc">Kan se det meste i Field, men ikke møter og mengder (med mindre de får egen tilgang via en egendefinert gruppe). Kan ikke se kladder eller motta varsler ved endringer.</div>
+        </div>
+        <div class="bg-card">
+          <div class="bg-card-header">
+            <span class="bg-card-icon">🦺</span>
+            <div>
+              <div class="bg-card-sub">HMS-ansvarlig</div>
+              <div class="bg-card-title">HMS-ledere</div>
+            </div>
+          </div>
+          <div class="bg-card-desc">Ansvarlig for HMS-funksjonene. Får automatisk HMS-arbeidsforløp i alle arbeidspakker der HMS er aktivert. Mottar alle HMS-observasjoner. Kan ikke redigere HMS-malene selv.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-tab-panel" id="bgPanelBox">
+      <div class="bg-cards">
+        <div class="bg-card">
+          <div class="bg-card-header">
+            <span class="bg-card-icon">📂</span>
+            <div>
+              <div class="bg-card-sub">Box og Lokasjoner</div>
+              <div class="bg-card-title">Prosjekteringsleder</div>
+            </div>
+          </div>
+          <div class="bg-card-desc">Administrerer Box og Lokasjoner. Oppretter og styrer lokasjoner, bygninger og mappestruktur. Lager versjonsett, distribusjonslister, review packages og kommentarer. Kan håndtere filområder og fil-flyt, inkludert tvungen publisering og godkjenning.</div>
+        </div>
+        <div class="bg-card">
+          <div class="bg-card-header">
+            <span class="bg-card-icon">📬</span>
+            <div>
+              <div class="bg-card-sub">Innsendinger</div>
+              <div class="bg-card-title">Innsendingsansvarlig</div>
+            </div>
+          </div>
+          <div class="bg-card-desc">Tilgjengelig kun når innsendingsfunksjonen er aktivert i prosjektet. Har tilgang til alle innsendingsinnstillinger og administrerer prosjektets innsendinger og leveranser.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIDE 3: God praksis -->
+  <div class="page" id="brukergrupperPage3">
+    <header>
+      <h1>Slik bygger du gode grupper</h1>
+      <p>Hvorfor flere små grupper gir bedre kontroll enn én stor</p>
+    </header>
+
+    <div class="bg-why">
+      <p>Det er fristende å lage få og store brukergrupper for å holde det enkelt. Men det gjør det vanskelig å gi presise rettigheter og målrette informasjon. Flere små grupper gir mer kontroll over hva folk kan opprette, redigere og se i hver modul.</p>
+    </div>
+
+    <div class="bg-principles">
+      <div class="bg-principle">
+        <div class="bg-principle-num">Prinsipp 1</div>
+        <div class="bg-principle-title">Nummereringssystem</div>
+        <div class="bg-principle-text">Hver gruppe starter med et nummer. Det gir samme rekkefølge på alle prosjekter siden Dalux sorterer alfabetisk på gruppenavn.</div>
+      </div>
+      <div class="bg-principle">
+        <div class="bg-principle-num">Prinsipp 2</div>
+        <div class="bg-principle-title">Én gruppe per firma/kontrakt</div>
+        <div class="bg-principle-text">Brukerne i én gruppe bør komme fra samme firma eller kontrakt. Da kan du enkelt målrette alle fra samme aktør i arbeidsforløp.</div>
+      </div>
+      <div class="bg-principle">
+        <div class="bg-principle-num">Prinsipp 3</div>
+        <div class="bg-principle-title">Splitt per fag når relevant</div>
+        <div class="bg-principle-text">Hvis ett firma dekker flere fag, lag undergrupper med samme rot-nummer (40, 41, 42 osv.). Du kan da gi ulike rettigheter til hvert fag.</div>
+      </div>
+    </div>
+
+    <div class="bg-example">
+      <div class="bg-example-header">
+        <span class="bg-example-icon">📋</span>
+        <span class="bg-example-title">Eksempel: Brukergrupper i et byggeprosjekt</span>
+      </div>
+      <div class="bg-example-list">
+        <div class="bg-example-row"><span class="bg-example-num">10</span><span>Byggherre</span></div>
+        <div class="bg-example-row"><span class="bg-example-num">20</span><span>Byggeledelse</span></div>
+        <div class="bg-example-row"><span class="bg-example-num">30</span><span>Lars Anlegg AS (totalentreprenør)</span></div>
+        <div class="bg-example-row"><span class="bg-example-num">40</span><span>Betongmiljø AS (RiB)</span></div>
+        <div class="bg-example-row sub"><span class="bg-example-num">41</span><span>Betongmiljø AS - Konstruksjon</span></div>
+        <div class="bg-example-row sub"><span class="bg-example-num">42</span><span>Betongmiljø AS - Geoteknikk</span></div>
+        <div class="bg-example-row"><span class="bg-example-num">50</span><span>Fasade &amp; Form AS (ARK)</span></div>
+        <div class="bg-example-row"><span class="bg-example-num">60</span><span>Strøm &amp; Lys AS (RiE)</span></div>
+        <div class="bg-example-row"><span class="bg-example-num">70</span><span>Klima AS (RiV)</span></div>
+        <div class="bg-example-row"><span class="bg-example-num">80</span><span>HMS-koordinator</span></div>
+      </div>
+    </div>
+
+    <div class="bg-split">
+      <div class="bg-split-header">
+        <h3>Hva får du med å splitte?</h3>
+        <p>Se forskjellen mellom én bred gruppe og fagsplittede grupper</p>
+      </div>
+      <div class="bg-split-cols">
+        <div class="bg-split-col bad">
+          <span class="bg-split-label">Mindre fleksibelt</span>
+          <div class="bg-split-title">40 - Betongmiljø AS (én stor)</div>
+          <div class="bg-split-text">Alle fagene i Betongmiljø får samme rettigheter. Geoteknikere får tilgang til konstruksjonsmodeller selv om de ikke trenger det. Varsler om konstruksjons-revisjoner går til geoteknikere som heller ikke trenger dem.</div>
+        </div>
+        <div class="bg-split-col good">
+          <span class="bg-split-label">Mer presis</span>
+          <div class="bg-split-title">41 + 42 (fagsplittet)</div>
+          <div class="bg-split-text">Konstruksjon (41) og Geoteknikk (42) får ulike rettigheter og varsler. Du kan målrette en kommentar til kun riktig fag, og hver gruppe ser bare det som er relevant for dem. Begge er fortsatt under "40 Betongmiljø" for sortering.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button type="button" class="side-arrow left hidden" id="arrowLeft" onclick="navArrow(-1)" aria-label="Forrige side">◀</button>
+<button type="button" class="side-arrow right hidden" id="arrowRight" onclick="navArrow(1)" aria-label="Neste side">▶</button>
 
 <script>
 // ============================
@@ -1974,7 +3074,7 @@ const ues = [
   { c:'43.994', n:'Murerarbeid', col:'#c9785d', bg:'#c8d8b8' },
 ];
 const shortNames = {
-  '41.00':'Internentreprise','41.100':'Byggherre',
+  '41.00':'Internentr.','41.100':'Byggherre',
   '43.110':'Riving','43.120':'Grunnarbeid','43.130':'Prøveboring',
   '43.210':'Elektriker','43.221':'Rørlegger','43.223':'Ventilasjon',
   '43.310':'Stukkatør','43.330':'Gulv/Tapet','43.341':'Maler',
@@ -1983,8 +3083,25 @@ const shortNames = {
 };
 const hubStage = document.getElementById('hubStage');
 const listChrome = document.getElementById('listChrome');
-const listX=240,listW=620,listRowH=30,listHeaderH=75;
-const hubCX=550,hubCY=290,hubRx=400,hubRy=240;
+const listRowH=30, listHeaderH=75;
+// Design-koordinater for SVG viewBox - DOM-posisjoner regnes responsivt fra disse
+const HUB_DESIGN_W=1100, HUB_DESIGN_H=620;
+function getHubLayout(){
+  const w = hubStage.offsetWidth || HUB_DESIGN_W;
+  const h = hubStage.offsetHeight || HUB_DESIGN_H;
+  const scale = w / HUB_DESIGN_W;
+  return {
+    w, h, scale,
+    cx: w * 0.5,
+    cy: h * (290/HUB_DESIGN_H),
+    rx: w * (400/HUB_DESIGN_W),
+    ry: h * (240/HUB_DESIGN_H),
+    nodeW: Math.max(115, Math.min(165, 165*scale)),
+    nodeH: 34,
+    listX: w * (240/HUB_DESIGN_W),
+    listW: w * (620/HUB_DESIGN_W),
+  };
+}
 const hubNodes=[];
 ues.forEach((u,i)=>{
   const el=document.createElement('div');
@@ -1995,21 +3112,37 @@ ues.forEach((u,i)=>{
   el.style.cursor='pointer'; el.onclick=()=>openWf(i);
   hubStage.appendChild(el); hubNodes.push(el);
 });
-function getListPos(i){return{left:listX,top:listHeaderH+i*listRowH,w:listW,h:listRowH};}
-function getHubPos(i){const a=(i/ues.length)*Math.PI*2-Math.PI/2;const r=i%2===0?1:.68;return{left:hubCX+Math.cos(a)*hubRx*r-72,top:hubCY+Math.sin(a)*hubRy*r-17,w:144,h:34};}
-function applyPos(fn){hubNodes.forEach((el,i)=>{const p=fn(i);el.style.left=p.left+'px';el.style.top=p.top+'px';el.style.width=p.w+'px';el.style.height=p.h+'px';});}
-function genHubSvg(){let s='';ues.forEach((u,i)=>{const a=(i/ues.length)*Math.PI*2-Math.PI/2;const r=i%2===0?1:.68;s+=`<line x1="${hubCX}" y1="${hubCY}" x2="${hubCX+Math.cos(a)*hubRx*r}" y2="${hubCY+Math.sin(a)*hubRy*r}" stroke="${u.col}"/>`;});document.getElementById('hubSvg').innerHTML=s;}
-const hubDots=[];
-function createDots(){
+function getListPos(i, L){L=L||getHubLayout();return{left:L.listX,top:listHeaderH+i*listRowH,w:L.listW,h:listRowH};}
+function getHubPos(i, L){L=L||getHubLayout();const a=(i/ues.length)*Math.PI*2-Math.PI/2;const r=i%2===0?1:.68;return{left:L.cx+Math.cos(a)*L.rx*r-L.nodeW/2,top:L.cy+Math.sin(a)*L.ry*r-L.nodeH/2,w:L.nodeW,h:L.nodeH};}
+function applyPos(fn){const L=getHubLayout();hubNodes.forEach((el,i)=>{const p=fn(i,L);el.style.left=p.left+'px';el.style.top=p.top+'px';el.style.width=p.w+'px';el.style.height=p.h+'px';});}
+function genHubSvg(){
+  // SVG bruker design-koordinater (viewBox 0 0 1100 620) og skaleres automatisk
+  const cx=HUB_DESIGN_W/2, cy=290, rx=400, ry=240;
+  let s='';
   ues.forEach((u,i)=>{
     const a=(i/ues.length)*Math.PI*2-Math.PI/2;
     const r=i%2===0?1:.68;
-    const ex=hubCX+Math.cos(a)*hubRx*r, ey=hubCY+Math.sin(a)*hubRy*r;
+    s+=`<line x1="${cx}" y1="${cy}" x2="${cx+Math.cos(a)*rx*r}" y2="${cy+Math.sin(a)*ry*r}" stroke="${u.col}"/>`;
+  });
+  document.getElementById('hubSvg').innerHTML=s;
+}
+const hubDots=[];
+function updateDotPositions(){
+  const L=getHubLayout();
+  hubDots.forEach((dot,i)=>{
+    const a=(i/ues.length)*Math.PI*2-Math.PI/2;
+    const r=i%2===0?1:.68;
+    dot._cx=L.cx; dot._cy=L.cy;
+    dot._ex=L.cx+Math.cos(a)*L.rx*r;
+    dot._ey=L.cy+Math.sin(a)*L.ry*r;
+  });
+}
+function createDots(){
+  ues.forEach((u,i)=>{
     const dot=document.createElement('div');
     dot.className='hub-dot';
     dot.style.background=u.col;
     dot.style.opacity=0;
-    dot._cx=hubCX; dot._cy=hubCY; dot._ex=ex; dot._ey=ey;
     dot._col=u.col;
     dot._phase=0;
     dot._progress=0;
@@ -2018,6 +3151,20 @@ function createDots(){
     hubStage.appendChild(dot);
     hubDots.push(dot);
   });
+  updateDotPositions();
+}
+function positionHubCenter(){
+  const L=getHubLayout();
+  const hc=document.getElementById('hubCenter');
+  const cw=Math.max(200, Math.min(260, 260*L.scale));
+  hc.style.left=(L.cx-cw/2)+'px';
+  hc.style.top=(L.cy-24)+'px';
+  hc.style.width=cw+'px';
+}
+function applyHubLayout(){
+  positionHubCenter();
+  updateDotPositions();
+  applyPos(currentView==='list' ? getListPos : getHubPos);
 }
 const DOT_PHASES=[
   {label:'Ny →',       move:'in',  speed:1},
@@ -2088,13 +3235,37 @@ function stopDotAnim(){
   dotTimer=0;
 }
 let currentView='list';
-const hubCaptions={list:'Klikk på en entreprise for å se arbeidsforløpene',hub:'Klikk på en entreprise for å se arbeidsforløpene - all kommunikasjon går via systemeier'};
+const hubCaptions={list:'Klikk på en entreprise for å se arbeidsforløpene',hub:'Klikk på en entreprise for å se arbeidsforløpene. All kommunikasjon går via systemeier'};
 function setView(view){if(view===currentView)return;currentView=view;document.querySelectorAll('.hub-tab').forEach(t=>t.classList.remove('on'));document.getElementById('t'+view.charAt(0).toUpperCase()+view.slice(1)).classList.add('on');hubStage.className='hub-stage '+view+'-view';listChrome.classList.toggle('hidden',view!=='list');hubNodes.forEach((el,i)=>{el.querySelector('.name').textContent=view==='list'?el.dataset.fullName:el.dataset.shortName;if(view==='hub'){el.style.borderLeftColor=ues[i].col;el.style.borderLeftWidth='3px';el.style.background='';}else{el.style.borderLeftColor='';el.style.borderLeftWidth='';el.style.background=el.dataset.bg||'#fff';}});applyPos(view==='list'?getListPos:getHubPos);if(view==='hub')startDotAnim();else stopDotAnim();document.getElementById('hubCaption').textContent=hubCaptions[view];}
-function openWf(idx){const u=ues[idx],short=shortNames[u.c]||u.n;document.getElementById('wfDot').style.background=u.col;document.getElementById('wfName').textContent=u.c+' '+short;document.getElementById('wfFag1').textContent=short;document.getElementById('wfFag2').textContent=short;document.getElementById('wfFag3').textContent=short;document.getElementById('wfFag4').textContent=short;document.getElementById('wfOverlay').classList.add('show');}
+function openWf(idx){
+  const u=ues[idx], short=shortNames[u.c]||u.n;
+  document.getElementById('wfDot').style.background=u.col;
+  document.getElementById('wfName').textContent=u.c+' '+short;
+  // Erstatt alle Fag-placeholders med entreprisens kortnavn
+  document.querySelectorAll('#wfOverlay .wf-fag').forEach(el=>{el.textContent=short;});
+  // Reset til "Lite prosjekt"-modus ved åpning
+  setWfMode('lite');
+  document.getElementById('wfOverlay').classList.add('show');
+}
+const wfModeHints={
+  lite:'I små prosjekter behandler totalentreprenøren alle saker, ofte fordi samme person har flere "hatter". HMS-observasjoner kan alle på prosjektet opprette - de sendes til HMS-lederne utenfor arbeidsforløpene, og kommer tilbake som en HMS-oppgave for utbedring.',
+  stort:'I større prosjekter splittes arbeidet på dedikerte fagledere. Slik unngår du at folk får varsler om saker som ikke er deres ansvar. HMS-observasjoner kan alle på prosjektet opprette - de sendes til HMS-lederne utenfor arbeidsforløpene, og kommer tilbake som en HMS-oppgave for utbedring.',
+};
+function setWfMode(mode){
+  document.querySelectorAll('#wfOverlay .wf-mode-tabs .hub-tab').forEach(b=>{
+    b.classList.toggle('on', b.dataset.mode===mode);
+  });
+  document.querySelectorAll('#wfOverlay .wf-flow-set').forEach(s=>{
+    s.classList.toggle('on', s.dataset.mode===mode);
+  });
+  const hint=document.getElementById('wfModeHint');
+  if(hint) hint.textContent=wfModeHints[mode]||'';
+}
 function closeWf(){document.getElementById('wfOverlay').classList.remove('show');}
 function toggleFS(){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}
 let activeModule=null;
 let activeBoxTrack=null;
+let activeCommonTrack=null;
 function openModule(mod){
   document.getElementById('splash').classList.add('hidden');
   if(activeModule){document.getElementById('mod'+activeModule.charAt(0).toUpperCase()+activeModule.slice(1)).classList.remove('active');}
@@ -2108,14 +3279,31 @@ function openModule(mod){
     activeBoxTrack=null;
   }
   document.querySelectorAll('.fs-btn').forEach(b=>{b.style.opacity='1';b.style.pointerEvents='';});
+  // Stagene har offsetWidth=0 mens de er display:none. Recompute når de blir synlige.
+  if(mod==='field'){requestAnimationFrame(()=>applyHubLayout());}
 }
 function backToSplash(){
   if(activeModule==='box'&&activeBoxTrack){backToBoxSelector();return;}
   if(activeModule){document.getElementById('mod'+activeModule.charAt(0).toUpperCase()+activeModule.slice(1)).classList.remove('active');}
+  if(activeCommonTrack){document.querySelectorAll('.common-track').forEach(t=>t.classList.remove('active'));}
   activeModule=null;
   activeBoxTrack=null;
+  activeCommonTrack=null;
   document.getElementById('splash').classList.remove('hidden');
   document.querySelectorAll('.fs-btn').forEach(b=>{b.style.opacity='0';b.style.pointerEvents='none';});
+}
+function openCommonTrack(track){
+  document.getElementById('splash').classList.add('hidden');
+  if(activeModule){
+    document.getElementById('mod'+activeModule.charAt(0).toUpperCase()+activeModule.slice(1)).classList.remove('active');
+  }
+  activeModule=null;
+  activeBoxTrack=null;
+  document.querySelectorAll('.common-track').forEach(t=>t.classList.remove('active'));
+  const trackMap={brukergrupper:'trackBrukergrupper'};
+  document.getElementById(trackMap[track]).classList.add('active');
+  activeCommonTrack=track;
+  document.querySelectorAll('.fs-btn').forEach(b=>{b.style.opacity='1';b.style.pointerEvents='';});
 }
 function openBoxTrack(track){
   document.getElementById('boxSelector').classList.remove('active');
@@ -2131,8 +3319,7 @@ function backToBoxSelector(){
   activeBoxTrack=null;
 }
 document.addEventListener('fullscreenchange',()=>{const t=document.fullscreenElement?'✕ Avslutt fullskjerm':'⛶ Fullskjerm';document.querySelectorAll('.fs-btn').forEach(b=>b.textContent=t);});
-const hc=document.getElementById('hubCenter');hc.style.left=(hubCX-130)+'px';hc.style.top=(hubCY-24)+'px';hc.style.width='260px';
-genHubSvg();createDots();applyPos(getListPos);
+genHubSvg();createDots();applyHubLayout();
 hubNodes.forEach(el=>{el.style.background=el.dataset.bg||'#fff';});
 
 // =========================================
@@ -2175,7 +3362,7 @@ const SCENARIOS = [
       {role:'te',row:2,col:'left2',num:'3',numBg:'var(--yellow-g)',numColor:'var(--yellow)',title:'TE sender oppgave i nytt forløp',body:'TE sender oppgaven videre i forløp 2 (TE → Ventilasjon) med instruksjoner om å legge om ventilasjonsrøret iht. revidert tegning. Dette er mulig fordi samme oppgavetype er aktivert i begge forløp. Rørlegger som opprettet den opprinnelige oppgaven har fortsatt innsyn og kan følge fremdriften, men kan ikke editere oppgaven når den ligger i et forløp de ikke har rettigheter i.',task:{status:'Ny i forløp 2',statusBg:'var(--orange-g)',statusColor:'var(--orange)',title:'Kollisjon ventilasjon/rør 2. etg',meta:'TE: "Legg om trasé iht. vedlagt revidert tegning" · 👁️ Rørlegger følger med',arrow:{from:'TE',fromBg:'var(--yellow-g)',fromColor:'var(--yellow)',to:'VENT',toBg:'var(--green-g)',toColor:'var(--green)',fillColor:'#8DC63F'}}},
       {role:'vent',row:2,col:'right2',num:'4',numBg:'var(--green-g)',numColor:'var(--green)',title:'Ventilasjon utbedrer',body:'Ventilasjon utfører omleggingen, tar bilde av ferdig resultat og sender oppgaven tilbake til TE.',task:{status:'Utbedret',statusBg:'rgba(142,106,191,.1)',statusColor:'var(--purple)',title:'Kollisjon ventilasjon/rør 2. etg',meta:'Ventilasjon: "Ferdig utført - se vedlagt bilde"',arrow:{from:'VENT',fromBg:'var(--green-g)',fromColor:'var(--green)',to:'TE',toBg:'var(--yellow-g)',toColor:'var(--yellow)',fillColor:'#d4a017'}}},
       {role:'te',row:2,col:'left2',num:'5',numBg:'var(--yellow-g)',numColor:'var(--yellow)',roleOverride:{left2:'Kontrollør'},title:'TE kontrollerer',body:'TE mottar oppgaven tilbake i forløp 2, kontrollerer at ventilasjonsrøret er lagt om korrekt og godkjenner.',task:{status:'Til kontroll',statusBg:'var(--yellow-g)',statusColor:'var(--yellow)',title:'Kollisjon ventilasjon/rør 2. etg',meta:'Hos TE - Venter på godkjenning'}},
-      {role:'done',row:0,col:'done',num:'✓',numBg:'var(--green-g)',numColor:'var(--green)',roleOverride:{left2:'Kontrollør'},title:'Oppgave godkjent og lukket',body:'TE godkjenner utbedringen og lukker oppgaven i forløp 2. Kollisjonen er løst - alt dokumentert med bilder, kommentarer og tidsstempler.',task:{status:'Lukket ✓',statusBg:'var(--green-g)',statusColor:'var(--green)',title:'Kollisjon ventilasjon/rør 2. etg',meta:'Lukket av TE - Total tid: 3 dager'}},
+      {role:'done',row:0,col:'done',num:'✓',numBg:'var(--green-g)',numColor:'var(--green)',roleOverride:{left2:'Kontrollør'},title:'Oppgave godkjent og lukket',body:'TE godkjenner utbedringen og lukker oppgaven i forløp 2. Kollisjonen er løst, alt er dokumentert med bilder, kommentarer og tidsstempler.',task:{status:'Lukket ✓',statusBg:'var(--green-g)',statusColor:'var(--green)',title:'Kollisjon ventilasjon/rør 2. etg',meta:'Lukket av TE - Total tid: 3 dager'}},
     ]
   },
   // ---- 2: HMS-forløp ----
@@ -2198,15 +3385,15 @@ const SCENARIOS = [
   {
     icon:ICON_APPROVAL, title:'Scenario: Endringsmelding med godkjenning',
     pipeline:true,
-    desc:'Underentreprenør varsler en endring som må behandles i flere ledd. Hvert ledd kan ha egne felter som settes opp i malen - felter kan flyttes til ett spesifikt ledd (kun redigerbare der) eller kopieres til flere ledd (redigerbare i alle). TE (Ledd 2) kan sende videre til godkjenning hos byggherre, eller lukke saken som "Omtvistet" ved uenighet.',
+    desc:'Underentreprenør varsler en endring som må behandles i flere ledd. Hvert ledd kan ha egne felter som settes opp i malen. Felter kan flyttes til ett spesifikt ledd (kun redigerbare der) eller kopieres til flere ledd (redigerbare i alle). TE (Ledd 2) kan sende videre til godkjenning hos byggherre, eller lukke saken som "Omtvistet" ved uenighet.',
     badges:[{text:'Ledd 1: UE varsler',bg:'var(--accent-g)',color:'var(--accent)'},{text:'Ledd 2: TE behandler',bg:'var(--yellow-g)',color:'var(--yellow)'},{text:'Ledd 3: BH godkjenner',bg:'rgba(142,106,191,.1)',color:'var(--purple)'}],
     row1:{label:'Godkjenningsforløp <span>UE → TE → Byggherre</span>',left:{emoji:'🏗️',bg:'#e8f0eb',border:'var(--accent)',name:'UE',role:'Ledd 1 · Innmelder'},right:{emoji:'👷',bg:'#f5ecd5',border:'var(--yellow)',name:'TE',role:'Ledd 2 · Behandler'},arrowColor:'#6fa032'},
     row2:null,
     steps:[
       {role:'fag',row:1,col:'left',pipe:0,num:'1',numBg:'var(--accent-g)',numColor:'var(--accent)',title:'UE varsler endringsmelding (Ledd 1)',body:'Underentreprenør registrerer en endringsmelding: "Fundamenttykkelse må økes pga. grunnforhold". Legger ved dokumentasjon og beskrivelse av endringen.',task:{status:'Ny',statusBg:'var(--accent-g)',statusColor:'var(--accent)',title:'Endringsmelding: Økt fundamenttykkelse',meta:'Varslet av UE (Ledd 1) - Nå',arrow:{from:'UE',fromBg:'var(--accent-g)',fromColor:'var(--accent)',to:'TE',toBg:'var(--yellow-g)',toColor:'var(--yellow)',fillColor:'#d4a017'}}},
-      {role:'te',row:1,col:'right',pipe:1,num:'2',numBg:'var(--yellow-g)',numColor:'var(--yellow)',title:'TE ser mangler - sender tilbake (Ledd 2 → 1)',body:'TE mottar endringsvarselet i ledd 2, men ser at det mangler geoteknisk rapport. Sender oppgaven tilbake til ledd 1 med kommentar. Oppgaven kan sendes tilbake til alle tidligere ledd.',task:{status:'Returnert til Ledd 1',statusBg:'var(--orange-g)',statusColor:'var(--orange)',title:'Endringsmelding: Økt fundamenttykkelse',meta:'TE: "Mangler geoteknisk rapport - vennligst legg ved"',arrow:{from:'TE',fromBg:'var(--yellow-g)',fromColor:'var(--yellow)',to:'UE',toBg:'var(--accent-g)',toColor:'var(--accent)',fillColor:'#6fa032'}}},
+      {role:'te',row:1,col:'right',pipe:1,num:'2',numBg:'var(--yellow-g)',numColor:'var(--yellow)',title:'TE ser mangler, sender tilbake (Ledd 2 → 1)',body:'TE mottar endringsvarselet i ledd 2, men ser at det mangler geoteknisk rapport. Sender oppgaven tilbake til ledd 1 med kommentar. Oppgaven kan sendes tilbake til alle tidligere ledd.',task:{status:'Returnert til Ledd 1',statusBg:'var(--orange-g)',statusColor:'var(--orange)',title:'Endringsmelding: Økt fundamenttykkelse',meta:'TE: "Mangler geoteknisk rapport - vennligst legg ved"',arrow:{from:'TE',fromBg:'var(--yellow-g)',fromColor:'var(--yellow)',to:'UE',toBg:'var(--accent-g)',toColor:'var(--accent)',fillColor:'#6fa032'}}},
       {role:'fag',row:1,col:'left',pipe:0,num:'3',numBg:'var(--accent-g)',numColor:'var(--accent)',title:'UE oppdaterer og sender på nytt (Ledd 1 → 2)',body:'UE legger ved geoteknisk rapport og oppdatert kostnadstilbud, og sender endringsvarselet tilbake til ledd 2.',task:{status:'Oppdatert',statusBg:'var(--accent-g)',statusColor:'var(--accent)',title:'Endringsmelding: Økt fundamenttykkelse',meta:'UE: "Geoteknisk rapport vedlagt + oppdatert tilbud"',arrow:{from:'UE',fromBg:'var(--accent-g)',fromColor:'var(--accent)',to:'TE',toBg:'var(--yellow-g)',toColor:'var(--yellow)',fillColor:'#d4a017'}}},
-      {role:'te',row:1,col:'right',pipe:1,num:'4',numBg:'var(--yellow-g)',numColor:'var(--yellow)',title:'TE beriker med leddspesifikke felter (Ledd 2)',body:'TE fyller inn feltene som er konfigurert for dette leddet i malen: estimert kostnad, konsekvens for fremdrift, og anbefaling. TE kan nå sende videre til byggherre for godkjenning, eller markere saken som "Omtvistet" dersom partene er uenige.',task:{status:'Sendt til Ledd 3',statusBg:'rgba(142,106,191,.1)',statusColor:'var(--purple)',title:'Endringsmelding: Økt fundamenttykkelse',meta:'Kostnad: 450 000 kr · Konsekvens: +2 uker · Anbefaling: Godkjenn',arrow:{from:'TE',fromBg:'var(--yellow-g)',fromColor:'var(--yellow)',to:'BH',toBg:'rgba(142,106,191,.15)',toColor:'var(--purple)',fillColor:'#8e6abf'}}},
+      {role:'te',row:1,col:'right',pipe:1,num:'4',numBg:'var(--yellow-g)',numColor:'var(--yellow)',title:'TE fyller ut leddspesifikke felter (Ledd 2)',body:'TE fyller inn feltene som er konfigurert for dette leddet i malen: estimert kostnad, konsekvens for fremdrift, og anbefaling. TE kan nå sende videre til byggherre for godkjenning, eller markere saken som "Omtvistet" dersom partene er uenige.',task:{status:'Sendt til Ledd 3',statusBg:'rgba(142,106,191,.1)',statusColor:'var(--purple)',title:'Endringsmelding: Økt fundamenttykkelse',meta:'Kostnad: 450 000 kr · Konsekvens: +2 uker · Anbefaling: Godkjenn',arrow:{from:'TE',fromBg:'var(--yellow-g)',fromColor:'var(--yellow)',to:'BH',toBg:'rgba(142,106,191,.15)',toColor:'var(--purple)',fillColor:'#8e6abf'}}},
       {role:'bh',row:1,col:'right',pipe:2,num:'5',numBg:'rgba(142,106,191,.1)',numColor:'var(--purple)',title:'Byggherre vurderer (Ledd 3)',body:'Byggherre gjennomgår endringsmeldingen med all dokumentasjon og TEs vurdering. Kan godkjenne endringen, eller sende tilbake til ledd 1 eller 2 for mer informasjon.',task:{status:'Til godkjenning',statusBg:'rgba(142,106,191,.1)',statusColor:'var(--purple)',title:'Endringsmelding: Økt fundamenttykkelse',meta:'Hos Byggherre (Ledd 3) - Venter på beslutning'}},
       {role:'done',row:0,col:'done',pipe:2,num:'✓',numBg:'var(--green-g)',numColor:'var(--green)',title:'Endringsmelding godkjent',body:'Byggherre godkjenner endringen. Hele historikken med alle ledd, kommentarer, vedlegg og leddspesifikke felter er dokumentert.',task:{status:'Godkjent ✓',statusBg:'var(--green-g)',statusColor:'var(--green)',title:'Endringsmelding: Økt fundamenttykkelse',meta:'Godkjent av Byggherre - Kostnad: 450 000 kr · +2 uker'}},
     ]
@@ -2468,35 +3655,55 @@ for(let i=0;i<COMM_DOT_N;i++){
 // Position center hub
 const commCenterEl=document.getElementById('commCenter');
 
-// List positions: 4-column grid
-function getCommListPos(i){
-  const cols=3, nodeW=270, nodeH=120, gapX=16, gapY=14, offY=50;
+// Design-koordinater for SVG viewBox - DOM-posisjoner regnes responsivt fra disse
+const COMM_DESIGN_W=1100, COMM_DESIGN_H=600;
+function getCommLayout(){
+  const w = commStage.offsetWidth || COMM_DESIGN_W;
+  const h = commStage.offsetHeight || COMM_DESIGN_H;
+  const scale = w / COMM_DESIGN_W;
+  return {
+    w, h, scale,
+    cx: w * 0.5,
+    cy: h * (280/COMM_DESIGN_H),
+    rx: w * (380/COMM_DESIGN_W),
+    ry: h * (220/COMM_DESIGN_H),
+    hubNodeW: Math.max(140, Math.min(180, 180*scale)),
+    hubNodeH: 80,
+    listNodeW: Math.max(210, Math.min(270, 270*scale)),
+    listNodeH: 120,
+    centerW: Math.max(170, Math.min(210, 210*scale)),
+    centerH: 84,
+  };
+}
+
+// List positions: 3-column grid
+function getCommListPos(i, L){
+  L=L||getCommLayout();
+  const cols=3, gapX=16, gapY=14, offY=50;
   const col=i%cols, row=Math.floor(i/cols);
-  const totalW=cols*nodeW+(cols-1)*gapX;
-  const stageW=commStage.offsetWidth||1100;
-  const startX=(stageW-totalW)/2;
-  return {left:startX+col*(nodeW+gapX), top:offY+row*(nodeH+gapY), w:nodeW, h:nodeH};
+  const totalW=cols*L.listNodeW+(cols-1)*gapX;
+  const startX=(L.w-totalW)/2;
+  return {left:startX+col*(L.listNodeW+gapX), top:offY+row*(L.listNodeH+gapY), w:L.listNodeW, h:L.listNodeH};
 }
 
 // Hub positions: ellipse
-const commCX=550,commCY=280,commRx=380,commRy=220;
-function getCommHubPos(i){
+function getCommHubPos(i, L){
+  L=L||getCommLayout();
   // Skip center group in ellipse
   const outerGroups=commGroups.filter(g=>!g.isCenter);
   const outerIdx=commGroups.slice(0,i+1).filter(g=>!g.isCenter).length-1;
   if(commGroups[i].isCenter){
-    // Hide at center position
-    return {left:commCX-90, top:commCY-40, w:0, h:0, hide:true};
+    return {left:L.cx-90, top:L.cy-40, w:0, h:0, hide:true};
   }
   const n=outerGroups.length;
   const a=(outerIdx/n)*Math.PI*2-Math.PI/2;
-  const nodeW=180, nodeH=80;
-  return {left:commCX+Math.cos(a)*commRx-nodeW/2, top:commCY+Math.sin(a)*commRy-nodeH/2, w:nodeW, h:nodeH};
+  return {left:L.cx+Math.cos(a)*L.rx-L.hubNodeW/2, top:L.cy+Math.sin(a)*L.ry-L.hubNodeH/2, w:L.hubNodeW, h:L.hubNodeH};
 }
 
 function applyCommPos(fn){
+  const L=getCommLayout();
   commNodes.forEach((el,i)=>{
-    const p=fn(i);
+    const p=fn(i,L);
     if(p.hide){
       el.style.opacity='0';el.style.pointerEvents='none';
       el.style.left=p.left+'px';el.style.top=p.top+'px';
@@ -2510,13 +3717,15 @@ function applyCommPos(fn){
 }
 
 function genCommSvg(){
+  // SVG bruker design-koordinater (viewBox 0 0 1100 600) og skaleres automatisk
+  const cx=COMM_DESIGN_W/2, cy=280, rx=380, ry=220;
   const outer=[];
   commGroups.forEach((g,i)=>{
     if(g.isCenter)return;
     const outerIdx=outer.length;
     const n=commGroups.filter(g=>!g.isCenter).length;
     const a=(outerIdx/n)*Math.PI*2-Math.PI/2;
-    outer.push({x:commCX+Math.cos(a)*commRx, y:commCY+Math.sin(a)*commRy, col:g.col});
+    outer.push({x:cx+Math.cos(a)*rx, y:cy+Math.sin(a)*ry, col:g.col});
   });
   let s='';
   // Lines between outer nodes
@@ -2525,21 +3734,38 @@ function genCommSvg(){
       s+=`<line x1="${outer[i].x}" y1="${outer[i].y}" x2="${outer[j].x}" y2="${outer[j].y}" stroke="${outer[i].col}"/>`;
     }
     // Lines from each outer to center
-    s+=`<line x1="${outer[i].x}" y1="${outer[i].y}" x2="${commCX}" y2="${commCY}" stroke="${commCenterGroup.col}" opacity=".25" stroke-dasharray="8 4" stroke-width="2"/>`;
+    s+=`<line x1="${outer[i].x}" y1="${outer[i].y}" x2="${cx}" y2="${cy}" stroke="${commCenterGroup.col}" opacity=".25" stroke-dasharray="8 4" stroke-width="2"/>`;
   }
   document.getElementById('commSvg').innerHTML=s;
 }
 
 const commCaptions={
   list:'Kommunikasjonsflyten viser hvilke grupper som kan kommunisere sammen',
-  hub:'Følg kommentaren mellom gruppene - den lukkes av Prosjekteringsleder'
+  hub:'Følg kommentaren mellom gruppene. Den lukkes av Prosjekteringsleder'
 };
 
 function setCommView(view){
   if(view===commView)return;
   commView=view;
   document.querySelectorAll('#commPage1 .comm-tab').forEach(t=>t.classList.remove('on'));
-  document.getElementById(view==='list'?'tCommList':'tCommHub').classList.add('on');
+  const tabId = {list:'tCommList',hub:'tCommHub',status:'tCommStatus'}[view];
+  document.getElementById(tabId).classList.add('on');
+
+  // Vis/skjul info-containere
+  document.getElementById('commInfoList').style.display = view==='list' ? 'block' : 'none';
+  document.getElementById('commInfoHub').style.display = view==='hub' ? 'block' : 'none';
+  document.getElementById('commInfoStatus').style.display = view==='status' ? 'block' : 'none';
+
+  // Stage og caption skjules helt i status-modus (statuser handler ikke om gruppene)
+  commStage.style.display = view==='status' ? 'none' : '';
+  document.getElementById('commCaption').style.display = view==='status' ? 'none' : '';
+
+  if(view==='status'){
+    stopCommDotAnim();
+    return;
+  }
+
+  // List/hub-modus: oppdater stage som før
   commStage.className='comm-stage '+(view==='list'?'list-view':'hub-view');
   commNodes.forEach((el,i)=>{
     el.querySelector('.comm-node-name').textContent=view==='list'?el.dataset.fullName:el.dataset.shortName;
@@ -2551,8 +3777,6 @@ function setCommView(view){
   });
   applyCommPos(view==='list'?getCommListPos:getCommHubPos);
   document.getElementById('commCaption').textContent=commCaptions[view];
-  document.getElementById('commInfoList').style.display=view==='list'?'block':'none';
-  document.getElementById('commInfoHub').style.display=view==='hub'?'block':'none';
   if(view==='hub'){genCommSvg();startCommDotAnim();}else{stopCommDotAnim();}
 }
 
@@ -2560,15 +3784,16 @@ function setCommView(view){
 let commDotAnimId=null;
 const commHubPositions=[];
 function cacheCommHubPos(){
+  const L=getCommLayout();
   commHubPositions.length=0;
   const outerGroups=commGroups.filter(g=>!g.isCenter);
   outerGroups.forEach((_,i)=>{
     const n=outerGroups.length;
     const a=(i/n)*Math.PI*2-Math.PI/2;
-    commHubPositions.push({x:commCX+Math.cos(a)*commRx, y:commCY+Math.sin(a)*commRy});
+    commHubPositions.push({x:L.cx+Math.cos(a)*L.rx, y:L.cy+Math.sin(a)*L.ry});
   });
   // Center position for Prosjekteringsleder
-  commHubPositions.push({x:commCX, y:commCY});
+  commHubPositions.push({x:L.cx, y:L.cy});
 }
 
 // Journey: pick a start node, bounce 2-4 times between random nodes, then end at center
@@ -2684,9 +3909,19 @@ function stopCommDotAnim(){
   commJourney=[];commJourneyIdx=0;commPauseFrames=0;
 }
 
+function positionCommCenter(){
+  const L=getCommLayout();
+  commCenterEl.style.left=(L.cx-L.centerW/2)+'px';
+  commCenterEl.style.top=(L.cy-L.centerH/2)+'px';
+  commCenterEl.style.width=L.centerW+'px';
+}
+function applyCommLayout(){
+  positionCommCenter();
+  cacheCommHubPos();
+  applyCommPos(commView==='list' ? getCommListPos : getCommHubPos);
+}
 // Init list positions
-commCenterEl.style.left=(commCX-105)+'px';commCenterEl.style.top=(commCY-42)+'px';commCenterEl.style.width='210px';
-applyCommPos(getCommListPos);
+applyCommLayout();
 
 // Page nav for comm track
 let commActivePage=1;
@@ -2703,6 +3938,78 @@ function showCommPage(n){
   commActivePage=n;
   if(n===1&&commView==='hub')startCommDotAnim();
   else stopCommDotAnim();
+  if(n===2){
+    // Reset kommentar-livssyklus til steg 1, og pussi opp puck-posisjon etter at siden er synlig
+    clCurrentStep=1;
+    requestAnimationFrame(()=>{requestAnimationFrame(()=>clApplyStep());});
+  }
+}
+
+// ===== Kommentar-livssyklus animasjon (Comm side 2) =====
+const CL_STEPS = [
+  {card:1, group:'rie', desc:'<strong>Opprett kommentar:</strong> Velg fil (tegning, PDF eller BIM-modell) og marker med sky, pil, tekst eller måling. Fyll ut kommentarskjema med type, kommunikasjonsflyt, tittel, tidsfrist og beskrivelse. Kommentaren knyttes permanent til filen og posisjonen.', status:'Ny', statusClass:'cl-st-ny', puckClosed:false},
+  {card:2, group:'ark', desc:'<strong>Send til gruppe eller person:</strong> Du sender kommentaren til en gruppe eller en person i flyten. Mottakeren får varsel, og kommentaren dukker opp på tegningen med en fargekode som viser statusen.', status:'Under behandling', statusClass:'cl-st-behandling', puckClosed:false},
+  {card:3, group:'ark', desc:'<strong>Dialog og statusoppdatering:</strong> Mottakeren svarer med meldinger og vedlegg i kommentartråden. Statusen oppdateres underveis, f.eks. fra «Under behandling» til «Besvart». Du kan sende kommentaren videre til andre grupper i flyten hvis det trengs.', status:'Besvart', statusClass:'cl-st-besvart', puckClosed:false},
+  {card:4, group:'pl',  desc:'<strong>Lukking:</strong> Når saken er ferdigbehandlet, lukker en bruker med Lukk-rettighet kommentaren. Hvem dette er avhenger av flyten, og det kan være prosjekteringsleder, byggherre eller en annen rolle. All historikk bevares: statusendringer, meldinger, vedlegg og tidsstempler.', status:'Lukket', statusClass:'cl-st-lukket', puckClosed:true},
+];
+
+let clCurrentStep = 1;
+
+function clStep(dir){
+  const next = clCurrentStep + dir;
+  if(next<1 || next>CL_STEPS.length) return;
+  clCurrentStep = next;
+  clApplyStep();
+}
+function clGoTo(n){
+  if(n<1 || n>CL_STEPS.length) return;
+  clCurrentStep = n;
+  clApplyStep();
+}
+function clApplyStep(){
+  const s = CL_STEPS[clCurrentStep-1];
+
+  // Aktiv stepper-fane (og 'done' for tidligere)
+  document.querySelectorAll('#commPage2 .cl-step-tab').forEach(t=>{
+    const n = parseInt(t.dataset.step);
+    t.classList.toggle('active', n===clCurrentStep);
+    t.classList.toggle('done', n<clCurrentStep);
+  });
+
+  // Beskrivelse oppdateres
+  document.getElementById('clStepDesc').innerHTML = s.desc;
+
+  // Aktiv gruppe
+  document.querySelectorAll('#commPage2 .cl-group').forEach(g=>{
+    g.classList.toggle('active', g.dataset.group===s.group);
+  });
+
+  // Puck-posisjon (i prosent av .cl-flow)
+  const flowEl = document.getElementById('clFlow');
+  const targetGroup = flowEl.querySelector('.cl-group[data-group="'+s.group+'"]');
+  if(flowEl && targetGroup){
+    const flowRect = flowEl.getBoundingClientRect();
+    const targetRect = targetGroup.getBoundingClientRect();
+    const centerPx = targetRect.left + targetRect.width/2 - flowRect.left;
+    document.getElementById('clPuck').style.left = centerPx + 'px';
+  }
+  // Puck-farge (grønn ved lukket)
+  document.getElementById('clPuck').classList.toggle('closed', s.puckClosed);
+
+  // Statusbadge
+  const sb = document.getElementById('clStatusBadge');
+  sb.className = 'cl-status-badge ' + s.statusClass;
+  sb.textContent = s.status;
+
+  // Progressiv aktivitetslogg
+  document.querySelectorAll('#commPage2 .comm-log-entry[data-show-from]').forEach(e=>{
+    const showFrom = parseInt(e.dataset.showFrom);
+    e.classList.toggle('cl-hidden', showFrom > clCurrentStep);
+  });
+
+  // Knapper
+  document.getElementById('clPrevBtn').disabled = clCurrentStep<=1;
+  document.getElementById('clNextBtn').disabled = clCurrentStep>=CL_STEPS.length;
 }
 
 // Hook into openBoxTrack
@@ -2713,14 +4020,20 @@ openBoxTrack=function(track){
   if(track==='comm'){
     commView='list';
     commStage.className='comm-stage list-view';
+    commStage.style.display='';
     document.getElementById('tCommList').classList.add('on');
     document.getElementById('tCommHub').classList.remove('on');
-    applyCommPos(getCommListPos);
+    document.getElementById('tCommStatus').classList.remove('on');
     commNodes.forEach(el=>{el.querySelector('.comm-node-name').textContent=el.dataset.fullName;el.style.borderLeftColor='';el.style.borderLeftWidth='';});
-    document.getElementById('commCaption').textContent=commCaptions.list;
+    const cap=document.getElementById('commCaption');
+    cap.textContent=commCaptions.list;
+    cap.style.display='';
     document.getElementById('commInfoList').style.display='block';
     document.getElementById('commInfoHub').style.display='none';
+    document.getElementById('commInfoStatus').style.display='none';
     showCommPage(1);
+    // Recompute layout - stage var display:none før dette
+    requestAnimationFrame(()=>applyCommLayout());
   }
 };
 
@@ -2736,6 +4049,376 @@ function showBoxPage(n){
   if(n===3)initDocFlow();
 }
 
+let brukergrupperActivePage=1;
+function showBrukergrupperPage(n){
+  if(n===brukergrupperActivePage)return;
+  [1,2,3].forEach(i=>{
+    const pg=document.getElementById('brukergrupperPage'+i);
+    pg.style.display='none';pg.style.opacity='0';pg.classList.remove('visible');
+  });
+  const pg=document.getElementById('brukergrupperPage'+n);
+  pg.style.display='flex';
+  requestAnimationFrame(()=>{pg.style.opacity='1';pg.classList.add('visible');});
+  document.querySelectorAll('#brukergrupperNav .page-btn').forEach((b,i)=>b.classList.toggle('active',i+1===n));
+  brukergrupperActivePage=n;
+}
+function setBgTab(tab){
+  document.querySelectorAll('#brukergrupperPage2 .hub-tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('#brukergrupperPage2 .bg-tab-panel').forEach(p=>p.classList.remove('active'));
+  const tabId={general:'bgtGeneral',field:'bgtField',box:'bgtBox'}[tab];
+  const panelId={general:'bgPanelGeneral',field:'bgPanelField',box:'bgPanelBox'}[tab];
+  document.getElementById(tabId).classList.add('on');
+  document.getElementById(panelId).classList.add('active');
+}
+
+// ======================
+// SIDE 1 ANIMERT SCENE
+// ======================
+const BG_SCENE_W=1000, BG_SCENE_H=500;
+const bgPersons=[
+  {id:'p1', name:'Stein Bygg',     role:'Byggherre',     group:'g1', initials:'SB'},
+  {id:'p2', name:'Lars Anlegg',    role:'Totalentr.',    group:'g2', initials:'LA'},
+  {id:'p3', name:'Erik Montasje',  role:'TE-fagleder',   group:'g2', initials:'EM'},
+  {id:'p4', name:'Tor Ampere',     role:'RiE',           group:'g3', initials:'TA'},
+  {id:'p5', name:'Kjell Sikker',   role:'HMS',           group:'g4', initials:'KS'},
+  {id:'p6', name:'Lars Anlegg',    role:'Totalentr.',    group:'g4', initials:'LA', isCross:true},
+];
+const bgGroups=[
+  {id:'g1', num:'10', name:'Byggherre',       color:'#6366f1'},  // indigo
+  {id:'g2', num:'30', name:'Lars Anlegg AS',  color:'#e67e22'},  // orange
+  {id:'g3', num:'60', name:'Strøm & Lys AS',  color:'#d4a017'},  // gul
+  {id:'g4', num:'80', name:'HMS-koordinator', color:'#e74c3c'},  // rød
+];
+const bgActions=[
+  // Field-handlinger
+  {id:'a1', name:'Opprette oppgaver',         icon:'📝', module:'field'},
+  {id:'a2', name:'Utføre kontrollplaner',     icon:'🔍', module:'field'},
+  {id:'a3', name:'Utføre sjekklister',         icon:'📋', module:'field'},
+  {id:'a4', name:'HMS-observasjoner',         icon:'🦺', module:'field'},
+  // Box-handlinger
+  {id:'a5', name:'Skrive kommentar',          icon:'💬', module:'box'},
+  {id:'a6', name:'Lukke kommentar',           icon:'🔒', module:'box'},
+  {id:'a7', name:'Laste opp filer',           icon:'📂', module:'box'},
+  {id:'a8', name:'Godkjenne filer',           icon:'✅', module:'box'},
+];
+const bgConnections=[
+  // Byggherre (g1) - bredt syn, godkjenner filer
+  {from:'g1', to:'a5'}, {from:'g1', to:'a8'},
+  // Lars Anlegg AS (g2) - totalentreprenør, full Field-bruker
+  {from:'g2', to:'a1'}, {from:'g2', to:'a3'}, {from:'g2', to:'a5'}, {from:'g2', to:'a7'},
+  // Strøm & Lys AS (g3) - RiE, kontroll og dokumentasjon
+  {from:'g3', to:'a2'}, {from:'g3', to:'a5'}, {from:'g3', to:'a7'},
+  // HMS-koordinator (g4) - HMS-spesifikk
+  {from:'g4', to:'a4'}, {from:'g4', to:'a5'},
+];
+const bgCaptions={
+  1:'Et byggeprosjekt har mange personer. Hver med sin rolle og sitt firma.',
+  2:'Vi samler personene i grupper. Da slipper vi å styre hver person for seg, og noen kan være med i flere grupper.',
+  3:'Klikk på en person for å se hvilke moduler de får tilgang til via sine grupper.',
+};
+
+let bgCurrentStep=1;
+let bgSelectedPerson=null;
+const bgSceneStage=document.getElementById('bgSceneStage');
+const bgPersonEls={}, bgGroupEls={}, bgActionEls={};
+
+function bgClickPerson(personId){
+  if(bgCurrentStep!==3) return;
+  bgSelectedPerson = (bgSelectedPerson===personId) ? null : personId;
+  // Hvis en av Lars sine kort klikkes, alle Lars-kort er "valgt" — finn det første
+  const p = bgPersons.find(x=>x.id===bgSelectedPerson);
+  if(p){
+    const firstWithName = bgPersons.find(x=>x.name===p.name);
+    if(firstWithName) bgSelectedPerson = firstWithName.id;
+  }
+  applyBgLayout();
+}
+
+function bgJoinNorwegian(items){
+  if(items.length===0) return '';
+  if(items.length===1) return items[0];
+  return items.slice(0,-1).join(', ') + ' og ' + items[items.length-1];
+}
+
+function bgCreateScene(){
+  // Personer
+  bgPersons.forEach(p=>{
+    const el=document.createElement('div');
+    el.className='bg-person';
+    el.dataset.id=p.id;
+    el.innerHTML=`<div class="bg-person-avatar">${p.initials}</div>
+                  <div class="bg-person-text"><span class="bg-person-name">${p.name}</span><span class="bg-person-role">${p.role}</span></div>`;
+    el.addEventListener('click', ()=>bgClickPerson(p.id));
+    bgSceneStage.appendChild(el);
+    bgPersonEls[p.id]=el;
+  });
+  // Grupper (containere)
+  bgGroups.forEach(g=>{
+    const el=document.createElement('div');
+    el.className='bg-group';
+    el.dataset.id=g.id;
+    el.style.setProperty('--group-color', g.color);
+    el.innerHTML=`<div class="bg-group-header"><span class="bg-group-num">${g.num}</span><span class="bg-group-name">${g.name}</span></div>`;
+    bgSceneStage.appendChild(el);
+    bgGroupEls[g.id]=el;
+  });
+  // Handlinger (chips)
+  bgActions.forEach(a=>{
+    const el=document.createElement('div');
+    el.className='bg-action mod-'+a.module;
+    el.dataset.id=a.id;
+    el.dataset.module=a.module;
+    el.innerHTML=`<span class="bg-action-icon">${a.icon}</span><span class="bg-action-name">${a.name}</span>`;
+    bgSceneStage.appendChild(el);
+    bgActionEls[a.id]=el;
+  });
+  // Modul-section-headers ("I Field" / "I Box")
+  ['field','box'].forEach(mod=>{
+    const h=document.createElement('div');
+    h.className='bg-action-header mod-'+mod;
+    h.dataset.module=mod;
+    h.textContent = mod==='field' ? 'I Field' : 'I Box';
+    bgSceneStage.appendChild(h);
+    bgActionEls['header-'+mod]=h;
+  });
+}
+
+function getBgSceneLayout(){
+  const w = bgSceneStage.offsetWidth || BG_SCENE_W;
+  const h = bgSceneStage.offsetHeight || BG_SCENE_H;
+  const scale = w / BG_SCENE_W;
+  return {w, h, scale};
+}
+
+// Steg 1: personer spredt i et 3x2 grid på hele stagen
+function bgPersonScatterPos(idx, L){
+  const cols=3, rows=2;
+  const col=idx%cols, row=Math.floor(idx/cols);
+  const xUnit = L.w / (cols+1);
+  const yUnit = L.h / (rows+1);
+  return {x: xUnit*(col+1), y: yUnit*(row+1)};
+}
+
+// Steg 2/3: gruppene som bokser i 2x2 grid på venstre halvdel (når handlinger vises) eller bredere (steg 2 uten handlinger)
+function bgGroupBox(idx, step, L){
+  const cols=2, rows=2;
+  const col=idx%cols, row=Math.floor(idx/cols);
+  // Bredde for grupperingen: bruk hele stagen i steg 2, ca 60% i steg 3 (handlinger ligger fra 66%)
+  const gridW = step===3 ? L.w * 0.60 : L.w * 0.92;
+  const gridLeft = step===3 ? L.w * 0.02 : L.w * 0.04;
+  const gridH = L.h * 0.88;
+  const gridTop = L.h * 0.06;
+  const gap = 14;
+  const cellW = (gridW - gap*(cols-1)) / cols;
+  const cellH = (gridH - gap*(rows-1)) / rows;
+  return {
+    x: gridLeft + col*(cellW+gap),
+    y: gridTop + row*(cellH+gap),
+    w: cellW, h: cellH,
+  };
+}
+
+// Steg 2/3: personenes posisjon inne i sin gruppe
+function bgPersonInGroupPos(person, step, L){
+  const gIdx = bgGroups.findIndex(g=>g.id===person.group);
+  const box = bgGroupBox(gIdx, step, L);
+  // Stable medlemmer vertikalt i gruppa, med god klikkbar mellomrom
+  const groupMembers = bgPersons.filter(p=>p.group===person.group);
+  const memberIdx = groupMembers.findIndex(p=>p.id===person.id);
+  const startY = box.y + 36; // plass til header + litt luft
+  const rowH = 50; // person-kort er ca 42px høye, 50 gir 8px gap = ingen overlapp
+  return {
+    x: box.x + box.w/2 - 75, // 150px bred person-kort, sentrert
+    y: startY + memberIdx*rowH,
+  };
+}
+
+// Steg 3: handlingene plassert vertikalt på høyre side, gruppert under "I Field"/"I Box"
+// Layout: 8 handlinger + 2 headers = 10 rader. Field-handlinger først, Box-handlinger etterpå.
+function bgActionPos(action, L){
+  const rightX = L.w * 0.66;       // venstre kant av handlings-kolonnen
+  const colW   = L.w * 0.30;       // bredde for hver chip
+  const topY   = L.h * 0.04;
+  const headerH = 22;
+  const rowH    = 32;
+  const sectionGap = 8;
+
+  const fieldActions = bgActions.filter(a=>a.module==='field');
+  const boxActions   = bgActions.filter(a=>a.module==='box');
+
+  // Beregn y-posisjon basert på handling-id eller header-flagg
+  if(action._isHeader){
+    if(action.module==='field') return {x:rightX, y:topY, w:colW, h:headerH};
+    // Box-header: under alle Field-handlinger + gap
+    return {x:rightX, y: topY + headerH + fieldActions.length*rowH + sectionGap, w:colW, h:headerH};
+  }
+  if(action.module==='field'){
+    const i = fieldActions.findIndex(a=>a.id===action.id);
+    return {x:rightX, y: topY + headerH + i*rowH, w:colW, h: rowH-4};
+  } else {
+    const i = boxActions.findIndex(a=>a.id===action.id);
+    const boxHeaderY = topY + headerH + fieldActions.length*rowH + sectionGap;
+    return {x:rightX, y: boxHeaderY + headerH + i*rowH, w:colW, h: rowH-4};
+  }
+}
+
+// Anker for SVG-linjer (midten av handlings-chip i design-koords)
+function bgActionAnchor(action){
+  const designL = {w:BG_SCENE_W, h:BG_SCENE_H};
+  const p = bgActionPos(action, designL);
+  return {x: p.x, y: p.y + p.h/2};
+}
+
+function applyBgLayout(){
+  const L = getBgSceneLayout();
+  const step = bgCurrentStep;
+
+  // Personer
+  bgPersons.forEach((p,i)=>{
+    const el = bgPersonEls[p.id];
+    let pos;
+    if(step===1){
+      pos = bgPersonScatterPos(i, L);
+      el.style.left = (pos.x - 75) + 'px';
+      el.style.top = (pos.y - 18) + 'px';
+      el.style.opacity = p.isCross ? '0' : '1';
+    } else {
+      pos = bgPersonInGroupPos(p, step, L);
+      el.style.left = pos.x + 'px';
+      el.style.top = pos.y + 'px';
+      el.style.opacity = '1';
+    }
+  });
+
+  // Grupper
+  bgGroups.forEach((g,i)=>{
+    const el = bgGroupEls[g.id];
+    const box = bgGroupBox(i, step, L);
+    el.style.left = box.x + 'px';
+    el.style.top = box.y + 'px';
+    el.style.width = box.w + 'px';
+    el.style.height = box.h + 'px';
+  });
+
+  // Handlinger (chips) og section-headers
+  bgActions.forEach(a=>{
+    const el = bgActionEls[a.id];
+    const pos = bgActionPos(a, L);
+    el.style.left = pos.x + 'px';
+    el.style.top = pos.y + 'px';
+    el.style.width = pos.w + 'px';
+    el.style.height = pos.h + 'px';
+  });
+  ['field','box'].forEach(mod=>{
+    const el = bgActionEls['header-'+mod];
+    const pos = bgActionPos({_isHeader:true, module:mod}, L);
+    el.style.left = pos.x + 'px';
+    el.style.top = pos.y + 'px';
+    el.style.width = pos.w + 'px';
+    el.style.height = pos.h + 'px';
+  });
+
+  // Steg 3: klikk-basert visning (Option C)
+  bgSceneStage.classList.toggle('step-3', step===3);
+
+  // Rydd alle highlight-klasser først
+  Object.values(bgPersonEls).forEach(el=>el.classList.remove('selected','dimmed'));
+  Object.values(bgGroupEls).forEach(el=>el.classList.remove('active','dimmed'));
+  Object.values(bgActionEls).forEach(el=>el.classList.remove('active','dimmed'));
+
+  if(step===3 && bgSelectedPerson){
+    const selectedPerson = bgPersons.find(p=>p.id===bgSelectedPerson);
+    // Finn alle gruppene personen er medlem i (matchet på navn for cross-membership)
+    const personGroupIds = new Set(
+      bgPersons.filter(p=>p.name===selectedPerson.name).map(p=>p.group)
+    );
+    const personActionIds = new Set();
+    bgConnections.forEach(c=>{
+      if(personGroupIds.has(c.from)) personActionIds.add(c.to);
+    });
+
+    // Apply highlight/dim-klasser
+    bgPersons.forEach(p=>{
+      const el = bgPersonEls[p.id];
+      if(p.name===selectedPerson.name) el.classList.add('selected');
+      else el.classList.add('dimmed');
+    });
+    bgGroups.forEach(g=>{
+      const el = bgGroupEls[g.id];
+      if(personGroupIds.has(g.id)) el.classList.add('active');
+      else el.classList.add('dimmed');
+    });
+    bgActions.forEach(a=>{
+      const el = bgActionEls[a.id];
+      if(personActionIds.has(a.id)) el.classList.add('active');
+      else el.classList.add('dimmed');
+    });
+
+    // SVG-linjer kun for valgt person sine grupper → handlinger
+    // Linje-farge basert på modulen handlingen tilhører (grønn for Field, blå for Box)
+    let svg='';
+    const designL = {w: BG_SCENE_W, h: BG_SCENE_H};
+    bgConnections.forEach(c=>{
+      if(!personGroupIds.has(c.from)) return;
+      const gIdx = bgGroups.findIndex(g=>g.id===c.from);
+      const action = bgActions.find(a=>a.id===c.to);
+      if(!action) return;
+      const gBox = bgGroupBox(gIdx, step, designL);
+      const aAnchor = bgActionAnchor(action);
+      const gx = gBox.x + gBox.w;
+      const gy = gBox.y + gBox.h/2;
+      const lineColor = action.module==='field' ? 'var(--dalux)' : 'var(--box-blue)';
+      svg += `<line x1="${gx}" y1="${gy}" x2="${aAnchor.x}" y2="${aAnchor.y}" stroke="${lineColor}" stroke-width="2.5" />`;
+    });
+    document.getElementById('bgSceneSvg').innerHTML = svg;
+
+    // Dynamisk caption basert på valgt person
+    const groupCount = personGroupIds.size;
+    const groupText = groupCount===1 ? '1 gruppe' : `${groupCount} grupper`;
+    const actionCount = personActionIds.size;
+    const actionText = actionCount===1 ? '1 handling' : `${actionCount} handlinger`;
+    // Hvilke moduler dekker handlingene?
+    const modulesUsed = new Set(bgActions.filter(a=>personActionIds.has(a.id)).map(a=>a.module));
+    const modLabels = [];
+    if(modulesUsed.has('field')) modLabels.push('Field');
+    if(modulesUsed.has('box')) modLabels.push('Box');
+    const modText = bgJoinNorwegian(modLabels);
+    document.getElementById('bgSceneCaption').innerHTML =
+      `<strong>${selectedPerson.name}</strong> er medlem av <strong>${groupText}</strong> og kan utføre <strong>${actionText}</strong> i ${modText}.`;
+  } else {
+    document.getElementById('bgSceneSvg').innerHTML = '';
+    document.getElementById('bgSceneCaption').textContent = bgCaptions[step];
+  }
+
+  // Klasser for å vise/skjule
+  bgSceneStage.classList.toggle('show-groups', step>=2);
+  bgSceneStage.classList.toggle('show-modules', step>=3);
+  document.getElementById('bgSceneSvg').classList.toggle('show', step>=3);
+
+  // Progress-prikker
+  document.querySelectorAll('.bg-scene-dot').forEach((d,i)=>{
+    const s = i+1;
+    d.classList.toggle('active', s===step);
+    d.classList.toggle('done', s<step);
+  });
+
+  // Knapper
+  document.getElementById('bgPrevBtn').disabled = step<=1;
+  document.getElementById('bgNextBtn').disabled = step>=3;
+}
+
+function bgStep(dir){
+  const next = bgCurrentStep + dir;
+  if(next<1 || next>3) return;
+  bgCurrentStep = next;
+  bgSelectedPerson = null;
+  applyBgLayout();
+}
+
+// Init når scriptet kjører
+bgCreateScene();
+applyBgLayout();
+
 function setIsoView(view){
   if(view===isoView)return;
   isoView=view;
@@ -2750,7 +4433,7 @@ function setIsoView(view){
   const intro=document.getElementById('boxP1Intro');
   if(view==='iso'){
     subtitle.textContent='Internasjonal standard for informasjonshåndtering i bygge- og anleggsprosjekter';
-    intro.innerHTML='<p>ISO 19650 handler om å sikre at riktig informasjon er tilgjengelig for riktige personer til rett tid. Standarden definerer hvordan dokumenter og modeller skal organiseres, navngis, deles og godkjennes gjennom hele prosjektets levetid.</p><p>Kjernen i standarden er et <strong>Common Data Environment (CDE)</strong> - ett felles sted der all prosjektinformasjon lever, med tydelige statusområder som viser hvor hvert dokument befinner seg i prosessen.</p>';
+    intro.innerHTML='<p>ISO 19650 handler om å sørge for at riktig informasjon er tilgjengelig for riktige personer til rett tid. Standarden setter rammene for hvordan dokumenter og modeller skal organiseres, navngis, deles og godkjennes gjennom hele prosjektets levetid.</p><p>Kjernen i standarden er et <strong>Common Data Environment (CDE)</strong>, ett felles sted der all prosjektinformasjon lever, med tydelige statusområder som viser hvor hvert dokument befinner seg i prosessen.</p>';
   } else {
     subtitle.textContent='Dalux Box Pro er bygget for å støtte ISO 19650 i praksis';
     intro.innerHTML='<p>For å oppfylle ISO 19650 må en rekke krav til informasjonshåndtering være på plass. Dalux Box Pro dekker disse kravene med konkrete funksjoner som kan konfigureres og tilpasses hvert prosjekt.</p><p>Under ser du kravene fra standarden. Trykk <strong>Vis i Dalux</strong> for å se hvilke funksjoner i Box som dekker hvert krav.</p>';
@@ -2855,10 +4538,10 @@ const DOC_STEPS=[
   {zone:'published',num:'5',numBg:'var(--green-g)',numColor:'var(--green)',
    title:'Godkjent og publisert',
    body:'Etter review er dokumentet godkjent og flyttes til Utgitte filer. Dette er nå gjeldende versjon som entreprenører og byggherren forholder seg til.',
-   doc:{name:'A-201-Plan-2etg.pdf',rev:'C01',status:'Godkjent - Gjeldende',statusBg:'var(--green-g)',statusColor:'var(--green)'}},
+   doc:{name:'A-201-Plan-2etg.pdf',rev:'C01',status:'Godkjent · Gjeldende',statusBg:'var(--green-g)',statusColor:'var(--green)'}},
   {zone:'done',num:'✓',numBg:'var(--green-g)',numColor:'var(--green)',
    title:'Full sporbarhet',
-   body:'Alle revisjoner, kommentarer og statusendringer er logget. Historikken viser dokumentets reise fra første utkast til godkjent versjon. Videre arkivering (ISO S4) håndteres utenfor Box, f.eks. gjennom Dalux Handover for overlevering til drift, eller Dalux FM for forvaltning og vedlikehold.',
+   body:'Alle revisjoner, kommentarer og statusendringer er logget. Historikken viser hele løpet fra første utkast til godkjent versjon. Videre arkivering (ISO S4) håndteres utenfor Box, f.eks. gjennom Dalux Handover for overlevering til drift, eller Dalux FM for forvaltning og vedlikehold.',
    doc:{name:'A-201-Plan-2etg.pdf',rev:'C01',status:'Dokumentert ✓',statusBg:'var(--green-g)',statusColor:'var(--green)'}},
 ];
 
@@ -2940,6 +4623,9 @@ function getNavContext(){
     if(commTrack&&commTrack.classList.contains('active')) return {current:commActivePage, max:2, fn:showCommPage};
     if(isoTrack&&isoTrack.classList.contains('active')) return {current:boxActivePage, max:3, fn:showBoxPage};
   }
+  if(activeCommonTrack==='brukergrupper'){
+    return {current:brukergrupperActivePage, max:3, fn:showBrukergrupperPage};
+  }
   return null;
 }
 
@@ -2979,10 +4665,42 @@ const _origOpenModule=openModule;
 openModule=function(m){_origOpenModule(m);setTimeout(updateArrows,50);};
 const _prevOpenBoxTrack=openBoxTrack;
 openBoxTrack=function(t){_prevOpenBoxTrack(t);setTimeout(updateArrows,50);};
+const _origOpenCommonTrack=openCommonTrack;
+openCommonTrack=function(t){
+  _origOpenCommonTrack(t);
+  setTimeout(updateArrows,50);
+  if(t==='brukergrupper'){
+    // Reset til steg 1 hver gang tracket åpnes, og recompute layout
+    bgCurrentStep=1;
+    requestAnimationFrame(()=>applyBgLayout());
+  }
+};
+const _origShowBrukergrupperPage=showBrukergrupperPage;
+showBrukergrupperPage=function(n){_origShowBrukergrupperPage(n);updateArrows();};
 const _origBackToSplash=backToSplash;
 backToSplash=function(){_origBackToSplash();updateArrows();};
 const _origBackToBoxSelector=backToBoxSelector;
 backToBoxSelector=function(){_origBackToBoxSelector();updateArrows();};
+
+// Responsivitet: recompute layout for synlige stager når vinduet endrer størrelse
+let _resizeTimer=null;
+window.addEventListener('resize', ()=>{
+  clearTimeout(_resizeTimer);
+  _resizeTimer=setTimeout(()=>{
+    if(document.getElementById('modField').classList.contains('active')){
+      applyHubLayout();
+    }
+    if(document.getElementById('boxTrackComm').classList.contains('active')){
+      applyCommLayout();
+      if(typeof commActivePage!=='undefined' && commActivePage===2){
+        clApplyStep();
+      }
+    }
+    if(document.getElementById('trackBrukergrupper').classList.contains('active')){
+      applyBgLayout();
+    }
+  }, 120);
+});
 </script>
 </body>
 </html>
