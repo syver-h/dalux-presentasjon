@@ -2656,7 +2656,7 @@
     <!-- Navngiving + Animasjon 1: filnavn-splitt -->
     <section class="fl-section">
       <h2 class="fl-h2">Navngiving trenger ikke være komplisert</h2>
-      <p class="fl-lead">Navnemalen deler filnavnet i metadata ved opplasting. Hver bindestrek lager et nytt felt. Velg så enkelt eller detaljert du vil.</p>
+      <p class="fl-lead">Navnemalen deler filnavnet i metadata ved opplasting. Et avgrensningstegn skiller hvert felt. Bindestrek og understrek er vanligst, mellomrom fungerer til tider, og egentlig kan de fleste tegn brukes så lenge malen er satt opp for det. Velg så enkelt eller detaljert du vil.</p>
 
       <div class="fls-toggle">
         <button class="fls-tg on" id="flsTgEnkel" onclick="flsSetExample('enkel')">Enkel</button>
@@ -4421,7 +4421,7 @@ const FLS_EX={
     {label:'Nummer', val:'1042'},
     {label:'Beskrivelse', val:'Fundamentplan', besk:true},
   ]},
-  detaljert:{ note:'Flere bindestreker = flere metadatafelt å filtrere og sortere på. For hyperlenking holder det med ett unikt <b>Nummer</b>, som i Enkel.', parts:[
+  detaljert:{ note:'Flere avgrensere = flere metadatafelt å filtrere og sortere på. For hyperlenking holder det med ett unikt <b>Nummer</b>, som i Enkel.', parts:[
     {label:'Bygg', val:'128'},
     {label:'Etasje', val:'02', hl:['flsTEtasje','02']},
     {label:'Fag', val:'B', hl:['flsTFag','B']},
