@@ -230,7 +230,7 @@
 
   /* Comm tabs - delt styling med .hub-tab (samme utseende) */
   #boxTrackComm .page { flex-direction:column; align-items:center; padding-top:84px; }
-  .comm-tabs { display:flex; gap:4px; margin-bottom:12px; z-index:2; justify-content:center; }
+  .comm-tabs { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:12px; z-index:2; justify-content:center; }
   .comm-tab, .hub-tab {
     background:var(--surface); border:1px solid var(--border); border-radius:10px;
     padding:8px 18px; font-family:'DM Sans',sans-serif; font-size:.84rem;
@@ -360,23 +360,6 @@
   .comm-info-icon { font-size:1.2rem; margin-bottom:6px; }
   .comm-info-title { font-weight:700; font-size:.82rem; color:var(--text); margin-bottom:6px; }
   .comm-info-text { font-size:.76rem; color:var(--muted); line-height:1.6; }
-
-  /* Page 2: lifecycle steps */
-  .lc-info-row { display:flex; flex-direction:column; gap:10px; }
-  .lc-info-card {
-    display:flex; gap:14px; align-items:flex-start;
-    background:var(--surface); border:1px solid var(--border);
-    border-radius:12px; padding:14px 18px;
-    box-shadow:0 1px 3px rgba(0,0,0,.04);
-  }
-  .lc-info-num {
-    width:28px; height:28px; border-radius:50%; flex-shrink:0;
-    background:var(--dalux); color:#fff; font-weight:700; font-size:.78rem;
-    display:flex; align-items:center; justify-content:center;
-    margin-top:2px;
-  }
-  .lc-info-title { font-weight:700; font-size:.84rem; color:var(--text); margin-bottom:3px; }
-  .lc-info-desc { font-size:.76rem; color:var(--muted); line-height:1.6; }
 
   /* Header for Comm side 2 */
   .cl-page-header {
@@ -842,11 +825,6 @@
     box-shadow: 0 0 0 1px var(--group-color), 0 2px 12px color-mix(in srgb, var(--group-color) 25%, transparent);
   }
   .bg-group.dimmed { opacity: .3; }
-  .bg-module.active {
-    border-color: var(--dalux);
-    box-shadow: 0 0 0 3px rgba(141,198,63,.25), 0 2px 12px rgba(141,198,63,.15);
-  }
-  .bg-module.dimmed { opacity: .35; }
   .bg-person-avatar {
     width: 26px; height: 26px; border-radius: 50%;
     background: var(--purple); color: #fff;
@@ -950,9 +928,18 @@
   .bg-scene-dot.done { background: var(--purple); opacity: .5; }
 
   /* Brukergrupper side 2 - standardgrupper */
-  .bg-tabs { display: flex; gap: 4px; margin-bottom: 20px; justify-content: center; }
-  .bg-tab-panel { display: none; max-width: 1000px; width: 100%; margin: 0 auto; }
-  .bg-tab-panel.active { display: block; }
+  .bg-section { max-width: 1000px; width: 100%; margin: 0 auto 32px; }
+  .bg-section:last-child { margin-bottom: 0; }
+  .bg-section-title {
+    font-family: 'Space Mono', monospace;
+    font-size: .72rem;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--muted);
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
   .bg-cards {
     display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
   }
@@ -968,7 +955,7 @@
   .bg-card-icon { font-size: 1.4rem; flex-shrink: 0; }
   .bg-card-title {
     font-weight: 700; font-size: .88rem; color: var(--text);
-    overflow-wrap: break-word; hyphens: auto;
+    overflow-wrap: break-word;
   }
   .bg-card-sub {
     font-family: 'Space Mono', monospace; font-size: .62rem;
@@ -976,7 +963,7 @@
   }
   .bg-card-desc {
     font-size: .82rem; color: var(--muted); line-height: 1.6;
-    overflow-wrap: break-word; hyphens: auto;
+    overflow-wrap: break-word;
   }
   .bg-card.warning {
     border-color: var(--orange); border-width: 2px;
@@ -1056,6 +1043,16 @@
   }
   .bg-split-col.bad .bg-split-label { background: var(--red-g); color: var(--red); }
   .bg-split-col.good .bg-split-label { background: var(--green-g); color: var(--green); }
+
+  /* Side 3: spotlight-stegvis reveal */
+  .bg-step { transition: opacity .45s ease, filter .45s ease, transform .45s ease, box-shadow .45s ease; }
+  .bg-step.bg-future { opacity: .22; filter: blur(3px); pointer-events: none; }
+  .bg-step.bg-done { opacity: .5; filter: none; }
+  .bg-step.bg-active { opacity: 1; filter: none; }
+  .bg-example.bg-active, .bg-split-col.bg-active {
+    transform: scale(1.03); z-index: 2; position: relative;
+    box-shadow: 0 12px 34px rgba(0,0,0,.14);
+  }
   .bg-split-title { font-weight: 700; font-size: .92rem; margin-bottom: 8px; }
   .bg-split-text { font-size: .8rem; color: var(--muted); line-height: 1.6; }
 
@@ -1399,7 +1396,6 @@
   }
   .wf-title .wf-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
   .wf-sub { font-size:.82rem; color:var(--muted); margin-bottom:22px; }
-  .wf-flows { display:flex; flex-direction:column; gap:12px; }
   .wf-mode-tabs {
     display:flex; gap:4px; justify-content:center; margin-bottom:18px;
   }
@@ -1545,10 +1541,6 @@
     display:flex; align-items:center; justify-content:center; font-size:1.2rem;
     border:2px solid transparent; transition:all .4s ease;
     position:relative; z-index:2;
-  }
-  .col-avatar.glow {
-    transform:scale(1.15);
-    box-shadow:0 0 0 4px rgba(141,198,63,.2), 0 4px 16px rgba(0,0,0,.1);
   }
   .col-name { font-weight:600; font-size:.88rem; margin-bottom:1px; }
   .col-role {
@@ -1775,7 +1767,6 @@
     /* Brukergrupper-track */
     .splash-common-cards { flex-direction:column; }
     .splash-common-card { width:100%; justify-content:center; }
-    .bg-points { flex-direction:column; }
     .bg-cards { flex-direction:column; align-items:stretch; }
     .bg-card { max-width:none; }
     .bg-principles { flex-direction:column; }
@@ -1996,7 +1987,7 @@
 <!-- ========================================= -->
 <div class="page intro" id="page2">
   <header>
-    <h1>Oppgaver - Fra opprettet til lukket</h1>
+    <h1>Oppgaver: Fra opprettet til lukket</h1>
     <p>Følg en oppgave gjennom arbeidsforløpet, fra oppretting til godkjenning.</p>
   </header>
 
@@ -2134,7 +2125,7 @@
   <div class="box-track-cards">
     <button class="box-track-card" onclick="openBoxTrack('comm')">
       <div class="box-track-icon">💬</div>
-      <div class="box-track-name">Kommunikasjonsflyt</div>
+      <div class="box-track-name">Samhandling i Box</div>
       <div class="box-track-desc">Enkel deling og kommunikasjon rundt dokumenter i prosjektet</div>
     </button>
     <button class="box-track-card coming-soon" onclick="openBoxTrack('files')" aria-label="Mappestruktur og filhåndtering, kommer snart">
@@ -2156,24 +2147,20 @@
 <div class="box-track" id="boxTrackComm">
 <button class="back-btn" onclick="backToBoxSelector()">← Box</button>
 
-<div class="page-nav" id="commNav">
-  <button class="page-btn active" onclick="showCommPage(1)" id="cpb1"><span class="pnum">1</span> Kommunikasjonsflyt</button>
-  <button class="page-btn" onclick="showCommPage(2)" id="cpb2"><span class="pnum">2</span> Kommentar - opprett, send, lukk</button>
-</div>
-
 <button class="fs-btn" onclick="toggleFS()" id="fsBtnComm" style="opacity:0;pointer-events:none">⛶ Fullskjerm</button>
 
 <!-- COMM PAGE 1: Kommunikasjonsflyt -->
 <div class="page visible" id="commPage1">
 
-  <div class="comm-intro">
-    <p>I Dalux Box oppretter du <strong>kommentarer</strong> direkte på tegninger, PDF-er og BIM-modeller. Hver kommentar tilhører en <strong>kommunikasjonsflyt</strong> som styrer hvilke grupper som kan se, opprette, redigere og lukke den. Slik sørger flyten for at riktig informasjon når riktige personer, og at all dialog er sporbar.</p>
+  <div class="comm-tabs">
+    <button class="comm-tab on" data-commtab="list" onclick="commTab('list')"><span class="num">1</span>Oppsett</button>
+    <button class="comm-tab" data-commtab="hub" onclick="commTab('hub')"><span class="num">2</span>Kommunikasjonsflyt</button>
+    <button class="comm-tab" data-commtab="status" onclick="commTab('status')"><span class="num">3</span>Statuser</button>
+    <button class="comm-tab" data-commtab="comment" onclick="commTab('comment')"><span class="num">4</span>Kommentar: opprett, send, lukk</button>
   </div>
 
-  <div class="comm-tabs">
-    <button class="comm-tab on" id="tCommList" onclick="setCommView('list')"><span class="num">1</span>Oppsett</button>
-    <button class="comm-tab" id="tCommHub" onclick="setCommView('hub')"><span class="num">2</span>Kommunikasjonsflyt</button>
-    <button class="comm-tab" id="tCommStatus" onclick="setCommView('status')"><span class="num">3</span>Statuser</button>
+  <div class="comm-intro">
+    <p>I Dalux Box oppretter du <strong>kommentarer</strong> direkte på tegninger, PDF-er og BIM-modeller. Hver kommentar tilhører en <strong>kommunikasjonsflyt</strong> som styrer hvilke grupper som kan se, opprette, redigere og lukke den. Slik sørger flyten for at riktig informasjon når riktige personer, og at all dialog er sporbar.</p>
   </div>
 
   <div class="comm-view-info" id="commViewInfo">
@@ -2187,7 +2174,7 @@
         <div class="comm-info-card">
           <div class="comm-info-icon">💬</div>
           <div class="comm-info-title">Kommentartyper</div>
-          <div class="comm-info-text">Hver flyt knyttes til én eller flere <strong>kommentartyper</strong>. Kommentartypene kan ha egendefinerte felter (tekst, nedtrekklister, tallverdier) og egne statusverdier med fargekoder. Definer kommentartypene etter prosjektets behov, f.eks. «Prosjektering», «RFI» eller «Byggherreavklaring».</div>
+          <div class="comm-info-text">Du kan knytte hver <strong>kommentartype</strong> til én eller flere flyter. Kommentartypene kan ha egendefinerte felter (tekst, nedtrekklister, tallverdier) og egne statusverdier med fargekoder. Definer kommentartypene etter prosjektets behov, f.eks. «Prosjektering», «RFI» eller «Byggherreavklaring».</div>
         </div>
         <div class="comm-info-card">
           <div class="comm-info-icon">🏷️</div>
@@ -2217,7 +2204,7 @@
     </div>
     <div class="comm-info-status" id="commInfoStatus" style="display:none">
       <!-- Før/etter-sammenligning -->
-      <div class="status-compare">
+      <div class="status-compare bg-step" data-statusstep="1">
         <div class="status-compare-card status-compare-bad">
           <div class="status-compare-label">Uten egendefinerte statuser</div>
           <div class="status-timeline">
@@ -2248,11 +2235,11 @@
       </div>
 
       <!-- Eksempel-flyter -->
-      <div class="status-section-header">
+      <div class="status-section-header bg-step" data-statusstep="2">
         <h3>Eksempler på status-oppsett</h3>
         <p>Start med standardflyten. Tilpass bare når kommentartypen krever det.</p>
       </div>
-      <div class="status-examples">
+      <div class="status-examples bg-step" data-statusstep="2">
         <div class="status-example-card recommended">
           <div class="status-example-label">Anbefalt utgangspunkt</div>
           <div class="status-example-title">Standardflyt</div>
@@ -2298,10 +2285,10 @@
       </div>
 
       <!-- Prinsipper -->
-      <div class="status-section-header">
+      <div class="status-section-header bg-step" data-statusstep="3">
         <h3>Tre prinsipper når du setter opp statuser</h3>
       </div>
-      <div class="bg-principles">
+      <div class="bg-principles bg-step" data-statusstep="3">
         <div class="bg-principle">
           <div class="bg-principle-num">Prinsipp 1</div>
           <div class="bg-principle-title">Standardiser hvor det er mulig</div>
@@ -2320,8 +2307,15 @@
       </div>
 
       <!-- Footnote/cross-link -->
-      <div class="status-footnote">
-        <p>Status-endringer logges automatisk i aktivitetsloggen. Se hva som skjer med en kommentar steg for steg på <strong>side 2 (Kommentar - opprett, send, lukk)</strong>.</p>
+      <div class="status-footnote bg-step" data-statusstep="3">
+        <p>Status-endringer logges automatisk i aktivitetsloggen. Se hva som skjer med en kommentar steg for steg på fanen <strong>Kommentar: opprett, send, lukk</strong>.</p>
+      </div>
+
+      <div style="height:90px"></div>
+      <div class="controls" id="statusControls">
+        <button class="ctrl-btn" id="statusPrev" onclick="statusPrev()" disabled>← Forrige</button>
+        <div class="lc-progress" id="statusProgress"></div>
+        <button class="ctrl-btn primary" id="statusNext" onclick="statusNext()">Neste →</button>
       </div>
     </div>
   </div>
@@ -2351,12 +2345,15 @@
   <div class="comm-caption" id="commCaption">Kommunikasjonsflyten viser hvilke grupper som kan kommunisere sammen</div>
 </div>
 
-<!-- COMM PAGE 2: Kommentar - opprett, send, lukk -->
+<!-- COMM PAGE 2: Kommentar: opprett, send, lukk -->
 <div class="page" id="commPage2">
 
-  <header class="cl-page-header">
-    <h1>Kommentar - opprett, send, lukk</h1>
-  </header>
+  <div class="comm-tabs">
+    <button class="comm-tab" data-commtab="list" onclick="commTab('list')"><span class="num">1</span>Oppsett</button>
+    <button class="comm-tab" data-commtab="hub" onclick="commTab('hub')"><span class="num">2</span>Kommunikasjonsflyt</button>
+    <button class="comm-tab" data-commtab="status" onclick="commTab('status')"><span class="num">3</span>Statuser</button>
+    <button class="comm-tab on" data-commtab="comment" onclick="commTab('comment')"><span class="num">4</span>Kommentar: opprett, send, lukk</button>
+  </div>
 
   <div class="comm-intro">
     <p>En kommentar i Box starter når du markerer et punkt på en tegning, et dokument eller en BIM-modell, og fyller ut kommentarskjemaet. Den lever videre gjennom hele behandlingen, med full sporbarhet i aktivitetsloggen.</p>
@@ -2541,8 +2538,8 @@
         </div>
         <div class="cde-zone-body">
           <div class="cde-dalux-name shared">→ Delte filer i Dalux</div>
-          <div class="cde-zone-desc">Delt med prosjektteamet for koordinering og tverrfaglig kontroll. Dokumentet er tilgjengelig for kommentering og review, men ikke offisielt godkjent.</div>
-          <div class="cde-tags"><span class="cde-tag shared">Til koordinering</span><span class="cde-tag shared">Tverrfaglig</span><span class="cde-tag shared">Review</span></div>
+          <div class="cde-zone-desc">Delt med prosjektteamet for koordinering og tverrfaglig kontroll. Dokumentet er tilgjengelig for kommentering og gjennomgang, men ikke offisielt godkjent.</div>
+          <div class="cde-tags"><span class="cde-tag shared">Til koordinering</span><span class="cde-tag shared">Tverrfaglig</span><span class="cde-tag shared">Gjennomgang</span></div>
         </div>
       </div>
       <div class="cde-arrow-sep">
@@ -2667,7 +2664,7 @@
           <div class="cde-feat-icon">📬</div>
           <div class="cde-feat-content">
             <div class="cde-feat-title">Innsendinger</div>
-            <div class="cde-feat-desc">Planlegg og spor filleveranser med ansvarlige, frister, review-flyt og godkjenning.</div>
+            <div class="cde-feat-desc">Planlegg og spor filleveranser med ansvarlige, frister, gjennomgangsflyt og godkjenning.</div>
           </div>
         </div>
       </div>
@@ -2679,7 +2676,7 @@
         <div class="cde-card-dalux">
           <div class="cde-feat-icon">✅</div>
           <div class="cde-feat-content">
-            <div class="cde-feat-title">Review og godkjenning</div>
+            <div class="cde-feat-title">Gjennomgang og godkjenning</div>
             <div class="cde-feat-desc">Formalisert flyt for gjennomgang og godkjenning med definerte roller og sporbare beslutninger.</div>
           </div>
         </div>
@@ -2754,7 +2751,7 @@
         <div class="box-features">
           <div class="box-feat"><span class="bf-icon">🗂️</span><span>Tre filområder (Filer → Delte filer → Utgitte filer)</span></div>
           <div class="box-feat"><span class="bf-icon">📬</span><span>Innsendinger med planlagte leveranser, frister og ansvarlige</span></div>
-          <div class="box-feat"><span class="bf-icon">✅</span><span>Formalisert review- og godkjenningsflyt</span></div>
+          <div class="box-feat"><span class="bf-icon">✅</span><span>Formalisert gjennomgangs- og godkjenningsflyt</span></div>
           <div class="box-feat"><span class="bf-icon">📐</span><span>Avtalt navnekonvensjon for hele prosjektet</span></div>
           <div class="box-feat"><span class="bf-icon">🔒</span><span>Tilgangsstyring per statusområde</span></div>
         </div>
@@ -2843,13 +2840,8 @@
       <p>Gruppene som finnes når du oppretter et nytt prosjekt</p>
     </header>
 
-    <div class="bg-tabs">
-      <button class="hub-tab on" id="bgtGeneral" onclick="setBgTab('general')"><span class="num">1</span>Generelt</button>
-      <button class="hub-tab" id="bgtField" onclick="setBgTab('field')"><span class="num">2</span>Field</button>
-      <button class="hub-tab" id="bgtBox" onclick="setBgTab('box')"><span class="num">3</span>Box</button>
-    </div>
-
-    <div class="bg-tab-panel active" id="bgPanelGeneral">
+    <div class="bg-section">
+      <div class="bg-section-title">Generelt</div>
       <div class="bg-cards">
         <div class="bg-card" style="max-width:480px">
           <div class="bg-card-header">
@@ -2859,12 +2851,13 @@
               <div class="bg-card-title">Prosjektadministratorer</div>
             </div>
           </div>
-          <div class="bg-card-desc">Har full tilgang til alle prosjektets innstillinger. Administrerer Dalux-prosjektet inkludert Field, Box og brukere. De kan opprette nye brukergrupper, sette rettigheter, og invitere brukere til prosjektet. Tender og Apartments krever egen tilgang.</div>
+          <div class="bg-card-desc">Har full tilgang til alle prosjektets innstillinger og kan opprette brukergrupper, sette rettigheter og invitere brukere. De ser innholdet i Box, men har i utgangspunktet ingen lese- eller oppretter-rettigheter i Field, noe de kan gi seg selv siden de styrer rettighetene.</div>
         </div>
       </div>
     </div>
 
-    <div class="bg-tab-panel" id="bgPanelField">
+    <div class="bg-section">
+      <div class="bg-section-title">Field</div>
       <div class="bg-cards">
         <div class="bg-card">
           <div class="bg-card-header">
@@ -2910,7 +2903,8 @@
       </div>
     </div>
 
-    <div class="bg-tab-panel" id="bgPanelBox">
+    <div class="bg-section">
+      <div class="bg-section-title">Box</div>
       <div class="bg-cards">
         <div class="bg-card">
           <div class="bg-card-header">
@@ -2948,24 +2942,24 @@
     </div>
 
     <div class="bg-principles">
-      <div class="bg-principle">
+      <div class="bg-principle bg-step" data-bgstep="1">
         <div class="bg-principle-num">Prinsipp 1</div>
         <div class="bg-principle-title">Nummereringssystem</div>
         <div class="bg-principle-text">Hver gruppe starter med et nummer. Det gir samme rekkefølge på alle prosjekter siden Dalux sorterer alfabetisk på gruppenavn.</div>
       </div>
-      <div class="bg-principle">
+      <div class="bg-principle bg-step" data-bgstep="1">
         <div class="bg-principle-num">Prinsipp 2</div>
         <div class="bg-principle-title">Én gruppe per firma/kontrakt</div>
         <div class="bg-principle-text">Brukerne i én gruppe bør komme fra samme firma eller kontrakt. Da kan du enkelt målrette alle fra samme aktør i arbeidsforløp.</div>
       </div>
-      <div class="bg-principle">
+      <div class="bg-principle bg-step" data-bgstep="1">
         <div class="bg-principle-num">Prinsipp 3</div>
         <div class="bg-principle-title">Splitt per fag når relevant</div>
         <div class="bg-principle-text">Hvis ett firma dekker flere fag, lag undergrupper med samme rot-nummer (40, 41, 42 osv.). Du kan da gi ulike rettigheter til hvert fag.</div>
       </div>
     </div>
 
-    <div class="bg-example">
+    <div class="bg-example bg-step" data-bgstep="2">
       <div class="bg-example-header">
         <span class="bg-example-icon">📋</span>
         <span class="bg-example-title">Eksempel: Brukergrupper i et byggeprosjekt</span>
@@ -2985,23 +2979,30 @@
     </div>
 
     <div class="bg-split">
-      <div class="bg-split-header">
+      <div class="bg-split-header bg-step" data-bgstep="3">
         <h3>Hva får du med å splitte?</h3>
         <p>Se forskjellen mellom én bred gruppe og fagsplittede grupper</p>
       </div>
       <div class="bg-split-cols">
-        <div class="bg-split-col bad">
+        <div class="bg-split-col bad bg-step" data-bgstep="3">
           <span class="bg-split-label">Mindre fleksibelt</span>
           <div class="bg-split-title">40 - Betongmiljø AS (én stor)</div>
           <div class="bg-split-text">Alle fagene i Betongmiljø får samme rettigheter. Geoteknikere får tilgang til konstruksjonsmodeller selv om de ikke trenger det. Varsler om konstruksjons-revisjoner går til geoteknikere som heller ikke trenger dem.</div>
         </div>
-        <div class="bg-split-col good">
+        <div class="bg-split-col good bg-step" data-bgstep="3">
           <span class="bg-split-label">Mer presis</span>
           <div class="bg-split-title">41 + 42 (fagsplittet)</div>
           <div class="bg-split-text">Konstruksjon (41) og Geoteknikk (42) får ulike rettigheter og varsler. Du kan målrette en kommentar til kun riktig fag, og hver gruppe ser bare det som er relevant for dem. Begge er fortsatt under "40 Betongmiljø" for sortering.</div>
         </div>
       </div>
     </div>
+    <div style="height:90px"></div>
+  </div>
+
+  <div class="controls" id="bg3Controls">
+    <button class="ctrl-btn" id="bg3Prev" onclick="bg3Prev()" disabled>← Forrige</button>
+    <div class="lc-progress" id="bg3Progress"></div>
+    <button class="ctrl-btn primary" id="bg3Next" onclick="bg3Next()">Neste →</button>
   </div>
 </div>
 
@@ -3256,8 +3257,8 @@ function openWf(idx){
   document.getElementById('wfOverlay').classList.add('show');
 }
 const wfModeHints={
-  lite:'I små prosjekter behandler totalentreprenøren alle saker, ofte fordi samme person har flere "hatter". HMS-observasjoner kan alle på prosjektet opprette - de sendes til HMS-lederne utenfor arbeidsforløpene, og kommer tilbake som en HMS-oppgave for utbedring.',
-  stort:'I større prosjekter splittes arbeidet på dedikerte fagledere. Slik unngår du at folk får varsler om saker som ikke er deres ansvar. HMS-observasjoner kan alle på prosjektet opprette - de sendes til HMS-lederne utenfor arbeidsforløpene, og kommer tilbake som en HMS-oppgave for utbedring.',
+  lite:'I små prosjekter behandler totalentreprenøren alle saker, ofte fordi samme person har flere "hatter". HMS-observasjoner kan alle på prosjektet opprette, de sendes til HMS-lederne utenfor arbeidsforløpene, og kommer tilbake som en HMS-oppgave for utbedring.',
+  stort:'I større prosjekter splittes arbeidet på dedikerte fagledere. Slik unngår du at folk får varsler om saker som ikke er deres ansvar. HMS-observasjoner kan alle på prosjektet opprette, de sendes til HMS-lederne utenfor arbeidsforløpene, og kommer tilbake som en HMS-oppgave for utbedring.',
 };
 function setWfMode(mode){
   document.querySelectorAll('#wfOverlay .wf-mode-tabs .hub-tab').forEach(b=>{
@@ -3351,10 +3352,10 @@ const SCENARIOS = [
     row1:{label:'Forløp <span>TE → Elektriker</span>',left:{emoji:'👷',bg:'#f5ecd5',border:'var(--yellow)',name:'TE',role:'Oppretter'},right:{emoji:'⚡',bg:'#e8f0eb',border:'var(--accent)',name:'Elektriker',role:'Svarer'},arrowColor:'#6fa032'},
     row2:null,
     steps:[
-      {role:'te',row:1,col:'left',num:'1',numBg:'var(--yellow-g)',numColor:'var(--yellow)',title:'TE oppretter oppgave',body:'TE oppdager feilen i tavlerommet og registrerer den som en ny oppgave til Elektriker, legger ved bilde og plasserer på plantegningen.',task:{status:'Ny',statusBg:'var(--accent-g)',statusColor:'var(--accent)',title:'Feil i tavlerom 1. etg',meta:'Opprettet av TE - Nå',arrow:{from:'TE',fromBg:'var(--yellow-g)',fromColor:'var(--yellow)',to:'EL',toBg:'var(--accent-g)',toColor:'var(--accent)',fillColor:'#6fa032'}}},
-      {role:'fag',row:1,col:'right',num:'2',numBg:'var(--accent-g)',numColor:'var(--accent)',title:'Elektriker mottar og vurderer',body:'Elektriker ser oppgaven i sin innboks og vurderer omfanget av feilen.',task:{status:'Mottatt',statusBg:'var(--accent-g)',statusColor:'var(--accent)',title:'Feil i tavlerom 1. etg',meta:'Hos Elektriker - Under vurdering'}},
-      {role:'fag',row:1,col:'right',num:'3',numBg:'var(--accent-g)',numColor:'var(--accent)',title:'Elektriker utbedrer',body:'Elektriker utfører reparasjonen, dokumenterer med bilder og sender oppgaven tilbake til TE.',task:{status:'Utbedret',statusBg:'rgba(142,106,191,.1)',statusColor:'var(--purple)',title:'Feil i tavlerom 1. etg',meta:'Elektriker: "Ferdig utført - se vedlagte bilder"',arrow:{from:'EL',fromBg:'var(--accent-g)',fromColor:'var(--accent)',to:'TE',toBg:'var(--yellow-g)',toColor:'var(--yellow)',fillColor:'#d4a017'}}},
-      {role:'done',row:0,col:'done',num:'✓',numBg:'var(--green-g)',numColor:'var(--green)',title:'Oppgave godkjent og lukket',body:'TE kontrollerer, godkjenner og lukker oppgaven. Hele historikken er dokumentert med bilder, kommentarer og tidsstempler.',task:{status:'Lukket ✓',statusBg:'var(--green-g)',statusColor:'var(--green)',title:'Feil i tavlerom 1. etg',meta:'Lukket av TE - Total tid: 2 dager'}},
+      {role:'te',row:1,col:'left',num:'1',numBg:'var(--yellow-g)',numColor:'var(--yellow)',title:'TE oppretter oppgave',body:'TE oppdager feilen i tavlerommet og registrerer den som en ny oppgave til Elektriker, legger ved bilde og plasserer på plantegningen.',task:{status:'Ny',statusBg:'var(--accent-g)',statusColor:'var(--accent)',title:'Feil i tavlerom 1. etg',meta:'Opprettet av TE, nå',arrow:{from:'TE',fromBg:'var(--yellow-g)',fromColor:'var(--yellow)',to:'EL',toBg:'var(--accent-g)',toColor:'var(--accent)',fillColor:'#6fa032'}}},
+      {role:'fag',row:1,col:'right',num:'2',numBg:'var(--accent-g)',numColor:'var(--accent)',title:'Elektriker mottar og vurderer',body:'Elektriker ser oppgaven i sin innboks og vurderer omfanget av feilen.',task:{status:'Mottatt',statusBg:'var(--accent-g)',statusColor:'var(--accent)',title:'Feil i tavlerom 1. etg',meta:'Hos Elektriker, under vurdering'}},
+      {role:'fag',row:1,col:'right',num:'3',numBg:'var(--accent-g)',numColor:'var(--accent)',title:'Elektriker utbedrer',body:'Elektriker utfører reparasjonen, dokumenterer med bilder og sender oppgaven tilbake til TE.',task:{status:'Utbedret',statusBg:'rgba(142,106,191,.1)',statusColor:'var(--purple)',title:'Feil i tavlerom 1. etg',meta:'Elektriker: "Ferdig utført, se vedlagte bilder"',arrow:{from:'EL',fromBg:'var(--accent-g)',fromColor:'var(--accent)',to:'TE',toBg:'var(--yellow-g)',toColor:'var(--yellow)',fillColor:'#d4a017'}}},
+      {role:'done',row:0,col:'done',num:'✓',numBg:'var(--green-g)',numColor:'var(--green)',title:'Oppgave godkjent og lukket',body:'TE kontrollerer, godkjenner og lukker oppgaven. Hele historikken er dokumentert med bilder, kommentarer og tidsstempler.',task:{status:'Lukket ✓',statusBg:'var(--green-g)',statusColor:'var(--green)',title:'Feil i tavlerom 1. etg',meta:'Lukket av TE, total tid: 2 dager'}},
     ]
   },
   // ---- 1: Kryssforløp ----
@@ -3365,30 +3366,30 @@ const SCENARIOS = [
     row1:{label:'Forløp 1 <span>Rørlegger → TE</span>',left:{emoji:'🚿',bg:'#e8f0eb',border:'var(--accent)',name:'Rørlegger',role:'Oppretter'},right:{emoji:'👷',bg:'#f5ecd5',border:'var(--yellow)',name:'TE',role:'Svarer'},arrowColor:'#6fa032'},
     row2:{label:'Forløp 2 <span>TE → Ventilasjon</span>',left:{emoji:'👷',bg:'#f5ecd5',border:'var(--yellow)',name:'TE',role:'Tildeler'},right:{emoji:ICON_FAN,isImg:true,bg:'#e2f5e9',border:'var(--green)',name:'Ventilasjon',role:'Svarer'},arrowColor:'#8DC63F',showAtStep:2},
     steps:[
-      {role:'fag',row:1,col:'left',num:'1',numBg:'var(--accent-g)',numColor:'var(--accent)',title:'Rørlegger oppretter oppgave',body:'Rørlegger registrerer kollisjonen som en ny oppgave i oppgaveforløpet, legger ved bilde og plasserer den på plantegningen.',task:{status:'Ny',statusBg:'var(--accent-g)',statusColor:'var(--accent)',title:'Kollisjon ventilasjon/rør 2. etg',meta:'Opprettet av Rørlegger - Nå',arrow:{from:'RØR',fromBg:'var(--accent-g)',fromColor:'var(--accent)',to:'TE',toBg:'var(--yellow-g)',toColor:'var(--yellow)',fillColor:'#d4a017'}}},
-      {role:'te',row:1,col:'right',num:'2',numBg:'var(--yellow-g)',numColor:'var(--yellow)',title:'TE mottar og vurderer',body:'Totalentreprenøren ser oppgaven i sin innboks, vurderer situasjonen og ser at det er ventilasjonsrøret som må legges om.',task:{status:'Mottatt',statusBg:'var(--yellow-g)',statusColor:'var(--yellow)',title:'Kollisjon ventilasjon/rør 2. etg',meta:'Hos TE - Under vurdering'}},
+      {role:'fag',row:1,col:'left',num:'1',numBg:'var(--accent-g)',numColor:'var(--accent)',title:'Rørlegger oppretter oppgave',body:'Rørlegger registrerer kollisjonen som en ny oppgave i oppgaveforløpet, legger ved bilde og plasserer den på plantegningen.',task:{status:'Ny',statusBg:'var(--accent-g)',statusColor:'var(--accent)',title:'Kollisjon ventilasjon/rør 2. etg',meta:'Opprettet av Rørlegger, nå',arrow:{from:'RØR',fromBg:'var(--accent-g)',fromColor:'var(--accent)',to:'TE',toBg:'var(--yellow-g)',toColor:'var(--yellow)',fillColor:'#d4a017'}}},
+      {role:'te',row:1,col:'right',num:'2',numBg:'var(--yellow-g)',numColor:'var(--yellow)',title:'TE mottar og vurderer',body:'Totalentreprenøren ser oppgaven i sin innboks, vurderer situasjonen og ser at det er ventilasjonsrøret som må legges om.',task:{status:'Mottatt',statusBg:'var(--yellow-g)',statusColor:'var(--yellow)',title:'Kollisjon ventilasjon/rør 2. etg',meta:'Hos TE, under vurdering'}},
       {role:'te',row:2,col:'left2',num:'3',numBg:'var(--yellow-g)',numColor:'var(--yellow)',title:'TE sender oppgave i nytt forløp',body:'TE sender oppgaven videre i forløp 2 (TE → Ventilasjon) med instruksjoner om å legge om ventilasjonsrøret iht. revidert tegning. Dette er mulig fordi samme oppgavetype er aktivert i begge forløp. Rørlegger som opprettet den opprinnelige oppgaven har fortsatt innsyn og kan følge fremdriften, men kan ikke editere oppgaven når den ligger i et forløp de ikke har rettigheter i.',task:{status:'Ny i forløp 2',statusBg:'var(--orange-g)',statusColor:'var(--orange)',title:'Kollisjon ventilasjon/rør 2. etg',meta:'TE: "Legg om trasé iht. vedlagt revidert tegning" · 👁️ Rørlegger følger med',arrow:{from:'TE',fromBg:'var(--yellow-g)',fromColor:'var(--yellow)',to:'VENT',toBg:'var(--green-g)',toColor:'var(--green)',fillColor:'#8DC63F'}}},
-      {role:'vent',row:2,col:'right2',num:'4',numBg:'var(--green-g)',numColor:'var(--green)',title:'Ventilasjon utbedrer',body:'Ventilasjon utfører omleggingen, tar bilde av ferdig resultat og sender oppgaven tilbake til TE.',task:{status:'Utbedret',statusBg:'rgba(142,106,191,.1)',statusColor:'var(--purple)',title:'Kollisjon ventilasjon/rør 2. etg',meta:'Ventilasjon: "Ferdig utført - se vedlagt bilde"',arrow:{from:'VENT',fromBg:'var(--green-g)',fromColor:'var(--green)',to:'TE',toBg:'var(--yellow-g)',toColor:'var(--yellow)',fillColor:'#d4a017'}}},
-      {role:'te',row:2,col:'left2',num:'5',numBg:'var(--yellow-g)',numColor:'var(--yellow)',roleOverride:{left2:'Kontrollør'},title:'TE kontrollerer',body:'TE mottar oppgaven tilbake i forløp 2, kontrollerer at ventilasjonsrøret er lagt om korrekt og godkjenner.',task:{status:'Til kontroll',statusBg:'var(--yellow-g)',statusColor:'var(--yellow)',title:'Kollisjon ventilasjon/rør 2. etg',meta:'Hos TE - Venter på godkjenning'}},
-      {role:'done',row:0,col:'done',num:'✓',numBg:'var(--green-g)',numColor:'var(--green)',roleOverride:{left2:'Kontrollør'},title:'Oppgave godkjent og lukket',body:'TE godkjenner utbedringen og lukker oppgaven i forløp 2. Kollisjonen er løst, alt er dokumentert med bilder, kommentarer og tidsstempler.',task:{status:'Lukket ✓',statusBg:'var(--green-g)',statusColor:'var(--green)',title:'Kollisjon ventilasjon/rør 2. etg',meta:'Lukket av TE - Total tid: 3 dager'}},
+      {role:'vent',row:2,col:'right2',num:'4',numBg:'var(--green-g)',numColor:'var(--green)',title:'Ventilasjon utbedrer',body:'Ventilasjon utfører omleggingen, tar bilde av ferdig resultat og sender oppgaven tilbake til TE.',task:{status:'Utbedret',statusBg:'rgba(142,106,191,.1)',statusColor:'var(--purple)',title:'Kollisjon ventilasjon/rør 2. etg',meta:'Ventilasjon: "Ferdig utført, se vedlagt bilde"',arrow:{from:'VENT',fromBg:'var(--green-g)',fromColor:'var(--green)',to:'TE',toBg:'var(--yellow-g)',toColor:'var(--yellow)',fillColor:'#d4a017'}}},
+      {role:'te',row:2,col:'left2',num:'5',numBg:'var(--yellow-g)',numColor:'var(--yellow)',roleOverride:{left2:'Kontrollør'},title:'TE kontrollerer',body:'TE mottar oppgaven tilbake i forløp 2, kontrollerer at ventilasjonsrøret er lagt om korrekt og godkjenner.',task:{status:'Til kontroll',statusBg:'var(--yellow-g)',statusColor:'var(--yellow)',title:'Kollisjon ventilasjon/rør 2. etg',meta:'Hos TE, venter på godkjenning'}},
+      {role:'done',row:0,col:'done',num:'✓',numBg:'var(--green-g)',numColor:'var(--green)',roleOverride:{left2:'Kontrollør'},title:'Oppgave godkjent og lukket',body:'TE godkjenner utbedringen og lukker oppgaven i forløp 2. Kollisjonen er løst, alt er dokumentert med bilder, kommentarer og tidsstempler.',task:{status:'Lukket ✓',statusBg:'var(--green-g)',statusColor:'var(--green)',title:'Kollisjon ventilasjon/rør 2. etg',meta:'Lukket av TE, total tid: 3 dager'}},
     ]
   },
   // ---- 2: HMS-forløp ----
   {
     icon:ICON_HMS_HELM, title:'Scenario: Fra HMS-observasjon til HMS-oppgave',
-    desc:'En fagarbeider melder inn en HMS-observasjon. Denne er privat og går kun til HMS-lederne. De kvalitetssikrer innholdet, kategoriserer, og kan basert på observasjonen opprette en HMS-oppgave som sendes i et eget HMS-forløp.',
+    desc:'En fagarbeider melder inn en HMS-observasjon. Denne er privat og går som standard til HMS-lederne. De kvalitetssikrer innholdet, kategoriserer, og kan basert på observasjonen opprette en HMS-oppgave som sendes i et eget HMS-forløp.',
     badges:[{text:'🔒 HMS-observasjon (privat)',bg:'var(--orange-g)',color:'var(--orange)'},{text:'HMS-oppgaveforløp',bg:'var(--red-g)',color:'var(--red)'}],
     row1:{label:'<img src="'+ICON_HMS_OBS+'" style="width:18px;height:18px;vertical-align:middle;margin-right:4px;">HMS-observasjon <span>🔒 Privat*</span>',left:{emoji:'👷',bg:'#e8f0eb',border:'var(--accent)',name:'Fagarbeider',role:'Melder'},right:{emoji:ICON_HMS_HELM,isImg:true,bg:'#fce8db',border:'var(--orange)',name:'HMS-ledere',role:'Mottaker'},arrowColor:'#e67e22',oneWay:true},
     row2:{label:'<img src="'+ICON_HMS_OPP+'" style="width:18px;height:18px;vertical-align:middle;margin-right:4px;">HMS-oppgaveforløp <span>HMS-leder → Fag</span>',left:{emoji:ICON_HMS_HELM,isImg:true,bg:'#fce8db',border:'var(--orange)',name:'HMS-ledere',role:'Tildeler'},right:{emoji:'🔧',bg:'#e8f0eb',border:'var(--accent)',name:'Fag',role:'Utfører'},arrowColor:'#e74c3c',showAtStep:3},
     steps:[
-      {role:'fag',row:1,col:'left',num:'1',numBg:'var(--accent-g)',numColor:'var(--accent)',title:'Fagarbeider melder HMS-observasjon',body:'Fagarbeider oppdager manglende sikring ved stillas i 3. etasje og registrerer en HMS-observasjon med bilde og plassering. Observasjonen er privat og kun synlig for HMS-lederne.',task:{status:'Ny observasjon',statusBg:'var(--orange-g)',statusColor:'var(--orange)',title:'Manglende sikring stillas 3. etg',meta:'Privat melding til HMS-ledere',arrow:{from:'FAG',fromBg:'var(--accent-g)',fromColor:'var(--accent)',to:'HMS',toBg:'var(--orange-g)',toColor:'var(--orange)',fillColor:'#e67e22'}}},
-      {role:'hms',row:1,col:'right',num:'2',numBg:'var(--orange-g)',numColor:'var(--orange)',title:'HMS-ledere kvalitetssikrer',body:'HMS-lederne mottar observasjonen privat. De vurderer alvorlighetsgrad, kategoriserer som "Fall fra høyde", og kan fjerne upassende innhold før videre behandling. Ingen andre har innsyn i observasjonen.',task:{status:'Under vurdering',statusBg:'var(--orange-g)',statusColor:'var(--orange)',title:'Manglende sikring stillas 3. etg',meta:'🔒 Privat - Kategori: Fall fra høyde - Alvorlighet: Høy'}},
+      {role:'fag',row:1,col:'left',num:'1',numBg:'var(--accent-g)',numColor:'var(--accent)',title:'Fagarbeider melder HMS-observasjon',body:'Fagarbeider oppdager manglende sikring ved stillas i 3. etasje og registrerer en HMS-observasjon med bilde og plassering. Observasjonen er privat og synlig for HMS-lederne.',task:{status:'Ny observasjon',statusBg:'var(--orange-g)',statusColor:'var(--orange)',title:'Manglende sikring stillas 3. etg',meta:'Privat melding til HMS-ledere',arrow:{from:'FAG',fromBg:'var(--accent-g)',fromColor:'var(--accent)',to:'HMS',toBg:'var(--orange-g)',toColor:'var(--orange)',fillColor:'#e67e22'}}},
+      {role:'hms',row:1,col:'right',num:'2',numBg:'var(--orange-g)',numColor:'var(--orange)',title:'HMS-ledere kvalitetssikrer',body:'HMS-lederne mottar observasjonen privat. De vurderer alvorlighetsgrad, kategoriserer som "Fall fra høyde", og kan fjerne upassende innhold før videre behandling. Som standard er det bare HMS-lederne som har innsyn.',task:{status:'Under vurdering',statusBg:'var(--orange-g)',statusColor:'var(--orange)',title:'Manglende sikring stillas 3. etg',meta:'🔒 Privat. Kategori: Fall fra høyde. Alvorlighet: Høy'}},
       {role:'hms',row:1,col:'right',num:'3',numBg:'var(--orange-g)',numColor:'var(--orange)',roleOverride:{right:'Beslutter'},title:'HMS-ledere beslutter tiltak',body:'Basert på observasjonen beslutter HMS-lederne at det må opprettes en egen HMS-oppgave. Observasjonen forblir privat, men HMS-oppgaven blir synlig i HMS-forløpet.',task:{status:'Tiltak besluttet',statusBg:'var(--red-g)',statusColor:'var(--red)',title:'Manglende sikring stillas 3. etg',meta:'Beslutning: Opprett HMS-oppgave for utbedring'}},
       {role:'hms',row:2,col:'left2',num:'4',numBg:'var(--red-g)',numColor:'var(--red)',title:'HMS-oppgave opprettes i HMS-forløp',body:'HMS-lederne oppretter en separat HMS-oppgave basert på observasjonen og tildeler den til faget med krav om umiddelbar utbedring.',task:{status:'Ny HMS-oppgave',statusBg:'var(--red-g)',statusColor:'var(--red)',title:'Utbedr sikring stillas 3. etg',meta:'HMS: "Sikring må monteres før videre arbeid"',arrow:{from:'HMS',fromBg:'var(--orange-g)',fromColor:'var(--orange)',to:'FAG',toBg:'var(--accent-g)',toColor:'var(--accent)',fillColor:'#e74c3c'}}},
-      {role:'fag',row:2,col:'right2',num:'5',numBg:'var(--accent-g)',numColor:'var(--accent)',title:'Fag utbedrer',body:'Faget mottar HMS-oppgaven, monterer sikring på stillaset, dokumenterer med bilder og sender oppgaven tilbake til HMS-lederne.',task:{status:'Utbedret',statusBg:'rgba(142,106,191,.1)',statusColor:'var(--purple)',title:'Utbedr sikring stillas 3. etg',meta:'Fag: "Sikring montert - se vedlagte bilder"',arrow:{from:'FAG',fromBg:'var(--accent-g)',fromColor:'var(--accent)',to:'HMS',toBg:'var(--orange-g)',toColor:'var(--orange)',fillColor:'#e67e22'}}},
-      {role:'done',row:0,col:'done',num:'✓',numBg:'var(--green-g)',numColor:'var(--green)',roleOverride:{left2:'Kontrollør'},title:'HMS-oppgave godkjent og lukket',body:'HMS-lederne kontrollerer utbedringen, godkjenner og lukker HMS-oppgaven. Den opprinnelige observasjonen er ferdigbehandlet.',task:{status:'Lukket ✓',statusBg:'var(--green-g)',statusColor:'var(--green)',title:'Utbedr sikring stillas 3. etg',meta:'Lukket av HMS-leder - Total tid: 1 dag'}},
+      {role:'fag',row:2,col:'right2',num:'5',numBg:'var(--accent-g)',numColor:'var(--accent)',title:'Fag utbedrer',body:'Faget mottar HMS-oppgaven, monterer sikring på stillaset, dokumenterer med bilder og sender oppgaven tilbake til HMS-lederne.',task:{status:'Utbedret',statusBg:'rgba(142,106,191,.1)',statusColor:'var(--purple)',title:'Utbedr sikring stillas 3. etg',meta:'Fag: "Sikring montert, se vedlagte bilder"',arrow:{from:'FAG',fromBg:'var(--accent-g)',fromColor:'var(--accent)',to:'HMS',toBg:'var(--orange-g)',toColor:'var(--orange)',fillColor:'#e67e22'}}},
+      {role:'done',row:0,col:'done',num:'✓',numBg:'var(--green-g)',numColor:'var(--green)',roleOverride:{left2:'Kontrollør'},title:'HMS-oppgave godkjent og lukket',body:'HMS-lederne kontrollerer utbedringen, godkjenner og lukker HMS-oppgaven. Den opprinnelige observasjonen er ferdigbehandlet.',task:{status:'Lukket ✓',statusBg:'var(--green-g)',statusColor:'var(--green)',title:'Utbedr sikring stillas 3. etg',meta:'Lukket av HMS-leder, total tid: 1 dag'}},
     ],
-    disclaimer:'<strong>*</strong> Tre admin-grupper har innsyn i HMS-observasjoner: HMS-ledere, Oppgave- og sjekklistekoordinator, og Field-observatører.'
+    disclaimer:'<strong>*</strong> Som standard ser bare HMS-lederne observasjonene. Avhengig av oppsett kan to andre grupper også få innsyn: Oppgave- og sjekklistekoordinator og Field-observatører.'
   },
   // ---- 3: Godkjenningsoppgave ----
   {
@@ -3399,12 +3400,12 @@ const SCENARIOS = [
     row1:{label:'Godkjenningsforløp <span>UE → TE → Byggherre</span>',left:{emoji:'🏗️',bg:'#e8f0eb',border:'var(--accent)',name:'UE',role:'Ledd 1 · Innmelder'},right:{emoji:'👷',bg:'#f5ecd5',border:'var(--yellow)',name:'TE',role:'Ledd 2 · Behandler'},arrowColor:'#6fa032'},
     row2:null,
     steps:[
-      {role:'fag',row:1,col:'left',pipe:0,num:'1',numBg:'var(--accent-g)',numColor:'var(--accent)',title:'UE varsler endringsmelding (Ledd 1)',body:'Underentreprenør registrerer en endringsmelding: "Fundamenttykkelse må økes pga. grunnforhold". Legger ved dokumentasjon og beskrivelse av endringen.',task:{status:'Ny',statusBg:'var(--accent-g)',statusColor:'var(--accent)',title:'Endringsmelding: Økt fundamenttykkelse',meta:'Varslet av UE (Ledd 1) - Nå',arrow:{from:'UE',fromBg:'var(--accent-g)',fromColor:'var(--accent)',to:'TE',toBg:'var(--yellow-g)',toColor:'var(--yellow)',fillColor:'#d4a017'}}},
-      {role:'te',row:1,col:'right',pipe:1,num:'2',numBg:'var(--yellow-g)',numColor:'var(--yellow)',title:'TE ser mangler, sender tilbake (Ledd 2 → 1)',body:'TE mottar endringsvarselet i ledd 2, men ser at det mangler geoteknisk rapport. Sender oppgaven tilbake til ledd 1 med kommentar. Oppgaven kan sendes tilbake til alle tidligere ledd.',task:{status:'Returnert til Ledd 1',statusBg:'var(--orange-g)',statusColor:'var(--orange)',title:'Endringsmelding: Økt fundamenttykkelse',meta:'TE: "Mangler geoteknisk rapport - vennligst legg ved"',arrow:{from:'TE',fromBg:'var(--yellow-g)',fromColor:'var(--yellow)',to:'UE',toBg:'var(--accent-g)',toColor:'var(--accent)',fillColor:'#6fa032'}}},
+      {role:'fag',row:1,col:'left',pipe:0,num:'1',numBg:'var(--accent-g)',numColor:'var(--accent)',title:'UE varsler endringsmelding (Ledd 1)',body:'Underentreprenør registrerer en endringsmelding: "Fundamenttykkelse må økes pga. grunnforhold". Legger ved dokumentasjon og beskrivelse av endringen.',task:{status:'Ny',statusBg:'var(--accent-g)',statusColor:'var(--accent)',title:'Endringsmelding: Økt fundamenttykkelse',meta:'Varslet av UE (Ledd 1), nå',arrow:{from:'UE',fromBg:'var(--accent-g)',fromColor:'var(--accent)',to:'TE',toBg:'var(--yellow-g)',toColor:'var(--yellow)',fillColor:'#d4a017'}}},
+      {role:'te',row:1,col:'right',pipe:1,num:'2',numBg:'var(--yellow-g)',numColor:'var(--yellow)',title:'TE ser mangler, sender tilbake (Ledd 2 → 1)',body:'TE mottar endringsvarselet i ledd 2, men ser at det mangler geoteknisk rapport. Sender oppgaven tilbake til ledd 1 med kommentar. Oppgaven kan sendes tilbake til alle tidligere ledd.',task:{status:'Returnert til Ledd 1',statusBg:'var(--orange-g)',statusColor:'var(--orange)',title:'Endringsmelding: Økt fundamenttykkelse',meta:'TE: "Mangler geoteknisk rapport, vennligst legg ved"',arrow:{from:'TE',fromBg:'var(--yellow-g)',fromColor:'var(--yellow)',to:'UE',toBg:'var(--accent-g)',toColor:'var(--accent)',fillColor:'#6fa032'}}},
       {role:'fag',row:1,col:'left',pipe:0,num:'3',numBg:'var(--accent-g)',numColor:'var(--accent)',title:'UE oppdaterer og sender på nytt (Ledd 1 → 2)',body:'UE legger ved geoteknisk rapport og oppdatert kostnadstilbud, og sender endringsvarselet tilbake til ledd 2.',task:{status:'Oppdatert',statusBg:'var(--accent-g)',statusColor:'var(--accent)',title:'Endringsmelding: Økt fundamenttykkelse',meta:'UE: "Geoteknisk rapport vedlagt + oppdatert tilbud"',arrow:{from:'UE',fromBg:'var(--accent-g)',fromColor:'var(--accent)',to:'TE',toBg:'var(--yellow-g)',toColor:'var(--yellow)',fillColor:'#d4a017'}}},
       {role:'te',row:1,col:'right',pipe:1,num:'4',numBg:'var(--yellow-g)',numColor:'var(--yellow)',title:'TE fyller ut leddspesifikke felter (Ledd 2)',body:'TE fyller inn feltene som er konfigurert for dette leddet i malen: estimert kostnad, konsekvens for fremdrift, og anbefaling. TE kan nå sende videre til byggherre for godkjenning, eller markere saken som "Omtvistet" dersom partene er uenige.',task:{status:'Sendt til Ledd 3',statusBg:'rgba(142,106,191,.1)',statusColor:'var(--purple)',title:'Endringsmelding: Økt fundamenttykkelse',meta:'Kostnad: 450 000 kr · Konsekvens: +2 uker · Anbefaling: Godkjenn',arrow:{from:'TE',fromBg:'var(--yellow-g)',fromColor:'var(--yellow)',to:'BH',toBg:'rgba(142,106,191,.15)',toColor:'var(--purple)',fillColor:'#8e6abf'}}},
-      {role:'bh',row:1,col:'right',pipe:2,num:'5',numBg:'rgba(142,106,191,.1)',numColor:'var(--purple)',title:'Byggherre vurderer (Ledd 3)',body:'Byggherre gjennomgår endringsmeldingen med all dokumentasjon og TEs vurdering. Kan godkjenne endringen, eller sende tilbake til ledd 1 eller 2 for mer informasjon.',task:{status:'Til godkjenning',statusBg:'rgba(142,106,191,.1)',statusColor:'var(--purple)',title:'Endringsmelding: Økt fundamenttykkelse',meta:'Hos Byggherre (Ledd 3) - Venter på beslutning'}},
-      {role:'done',row:0,col:'done',pipe:2,num:'✓',numBg:'var(--green-g)',numColor:'var(--green)',title:'Endringsmelding godkjent',body:'Byggherre godkjenner endringen. Hele historikken med alle ledd, kommentarer, vedlegg og leddspesifikke felter er dokumentert.',task:{status:'Godkjent ✓',statusBg:'var(--green-g)',statusColor:'var(--green)',title:'Endringsmelding: Økt fundamenttykkelse',meta:'Godkjent av Byggherre - Kostnad: 450 000 kr · +2 uker'}},
+      {role:'bh',row:1,col:'right',pipe:2,num:'5',numBg:'rgba(142,106,191,.1)',numColor:'var(--purple)',title:'Byggherre vurderer (Ledd 3)',body:'Byggherre gjennomgår endringsmeldingen med all dokumentasjon og TEs vurdering. Kan godkjenne endringen, eller sende tilbake til ledd 1 eller 2 for mer informasjon.',task:{status:'Til godkjenning',statusBg:'rgba(142,106,191,.1)',statusColor:'var(--purple)',title:'Endringsmelding: Økt fundamenttykkelse',meta:'Hos Byggherre (Ledd 3), venter på beslutning'}},
+      {role:'done',row:0,col:'done',pipe:2,num:'✓',numBg:'var(--green-g)',numColor:'var(--green)',title:'Endringsmelding godkjent',body:'Byggherre godkjenner endringen. Hele historikken med alle ledd, kommentarer, vedlegg og leddspesifikke felter er dokumentert.',task:{status:'Godkjent ✓',statusBg:'var(--green-g)',statusColor:'var(--green)',title:'Endringsmelding: Økt fundamenttykkelse',meta:'Godkjent av Byggherre. Kostnad: 450 000 kr · +2 uker'}},
     ]
   },
 ];
@@ -3762,9 +3763,7 @@ const commCaptions={
 function setCommView(view){
   if(view===commView)return;
   commView=view;
-  document.querySelectorAll('#commPage1 .comm-tab').forEach(t=>t.classList.remove('on'));
-  const tabId = {list:'tCommList',hub:'tCommHub',status:'tCommStatus'}[view];
-  document.getElementById(tabId).classList.add('on');
+  commSyncTabs();
 
   // Vis/skjul info-containere
   document.getElementById('commInfoList').style.display = view==='list' ? 'block' : 'none';
@@ -3777,8 +3776,10 @@ function setCommView(view){
 
   if(view==='status'){
     stopCommDotAnim();
+    statusActivate();
     return;
   }
+  statusDeactivate();
 
   // List/hub-modus: oppdater stage som før
   commStage.className='comm-stage '+(view==='list'?'list-view':'hub-view');
@@ -3794,6 +3795,55 @@ function setCommView(view){
   document.getElementById('commCaption').textContent=commCaptions[view];
   if(view==='hub'){genCommSvg();startCommDotAnim();}else{stopCommDotAnim();}
 }
+
+// Felles 4-tab-navigasjon for Samhandling-tracken (Oppsett/Kommunikasjonsflyt/Statuser/Kommentar).
+// Tab 1-3 er visninger på side 1, tab 4 (Kommentar) er side 2. Tab-raden ligger på begge sider.
+function commSyncTabs(){
+  const active = commActivePage===2 ? 'comment' : commView;
+  document.querySelectorAll('#boxTrackComm .comm-tab').forEach(t=>{
+    t.classList.toggle('on', t.dataset.commtab===active);
+  });
+}
+function commTab(target){
+  if(target==='comment'){ showCommPage(2); }
+  else { if(commActivePage!==1) showCommPage(1); setCommView(target); }
+  commSyncTabs();
+}
+
+// Statuser-fanen: spotlight-stegvis visning (3 steg: sammenligning, eksempler, prinsipper)
+let statusStep = 1;
+const STATUS_TOTAL = 3;
+function statusUpdate(scroll){
+  document.querySelectorAll('#commInfoStatus .bg-step').forEach(el=>{
+    const n = parseInt(el.dataset.statusstep, 10);
+    el.classList.remove('bg-future','bg-done','bg-active');
+    if(n < statusStep) el.classList.add('bg-done');
+    else if(n === statusStep) el.classList.add('bg-active');
+    else el.classList.add('bg-future');
+  });
+  const prog = document.getElementById('statusProgress');
+  if(prog){
+    prog.innerHTML='';
+    for(let i=1;i<=STATUS_TOTAL;i++){
+      const d=document.createElement('div');
+      d.className='prog-dot'+(i<statusStep?' filled':(i===statusStep?' current':''));
+      prog.appendChild(d);
+    }
+  }
+  const prev=document.getElementById('statusPrev'), next=document.getElementById('statusNext');
+  if(prev) prev.disabled = statusStep<=1;
+  if(next) next.textContent = statusStep>=STATUS_TOTAL ? '↑ Til toppen' : 'Neste →';
+  if(scroll){
+    const active=document.querySelector('#commInfoStatus .bg-step.bg-active');
+    if(active) active.scrollIntoView({behavior:'smooth', block:'center'});
+  }
+}
+function statusNext(){ if(statusStep>=STATUS_TOTAL){ statusReset(); return; } statusStep++; statusUpdate(true); }
+function statusPrev(){ if(statusStep>1){ statusStep--; statusUpdate(true); } }
+function statusReset(){ statusStep=1; statusUpdate(false); window.scrollTo({top:0, behavior:'smooth'}); }
+function statusActivate(){ statusStep=1; statusUpdate(false); const c=document.getElementById('statusControls'); if(c) c.classList.add('visible'); }
+function statusDeactivate(){ const c=document.getElementById('statusControls'); if(c) c.classList.remove('visible'); }
+statusUpdate(false);
 
 // Single-comment bounce animation
 let commDotAnimId=null;
@@ -3949,8 +3999,8 @@ function showCommPage(n){
   const pg=document.getElementById('commPage'+n);
   pg.style.display='flex';
   requestAnimationFrame(()=>{pg.style.opacity='1';pg.classList.add('visible');});
-  document.querySelectorAll('#commNav .page-btn').forEach((b,i)=>b.classList.toggle('active',i+1===n));
   commActivePage=n;
+  commSyncTabs();
   if(n===1&&commView==='hub')startCommDotAnim();
   else stopCommDotAnim();
   if(n===2){
@@ -4036,9 +4086,6 @@ openBoxTrack=function(track){
     commView='list';
     commStage.className='comm-stage list-view';
     commStage.style.display='';
-    document.getElementById('tCommList').classList.add('on');
-    document.getElementById('tCommHub').classList.remove('on');
-    document.getElementById('tCommStatus').classList.remove('on');
     commNodes.forEach(el=>{el.querySelector('.comm-node-name').textContent=el.dataset.fullName;el.style.borderLeftColor='';el.style.borderLeftWidth='';});
     const cap=document.getElementById('commCaption');
     cap.textContent=commCaptions.list;
@@ -4047,6 +4094,7 @@ openBoxTrack=function(track){
     document.getElementById('commInfoHub').style.display='none';
     document.getElementById('commInfoStatus').style.display='none';
     showCommPage(1);
+    commSyncTabs();
     // Recompute layout - stage var display:none før dette
     requestAnimationFrame(()=>applyCommLayout());
   }
@@ -4077,15 +4125,6 @@ function showBrukergrupperPage(n){
   document.querySelectorAll('#brukergrupperNav .page-btn').forEach((b,i)=>b.classList.toggle('active',i+1===n));
   brukergrupperActivePage=n;
 }
-function setBgTab(tab){
-  document.querySelectorAll('#brukergrupperPage2 .hub-tab').forEach(t=>t.classList.remove('on'));
-  document.querySelectorAll('#brukergrupperPage2 .bg-tab-panel').forEach(p=>p.classList.remove('active'));
-  const tabId={general:'bgtGeneral',field:'bgtField',box:'bgtBox'}[tab];
-  const panelId={general:'bgPanelGeneral',field:'bgPanelField',box:'bgPanelBox'}[tab];
-  document.getElementById(tabId).classList.add('on');
-  document.getElementById(panelId).classList.add('active');
-}
-
 // ======================
 // SIDE 1 ANIMERT SCENE
 // ======================
@@ -4140,7 +4179,7 @@ const bgPersonEls={}, bgGroupEls={}, bgActionEls={};
 function bgClickPerson(personId){
   if(bgCurrentStep!==3) return;
   bgSelectedPerson = (bgSelectedPerson===personId) ? null : personId;
-  // Hvis en av Lars sine kort klikkes, alle Lars-kort er "valgt" — finn det første
+  // Hvis en av Lars sine kort klikkes, alle Lars-kort er "valgt": finn det første
   const p = bgPersons.find(x=>x.id===bgSelectedPerson);
   if(p){
     const firstWithName = bgPersons.find(x=>x.name===p.name);
@@ -4544,15 +4583,15 @@ const DOC_STEPS=[
    doc:{name:'A-201-Plan-2etg.pdf',rev:'P01.2',status:'Under revisjon',statusBg:'var(--box-blue-g)',statusColor:'var(--box-blue)'}},
   {zone:'shared',num:'3',numBg:'var(--box-amber-g)',numColor:'var(--box-amber)',
    title:'Delt for tverrfaglig koordinering',
-   body:'Dokumentet flyttes til Delte filer og blir tilgjengelig for alle prosjekterende. RIB og RIV kan nå se tegningen og koordinere sine fag mot den.',
+   body:'Dokumentet flyttes til Delte filer og blir tilgjengelig for alle prosjekterende. RiB og RiV kan nå se tegningen og koordinere sine fag mot den.',
    doc:{name:'A-201-Plan-2etg.pdf',rev:'S01',status:'Delt for koordinering',statusBg:'var(--box-amber-g)',statusColor:'var(--box-amber)'}},
   {zone:'shared',num:'4',numBg:'var(--box-amber-g)',numColor:'var(--box-amber)',
    title:'Kommentarer og tilbakemelding',
-   body:'RIB melder om kollisjon med bæresystem. Dokumentet sendes tilbake til Filer for oppdatering. Etter revidering deles ny versjon på nytt i Delte filer.',
+   body:'RiB melder om kollisjon med bæresystem. Dokumentet sendes tilbake til Filer for oppdatering. Etter revidering deles ny versjon på nytt i Delte filer.',
    doc:{name:'A-201-Plan-2etg.pdf',rev:'S02',status:'Revidert etter kommentarer',statusBg:'var(--box-amber-g)',statusColor:'var(--box-amber)'}},
   {zone:'published',num:'5',numBg:'var(--green-g)',numColor:'var(--green)',
    title:'Godkjent og publisert',
-   body:'Etter review er dokumentet godkjent og flyttes til Utgitte filer. Dette er nå gjeldende versjon som entreprenører og byggherren forholder seg til.',
+   body:'Etter gjennomgang er dokumentet godkjent og flyttes til Utgitte filer. Dette er nå gjeldende versjon som entreprenører og byggherren forholder seg til.',
    doc:{name:'A-201-Plan-2etg.pdf',rev:'C01',status:'Godkjent · Gjeldende',statusBg:'var(--green-g)',statusColor:'var(--green)'}},
   {zone:'done',num:'✓',numBg:'var(--green-g)',numColor:'var(--green)',
    title:'Full sporbarhet',
@@ -4619,6 +4658,8 @@ function docPrev(){if(docCurrent>0){docCurrent--;docUpdate();}}
 // ============================
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){closeWf();if(activeModule)backToSplash();}
+  if(e.key==='PageDown'){e.preventDefault();presAdvance(1);}
+  if(e.key==='PageUp'){e.preventDefault();presAdvance(-1);}
   if(activeModule==='field'){
     if(activePage===1&&!document.querySelector('.wf-overlay.show')){const vs=['list','hub'];const ci=vs.indexOf(currentView);if(e.key==='ArrowRight'&&ci<1){e.preventDefault();setView(vs[ci+1]);}if(e.key==='ArrowLeft'&&ci>0){e.preventDefault();setView(vs[ci-1]);}}
     if(activePage===2){if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();lcNext();}if(e.key==='ArrowLeft'){e.preventDefault();lcPrev();}if(e.key==='r')lcReset();}
@@ -4627,6 +4668,14 @@ document.addEventListener('keydown',e=>{
     if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();docNext();}
     if(e.key==='ArrowLeft'){e.preventDefault();docPrev();}
   }
+});
+
+// Mus: tommelknapper (browser back/forward) navigerer som en peker/klikker.
+// e.button 3 = tilbake, 4 = framover. preventDefault på mousedown demper nettleserens historikk-navigasjon.
+window.addEventListener('mousedown', e=>{ if(e.button===3||e.button===4) e.preventDefault(); });
+window.addEventListener('mouseup', e=>{
+  if(e.button===3){ e.preventDefault(); presAdvance(-1); }
+  else if(e.button===4){ e.preventDefault(); presAdvance(1); }
 });
 
 // Side arrow navigation
@@ -4649,6 +4698,33 @@ function navArrow(dir){
   if(!ctx)return;
   const next=ctx.current+dir;
   if(next>=1&&next<=ctx.max) ctx.fn(next);
+}
+
+// Demo-navigasjon (Page Up/Down + mus-tommelknapper): stegg innholdet hvis siden
+// har en stepper, ellers bla mellom sider. dir: 1 = framover, -1 = tilbake.
+function presAdvance(dir){
+  if(activeModule==='field' && activePage===2){ if(dir>0)lcNext(); else lcPrev(); return; }
+  if(activeModule==='box'){
+    const commTrack=document.getElementById('boxTrackComm');
+    const isoTrack=document.getElementById('boxTrackIso');
+    // Samhandling: stegg gjennom de fire fanene (Oppsett/Kommunikasjonsflyt/Statuser/Kommentar)
+    if(commTrack && commTrack.classList.contains('active')){
+      const order=['list','hub','status','comment'];
+      const cur = commActivePage===2 ? 'comment' : commView;
+      if(cur==='status'){
+        if(dir>0 && statusStep < STATUS_TOTAL){ statusNext(); return; }
+        if(dir<0 && statusStep > 1){ statusPrev(); return; }
+      }
+      let i = order.indexOf(cur) + dir;
+      i = Math.max(0, Math.min(order.length-1, i));
+      commTab(order[i]);
+      return;
+    }
+    // ISO dokumentflyt (side 3): stegg dokumentet
+    if(isoTrack && isoTrack.classList.contains('active') && boxActivePage===3){ if(dir>0)docNext(); else docPrev(); return; }
+  }
+  if(activeCommonTrack==='brukergrupper' && brukergrupperActivePage===3){ if(dir>0)bg3Next(); else bg3Prev(); return; }
+  navArrow(dir);
 }
 
 function updateArrows(){
@@ -4716,6 +4792,47 @@ window.addEventListener('resize', ()=>{
     }
   }, 120);
 });
+
+// ======================
+// SIDE 3: Spotlight-stegvis visning ("Slik bygger du gode grupper")
+// ======================
+let bg3Step = 1;
+const BG3_TOTAL = 3;
+function bg3Update(scroll){
+  document.querySelectorAll('#brukergrupperPage3 .bg-step').forEach(el=>{
+    const n = parseInt(el.dataset.bgstep, 10);
+    el.classList.remove('bg-future','bg-done','bg-active');
+    if(n < bg3Step) el.classList.add('bg-done');
+    else if(n === bg3Step) el.classList.add('bg-active');
+    else el.classList.add('bg-future');
+  });
+  const prog = document.getElementById('bg3Progress');
+  if(prog){
+    prog.innerHTML='';
+    for(let i=1;i<=BG3_TOTAL;i++){
+      const d=document.createElement('div');
+      d.className='prog-dot'+(i<bg3Step?' filled':(i===bg3Step?' current':''));
+      prog.appendChild(d);
+    }
+  }
+  const prev=document.getElementById('bg3Prev'), next=document.getElementById('bg3Next');
+  if(prev) prev.disabled = bg3Step<=1;
+  if(next) next.textContent = bg3Step>=BG3_TOTAL ? '↑ Til toppen' : 'Neste →';
+  if(scroll){
+    const active=document.querySelector('#brukergrupperPage3 .bg-step.bg-active');
+    if(active) active.scrollIntoView({behavior:'smooth', block:'center'});
+  }
+}
+function bg3Next(){ if(bg3Step>=BG3_TOTAL){ bg3Reset(); return; } bg3Step++; bg3Update(true); }
+function bg3Prev(){ if(bg3Step>1){ bg3Step--; bg3Update(true); } }
+function bg3Reset(){ bg3Step=1; bg3Update(false); window.scrollTo({top:0,behavior:'smooth'}); }
+function bg3Activate(){ bg3Step=1; bg3Update(false); const c=document.getElementById('bg3Controls'); if(c) c.classList.add('visible'); }
+function bg3Deactivate(){ const c=document.getElementById('bg3Controls'); if(c) c.classList.remove('visible'); }
+const _bg3OrigShowPage = showBrukergrupperPage;
+showBrukergrupperPage = function(n){ _bg3OrigShowPage(n); if(n===3) bg3Activate(); else bg3Deactivate(); };
+const _bg3OrigOpenCommon = openCommonTrack;
+openCommonTrack = function(t){ _bg3OrigOpenCommon(t); bg3Deactivate(); };
+bg3Update(false);
 </script>
 </body>
 </html>
