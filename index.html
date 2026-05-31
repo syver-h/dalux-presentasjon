@@ -753,6 +753,9 @@
   #boxTrackFiles header h1 { font-size:1.6rem; font-weight:700; letter-spacing:-.02em; }
   #boxTrackFiles header p { color:var(--muted); font-size:.88rem; margin-top:4px; max-width:560px; }
 
+  .files-tabs { display:flex; gap:4px; justify-content:center; flex-wrap:wrap; margin:10px 0 6px; }
+  .files-tabview { display:none; width:100%; }
+  .files-tabview.on { display:flex; flex-direction:column; align-items:stretch; gap:34px; }
   .fl-wrap { width:100%; max-width:820px; display:flex; flex-direction:column; align-items:stretch; gap:34px; margin-top:18px; }
   .fl-section { width:100%; }
   .fl-h2 { font-size:1.12rem; font-weight:700; margin:0 0 6px; text-align:center; letter-spacing:-.01em; }
@@ -2614,7 +2617,15 @@
     <p>Få mer ut av Box: hold mappene flate, og la metadata gjøre jobben med å finne filer.</p>
   </header>
 
+  <div class="files-tabs">
+    <button class="hub-tab on" id="ftStruktur" onclick="setFilesTab('struktur')">Mappestruktur</button>
+    <button class="hub-tab" id="ftNavn" onclick="setFilesTab('navn')">Navngiving og metadata</button>
+    <button class="hub-tab" id="ftPraksis" onclick="setFilesTab('praksis')">Filtrering i praksis</button>
+  </div>
+
   <div class="fl-wrap">
+
+    <div class="files-tabview on" id="ftvStruktur">
 
     <!-- Mindset: flat struktur + metadata -->
     <section class="fl-section">
@@ -2654,6 +2665,10 @@
         Lager du en mappe per fase, dupliserer du filer, og det blir uklart hva som er nyest. Bruk <b>versjonssett</b> i stedet. Mer om det på Side 2: Filer og versjonshåndtering.
       </div>
     </section>
+
+    </div><!-- /ftvStruktur -->
+
+    <div class="files-tabview" id="ftvNavn">
 
     <!-- Navngiving + Animasjon 1: filnavn-splitt -->
     <section class="fl-section">
@@ -2714,13 +2729,45 @@
       </div>
     </section>
 
+    <!-- Standardfelter vs egne felter -->
+    <section class="fl-section">
+      <h2 class="fl-h2">Standardfelter og egne felter</h2>
+      <p class="fl-lead">Dalux har et sett standardfelter som går igjen i alle prosjekter. De fleste feltene vi nettopp splittet filnavnet i, er derimot metadata på filnivå som du selv har lagt til.</p>
+      <div class="fl-cards">
+        <div class="fl-card">
+          <h3><span class="fl-ic">🔒</span> Standardfelter (allerede i Dalux)</h3>
+          <p>Felt som Filnavn, Versjon, Tittel, Status, Firma og Nummer ligger i Dalux fra før, merket med et låsesymbol. Noen av dem er låst til bestemte deler av systemet og kan ikke brukes som metadata i Box.</p>
+        </div>
+        <div class="fl-card">
+          <h3><span class="fl-ic">✏️</span> Egne felter (du lager dem)</h3>
+          <p>Fag, etasje, type, systemkode og løpenummer er felt du legger til selv på filnivå. Det er disse navnemalen fyller ut automatisk når du laster opp.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hvordan navnemalen bygges (valgfri dybde) -->
+    <section class="fl-section">
+      <h2 class="fl-h2">Slik bygger du malen</h2>
+      <p class="fl-lead">For de som vil sette opp navngiving selv: i malen drar du inn feltene du vil ha, med en avgrenser mellom hver.</p>
+      <div class="fl-cards">
+        <div class="fl-card">
+          <h3><span class="fl-ic">🛠️</span> Felt og avgrensere</h3>
+          <p>Hvert felt henter du fra metadatalista du har laget. Et felt kan være tekst, dato eller et valg fra en liste. Du kan også styre om det bare skal være tall, og hvor langt det skal være.</p>
+        </div>
+        <div class="fl-card">
+          <h3><span class="fl-ic">🧪</span> Test før du lagrer</h3>
+          <p>Du trenger ikke bruke alle mulighetene. Vil du prøve, kan du teste hvordan et filnavn blir før du tar malen i bruk.</p>
+        </div>
+      </div>
+    </section>
+
     <!-- Nummer-feltet -->
     <section class="fl-section">
       <h2 class="fl-h2">«Nummer» kobler filene automatisk</h2>
       <div class="fl-cards">
         <div class="fl-card">
-          <h3><span class="fl-ic">🔗</span> Standard Dalux-felt</h3>
-          <p>«Nummer» er et standard-felt i Dalux, ikke noe du lager selv. Det er tekststrengen Dalux matcher på for automatiske hyperlenker. Klikker du et nummer i en tegning, hopper du rett til riktig fil.</p>
+          <h3><span class="fl-ic">🔗</span> Ett av standardfeltene</h3>
+          <p>«Nummer» er ett av standardfeltene, ikke noe du lager selv. Det er tekststrengen Dalux matcher på for automatiske hyperlenker. Klikker du et nummer i en tegning, hopper du rett til riktig fil.</p>
         </div>
         <div class="fl-card">
           <h3><span class="fl-ic">⚠️</span> Må være unikt</h3>
@@ -2729,10 +2776,14 @@
       </div>
     </section>
 
+    </div><!-- /ftvNavn -->
+
+    <div class="files-tabview" id="ftvPraksis">
+
     <!-- Animasjon 2: Dalux fil-liste (gevinsten) -->
     <section class="fl-section">
       <h2 class="fl-h2">Slik bruker du det i Box</h2>
-      <p class="fl-lead">Fordi navnemalen fyller metadata automatisk, filtrerer og søker du, i stedet for å lete i mapper.</p>
+      <p class="fl-lead">Når filene har metadata, filtrerer og søker du i stedet for å lete i mapper. Her spiller det ingen rolle om metadataen kom fra en navnemal eller ble fylt inn for hånd, så lenge den er der.</p>
 
       <div class="fll-panel">
         <div class="fll-filterbar">
@@ -2749,6 +2800,8 @@
       </div>
       <p class="fll-foot">Samme metadata driver <b>hyperlenkene</b>: klikk et nummer i en tegning, og du hopper rett til riktig fil.</p>
     </section>
+
+    </div><!-- /ftvPraksis -->
 
   </div>
 </div>
@@ -4566,6 +4619,30 @@ function flSetupObserver(){
   }, { threshold:0.35 });
   flsObserver.observe(stage);
 }
+// Tre faner på Side 1: Mappestruktur / Navngiving og metadata / Filtrering i praksis.
+// Splitten og fil-lista lever i skjulte faner ved åpning, så de initialiseres
+// (måles/spilles av) først når fanen vises.
+const FILES_TABS={ struktur:{view:'ftvStruktur', btn:'ftStruktur'}, navn:{view:'ftvNavn', btn:'ftNavn'}, praksis:{view:'ftvPraksis', btn:'ftPraksis'} };
+let filesTab='struktur';
+function setFilesTab(tab, noScroll){
+  filesTab=tab;
+  Object.keys(FILES_TABS).forEach(k=>{
+    document.getElementById(FILES_TABS[k].view).classList.toggle('on', k===tab);
+    document.getElementById(FILES_TABS[k].btn).classList.toggle('on', k===tab);
+  });
+  if(tab==='navn'){
+    // Re-arm splitten (scroll-utløst) hver gang fanen åpnes
+    flsSetSplit(false);
+    flsPlayed=false;
+    flSetupObserver();
+  }
+  if(tab==='praksis'){
+    fllFag='Alle'; fllEt='Alle';
+    fllRender();
+    fllReserveHeight();   // måling krever synlig liste
+  }
+  if(!noScroll) window.scrollTo(0,0);
+}
 function flInitFiles(){
   flsCurrent='enkel';
   document.getElementById('flsTgEnkel').classList.add('on');
@@ -4574,9 +4651,8 @@ function flInitFiles(){
   flsSetSplit(false);   // hviletilstand: helt filnavn (Tegningsnavn)
   fllFag='Alle'; fllEt='Alle';
   fllRender();
-  fllReserveHeight();
   flsPlayed=false;
-  flSetupObserver();
+  setFilesTab('struktur', true);   // start på første fane, uten scroll
 }
 
 let brukergrupperActivePage=1;
@@ -5262,8 +5338,10 @@ window.addEventListener('resize', ()=>{
       applyBgLayout();
     }
     if(document.getElementById('boxTrackFiles').classList.contains('active') && filesActivePage===1){
-      fllReserveHeight();
-      if(flsSplit){
+      if(document.getElementById('ftvPraksis').classList.contains('on')){
+        fllReserveHeight();
+      }
+      if(document.getElementById('ftvNavn').classList.contains('on') && flsSplit){
         flsSetSplit(false);
         requestAnimationFrame(()=>requestAnimationFrame(()=>flsSetSplit(true)));
       }
