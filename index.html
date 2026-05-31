@@ -855,6 +855,8 @@
   .fll-chip.on { background:var(--dalux); border-color:var(--dalux); color:#fff; }
   .fll-count { padding:10px 18px; font-size:.8rem; color:var(--muted); }
   .fll-count b { color:var(--text); }
+  /* Fast reservert høyde (settes i JS) så filtrering ikke endrer sidehøyden */
+  .fll-scroll { width:100%; }
   .fll-panel table { width:100%; border-collapse:collapse; }
   .fll-panel thead th { font-family:'Space Mono',monospace; font-size:.62rem; letter-spacing:.06em; text-transform:uppercase;
                         color:var(--muted); text-align:left; padding:8px 14px; border-bottom:1px solid var(--border); background:#fcfdfb; }
@@ -2738,10 +2740,12 @@
           <div class="fll-frow"><span class="fll-flabel">Etasje</span><div id="fllEtChips"></div></div>
         </div>
         <div class="fll-count" id="fllCount"></div>
-        <table>
-          <thead><tr><th>Nummer</th><th>Fag</th><th>Type</th><th>Etasje</th><th>Beskrivelse</th></tr></thead>
-          <tbody id="fllRows"></tbody>
-        </table>
+        <div class="fll-scroll">
+          <table>
+            <thead><tr><th>Nummer</th><th>Fag</th><th>Type</th><th>Etasje</th><th>Beskrivelse</th></tr></thead>
+            <tbody id="fllRows"></tbody>
+          </table>
+        </div>
       </div>
       <p class="fll-foot">Samme metadata driver <b>hyperlenkene</b>: klikk et nummer i en tegning, og du hopper rett til riktig fil.</p>
     </section>
@@ -4531,6 +4535,18 @@ function fllRender(){
   }
   document.getElementById('fllCount').innerHTML='Viser <b>'+shown.length+'</b> av '+FLL_FILES.length+' tegninger';
 }
+// Reserver fast høyde lik full liste, så filtrering ikke endrer sidehøyden
+// (ellers «hopper» scroll-posisjonen når antall treff endrer seg).
+function fllReserveHeight(){
+  const wrap=document.querySelector('.fll-scroll'); if(!wrap) return;
+  const f=fllFag, e=fllEt;
+  fllFag='Alle'; fllEt='Alle';
+  wrap.style.minHeight='0px';
+  fllRender();
+  wrap.style.minHeight=wrap.offsetHeight+'px';
+  fllFag=f; fllEt=e;
+  fllRender();
+}
 
 // Init + replay når tracket åpnes (rects krever synlig layout)
 // Splitten spilles av først når stagen scrolles inn i visningen, slik at
@@ -4556,7 +4572,9 @@ function flInitFiles(){
   document.getElementById('flsTgDet').classList.remove('on');
   flsBuild();
   flsSetSplit(false);   // hviletilstand: helt filnavn (Tegningsnavn)
+  fllFag='Alle'; fllEt='Alle';
   fllRender();
+  fllReserveHeight();
   flsPlayed=false;
   flSetupObserver();
 }
@@ -5243,9 +5261,12 @@ window.addEventListener('resize', ()=>{
     if(document.getElementById('trackBrukergrupper').classList.contains('active')){
       applyBgLayout();
     }
-    if(document.getElementById('boxTrackFiles').classList.contains('active') && filesActivePage===1 && flsSplit){
-      flsSetSplit(false);
-      requestAnimationFrame(()=>requestAnimationFrame(()=>flsSetSplit(true)));
+    if(document.getElementById('boxTrackFiles').classList.contains('active') && filesActivePage===1){
+      fllReserveHeight();
+      if(flsSplit){
+        flsSetSplit(false);
+        requestAnimationFrame(()=>requestAnimationFrame(()=>flsSetSplit(true)));
+      }
     }
   }, 120);
 });
