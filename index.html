@@ -4533,14 +4533,32 @@ function fllRender(){
 }
 
 // Init + replay når tracket åpnes (rects krever synlig layout)
+// Splitten spilles av først når stagen scrolles inn i visningen, slik at
+// brukeren rekker å se den uansett skjermstørrelse (ikke ferdig før de scroller).
+let flsObserver=null, flsPlayed=false;
+function flSetupObserver(){
+  const stage=document.querySelector('.fls-stage');
+  if(!stage || !('IntersectionObserver' in window)){ flsSetSplit(true); return; }
+  if(flsObserver) flsObserver.disconnect();
+  flsObserver=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting && !flsPlayed){
+        flsPlayed=true;
+        setTimeout(()=>flsSetSplit(true), 1000);
+      }
+    });
+  }, { threshold:0.35 });
+  flsObserver.observe(stage);
+}
 function flInitFiles(){
   flsCurrent='enkel';
   document.getElementById('flsTgEnkel').classList.add('on');
   document.getElementById('flsTgDet').classList.remove('on');
   flsBuild();
-  flsSetSplit(false);
-  setTimeout(()=>flsSetSplit(true), 500);
+  flsSetSplit(false);   // hviletilstand: helt filnavn (Tegningsnavn)
   fllRender();
+  flsPlayed=false;
+  flSetupObserver();
 }
 
 let brukergrupperActivePage=1;
