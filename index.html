@@ -742,6 +742,139 @@
   }
   .files-soon-bullet { color:var(--box-amber); font-weight:700; flex-shrink:0; }
 
+  /* ============================================= */
+  /* Mappestruktur-track (Side 1)                  */
+  /* ============================================= */
+  #filesPage1, #filesPage2 {
+    flex-direction:column; align-items:center;
+    padding:70px 24px 64px; overflow-y:auto; min-height:100vh;
+  }
+  #boxTrackFiles header { text-align:center; margin-bottom:6px; }
+  #boxTrackFiles header h1 { font-size:1.6rem; font-weight:700; letter-spacing:-.02em; }
+  #boxTrackFiles header p { color:var(--muted); font-size:.88rem; margin-top:4px; max-width:560px; }
+
+  .fl-wrap { width:100%; max-width:820px; display:flex; flex-direction:column; align-items:stretch; gap:34px; margin-top:18px; }
+  .fl-section { width:100%; }
+  .fl-h2 { font-size:1.12rem; font-weight:700; margin:0 0 6px; text-align:center; letter-spacing:-.01em; }
+  .fl-lead { color:var(--muted); font-size:.9rem; text-align:center; max-width:620px; margin:0 auto 18px; line-height:1.6; }
+  .fl-lead b { color:var(--text); }
+
+  /* Innholdskort + før/etter-kontrast */
+  .fl-cards { display:flex; gap:14px; flex-wrap:wrap; }
+  .fl-card { flex:1 1 240px; background:var(--surface); border:1px solid var(--border); border-radius:14px;
+             padding:18px 20px; box-shadow:0 1px 3px rgba(0,0,0,.05); }
+  .fl-card h3 { font-size:.92rem; margin:0 0 8px; display:flex; align-items:center; gap:8px; }
+  .fl-card p { font-size:.84rem; color:var(--muted); line-height:1.55; margin:0; }
+  .fl-card .fl-badge { font-family:'Space Mono',monospace; font-size:.58rem; letter-spacing:.05em;
+                       text-transform:uppercase; padding:3px 8px; border-radius:6px; font-weight:700; }
+  .fl-card.old { background:#fbfbfa; }
+  .fl-card.old .fl-badge { background:#efeeea; color:var(--muted); }
+  .fl-card.box { border-color:rgba(141,198,63,.5); background:rgba(141,198,63,.04); }
+  .fl-card.box .fl-badge { background:#eef5e2; color:var(--dalux-dark); }
+
+  /* Mapper-du-trenger-rad */
+  .fl-need { display:flex; gap:14px; flex-wrap:wrap; }
+  .fl-need-item { flex:1 1 240px; background:var(--surface); border:1px solid var(--border); border-radius:14px;
+                  padding:16px 18px; box-shadow:0 1px 3px rgba(0,0,0,.05); }
+  .fl-need-item h3 { font-size:.88rem; margin:0 0 6px; display:flex; align-items:center; gap:8px; }
+  .fl-need-item .fl-ic { font-size:1.1rem; }
+  .fl-need-item p { font-size:.83rem; color:var(--muted); line-height:1.55; margin:0; }
+
+  /* Callout (unngå fasemapper) */
+  .fl-callout { width:100%; background:var(--box-amber-g); border:1px solid #f0e2b0;
+                border-left:3px solid var(--box-amber); border-radius:12px; padding:14px 18px;
+                font-size:.86rem; line-height:1.6; color:var(--text); }
+  .fl-callout b { color:#a87c0a; }
+  .fl-callout .fl-callout-h { font-weight:700; display:flex; align-items:center; gap:8px; margin-bottom:4px; }
+
+  /* ---- Animasjon 1: filnavn-splitt (port av _proto_split) ---- */
+  .fls-toggle { display:flex; gap:6px; justify-content:center; margin-bottom:16px; }
+  .fls-tg { font-family:'DM Sans',sans-serif; font-size:.85rem; font-weight:600; cursor:pointer;
+            background:var(--surface); border:1px solid var(--border); border-radius:9px; padding:8px 16px; color:var(--muted); }
+  .fls-tg.on { border-color:var(--dalux); background:rgba(141,198,63,.08); color:var(--dalux-dark); }
+
+  .fls-stage { width:100%; max-width:760px; margin:0 auto; background:var(--surface); border:1px solid var(--border);
+               border-radius:18px; padding:28px 26px 22px; box-shadow:0 1px 3px rgba(0,0,0,.06); }
+  .fls-segtoggle { display:flex; justify-content:center; margin-bottom:22px; }
+  .fls-pilltg { display:flex; border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+  .fls-pilltg button { font-family:'DM Sans',sans-serif; font-size:.82rem; font-weight:600; cursor:pointer;
+                       border:none; background:var(--surface); color:var(--muted); padding:8px 16px; }
+  .fls-pilltg button.on { background:var(--dalux); color:#fff; }
+
+  .fls-fnrow { display:flex; justify-content:center; }
+  .fls-fnpill { font-family:'Space Mono',monospace; font-size:1.05rem; background:#fbfcf8;
+                border:1px dashed var(--border); border-radius:12px; padding:13px 15px;
+                display:inline-flex; align-items:center; flex-wrap:wrap; justify-content:center; row-gap:6px; }
+  .fls-seg { transition:transform .6s cubic-bezier(.4,0,.2,1); padding:4px 7px; border-radius:7px; font-weight:700; position:relative; z-index:3; }
+  .fls-delim { font-weight:700; color:#ec4899; padding:0 2px; transition:opacity .3s; }
+
+  .fls-cols { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:18px; }
+  .fls-col { flex:1 1 84px; min-width:84px; display:flex; flex-direction:column; align-items:center; gap:6px; }
+  .fls-col.besk { flex:1 1 150px; min-width:150px; }
+  .fls-collabel { font-family:'Space Mono',monospace; font-size:.6rem; letter-spacing:.05em;
+                  text-transform:uppercase; color:var(--muted); opacity:.35; transition:opacity .4s; }
+  .fls-collabel.show { opacity:1; }
+  .fls-cell { width:100%; min-height:46px; border:1.5px dashed var(--border); border-radius:9px;
+              background:#fbfcf8; transition:all .4s; }
+  .fls-cell.filled { border-style:solid; }
+
+  .fls-c0 { color:#6fa032; } .fls-cell.fls-c0.filled { border-color:#8DC63F; background:#eef5e2; } .fls-seg.fls-c0 { background:#eef5e2; }
+  .fls-c1 { color:#6366f1; } .fls-cell.fls-c1.filled { border-color:#6366f1; background:#eceefe; } .fls-seg.fls-c1 { background:#eceefe; }
+  .fls-c2 { color:#e67e22; } .fls-cell.fls-c2.filled { border-color:#e67e22; background:#fcefe2; } .fls-seg.fls-c2 { background:#fcefe2; }
+  .fls-c3 { color:#0d9488; } .fls-cell.fls-c3.filled { border-color:#0d9488; background:#e3f5f2; } .fls-seg.fls-c3 { background:#e3f5f2; }
+  .fls-c4 { color:#8e6abf; } .fls-cell.fls-c4.filled { border-color:#8e6abf; background:#f1ebf8; } .fls-seg.fls-c4 { background:#f1ebf8; }
+  .fls-c5 { color:#ec4899; } .fls-cell.fls-c5.filled { border-color:#ec4899; background:#fde7f3; } .fls-seg.fls-c5 { background:#fde7f3; }
+  .fls-c6 { color:#d4a017; } .fls-cell.fls-c6.filled { border-color:#d4a017; background:#faf3da; } .fls-seg.fls-c6 { background:#faf3da; }
+
+  .fls-unique { text-align:center; font-size:.8rem; color:var(--muted); margin-top:16px; min-height:18px; opacity:0; transition:opacity .5s; line-height:1.55; }
+  .fls-unique.show { opacity:1; }
+  .fls-unique b { color:#6366f1; }
+
+  .fls-tables { width:100%; max-width:760px; margin:16px auto 0; display:flex; gap:14px; flex-wrap:wrap;
+                max-height:0; overflow:hidden; opacity:0; transition:opacity .4s; }
+  .fls-tables.show { max-height:none; opacity:1; }
+  .fls-ref { flex:1 1 168px; background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:14px 16px; box-shadow:0 1px 3px rgba(0,0,0,.05); }
+  .fls-ref h3 { font-size:.85rem; margin:0 0 8px; }
+  .fls-ref table { width:100%; border-collapse:collapse; font-size:.76rem; }
+  .fls-ref td { padding:3px 5px; border-bottom:1px solid #f0eee9; font-family:'Space Mono',monospace; }
+  .fls-ref td.k { width:44px; color:var(--muted); font-weight:700; }
+  .fls-ref tr.hl td { background:#fff6da; }
+  .fls-ref tr.hl td.k { color:#d4a017; }
+  .fls-ref .cap { font-size:.7rem; color:var(--muted); margin-top:6px; }
+
+  /* ---- Animasjon 2: Dalux fil-liste (port av _proto_dalux) ---- */
+  .fll-panel { width:100%; max-width:780px; margin:0 auto; background:var(--surface); border:1px solid var(--border);
+               border-radius:16px; box-shadow:0 1px 3px rgba(0,0,0,.06); overflow:hidden; }
+  .fll-filterbar { padding:16px 18px; border-bottom:1px solid var(--border); background:#fcfdfb; }
+  .fll-frow { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:8px; }
+  .fll-frow:last-child { margin-bottom:0; }
+  .fll-flabel { font-family:'Space Mono',monospace; font-size:.66rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); width:62px; }
+  .fll-chip { font-family:'DM Sans',sans-serif; font-size:.8rem; font-weight:600; cursor:pointer; background:var(--surface);
+              border:1px solid var(--border); border-radius:20px; padding:5px 13px; color:var(--muted); transition:all .2s; }
+  .fll-chip:hover { border-color:var(--dalux); }
+  .fll-chip.on { background:var(--dalux); border-color:var(--dalux); color:#fff; }
+  .fll-count { padding:10px 18px; font-size:.8rem; color:var(--muted); }
+  .fll-count b { color:var(--text); }
+  .fll-panel table { width:100%; border-collapse:collapse; }
+  .fll-panel thead th { font-family:'Space Mono',monospace; font-size:.62rem; letter-spacing:.06em; text-transform:uppercase;
+                        color:var(--muted); text-align:left; padding:8px 14px; border-bottom:1px solid var(--border); background:#fcfdfb; }
+  .fll-panel tbody td { font-size:.84rem; padding:10px 14px; border-bottom:1px solid #f2f0ec; }
+  .fll-panel tbody td.nr { font-family:'Space Mono',monospace; font-size:.78rem; color:var(--dalux-dark); font-weight:700; }
+  .fll-panel tbody tr { transition:background .15s; }
+  .fll-panel tbody tr:hover { background:#fafdf5; }
+  .fll-tag { font-size:.72rem; font-weight:700; padding:2px 8px; border-radius:6px; }
+  .fll-tag.ark { background:#eef5e2; color:#6fa032; }
+  .fll-tag.rib { background:#eceefe; color:#6366f1; }
+  .fll-tag.rie { background:#fcefe2; color:#e67e22; }
+  .fll-tag.riv { background:#e3f5f2; color:#0d9488; }
+  .fll-empty { padding:24px; text-align:center; color:var(--muted); font-size:.85rem; }
+  .fll-foot { margin:16px auto 0; font-size:.82rem; color:var(--muted); text-align:center; max-width:600px; line-height:1.55; }
+  .fll-foot b { color:var(--dalux-dark); }
+
+  @media (max-width:740px){
+    .fl-cards, .fl-need { flex-direction:column; }
+  }
+
   /* Box tracks */
   .box-selector { display:none; }
   .box-selector.active { display:flex; align-items:center; justify-content:center; min-height:calc(100vh - 80px); }
@@ -2128,11 +2261,10 @@
       <div class="box-track-name">Samhandling i Box</div>
       <div class="box-track-desc">Enkel deling og kommunikasjon rundt dokumenter i prosjektet</div>
     </button>
-    <button class="box-track-card coming-soon" onclick="openBoxTrack('files')" aria-label="Mappestruktur og filhåndtering, kommer snart">
-      <span class="coming-soon-badge">Kommer snart</span>
+    <button class="box-track-card" onclick="openBoxTrack('files')" aria-label="Mappestruktur og filhåndtering">
       <div class="box-track-icon">📁</div>
       <div class="box-track-name">Mappestruktur og filhåndtering</div>
-      <div class="box-track-desc">Organisering, navnekonvensjoner og metadata for strukturert dokumenthåndtering</div>
+      <div class="box-track-desc">Hold mappene flate, og la metadata styre filtrering og navngiving</div>
     </button>
     <button class="box-track-card" onclick="openBoxTrack('iso')">
       <div class="box-track-icon">📐</div>
@@ -2465,19 +2597,171 @@
 <!-- Box Track: Mappestruktur og filhåndtering -->
 <div class="box-track" id="boxTrackFiles">
 <button class="back-btn" onclick="backToBoxSelector()">← Box</button>
+
+<div class="page-nav" id="filesNav">
+  <button class="page-btn active" onclick="showFilesPage(1)" id="fpb1"><span class="pnum">1</span> Mappestruktur og metadata</button>
+  <button class="page-btn" onclick="showFilesPage(2)" id="fpb2"><span class="pnum">2</span> Filer og versjonshåndtering</button>
+</div>
+
 <button class="fs-btn" onclick="toggleFS()" id="fsBtnFiles" style="opacity:0;pointer-events:none">⛶ Fullskjerm</button>
-<div class="page visible files-placeholder">
+
+<!-- FILES PAGE 1: Mappestruktur og metadata -->
+<div class="page visible" id="filesPage1">
+  <header>
+    <h1>Mappestruktur og metadata</h1>
+    <p>Få mer ut av Box: hold mappene flate, og la metadata gjøre jobben med å finne filer.</p>
+  </header>
+
+  <div class="fl-wrap">
+
+    <!-- Mindset: flat struktur + metadata -->
+    <section class="fl-section">
+      <p class="fl-lead">Mange bygger en tung mappestruktur for å organisere filer. I Box holder du i stedet strukturen <b>så flat som mulig</b> og lar metadata styre filtrering, sortering og navigering.</p>
+      <div class="fl-cards">
+        <div class="fl-card old">
+          <h3><span class="fl-badge">Før</span> Tung mappestruktur</h3>
+          <p>Mappe i mappe i mappe. Du må vite nøyaktig hvor en fil ligger for å finne den, og samme fil havner gjerne flere steder.</p>
+        </div>
+        <div class="fl-card box">
+          <h3><span class="fl-badge">I Box</span> Flat struktur + metadata</h3>
+          <p>Få mapper. Hvert felt i filnavnet blir metadata du filtrerer og sorterer på. Du finner filer ved å søke, ikke ved å lete.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mapper du faktisk trenger -->
+    <section class="fl-section">
+      <h2 class="fl-h2">Mapper du faktisk trenger</h2>
+      <p class="fl-lead">To ting avgjør om en mappe hører hjemme i prosjektet:</p>
+      <div class="fl-need">
+        <div class="fl-need-item">
+          <h3><span class="fl-ic">🔑</span> Rettigheter</h3>
+          <p>Rettigheter styres gjennom brukergruppene, de samme i alle Dalux-moduler. Du gir hver gruppe tilgang til mappene: hvem som får lese, og hvem som får laste opp og redigere. Ofte går fagene igjen på både mappe- og gruppenivå, men ikke alltid.</p>
+        </div>
+        <div class="fl-need-item">
+          <h3><span class="fl-ic">🏷️</span> Maler for navngiving</h3>
+          <p>Hver mappe kan ha sin egen navnemal. Da fyller Box ut metadata automatisk når du laster opp, riktig for akkurat det faget. Hold deg til én regel per mappe.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Unngå fasemapper -->
+    <section class="fl-section">
+      <div class="fl-callout">
+        <div class="fl-callout-h"><span>⚠️</span> Unngå fasemapper</div>
+        Lager du en mappe per fase, dupliserer du filer, og det blir uklart hva som er nyest. Bruk <b>versjonssett</b> i stedet. Mer om det på Side 2: Filer og versjonshåndtering.
+      </div>
+    </section>
+
+    <!-- Navngiving + Animasjon 1: filnavn-splitt -->
+    <section class="fl-section">
+      <h2 class="fl-h2">Navngiving trenger ikke være komplisert</h2>
+      <p class="fl-lead">Navnemalen deler filnavnet i metadata ved opplasting. Hver bindestrek lager et nytt felt. Velg så enkelt eller detaljert du vil.</p>
+
+      <div class="fls-toggle">
+        <button class="fls-tg on" id="flsTgEnkel" onclick="flsSetExample('enkel')">Enkel</button>
+        <button class="fls-tg" id="flsTgDet" onclick="flsSetExample('detaljert')">Detaljert</button>
+      </div>
+
+      <div class="fls-stage">
+        <div class="fls-segtoggle">
+          <div class="fls-pilltg">
+            <button id="flsStName" onclick="flsSetSplit(false)">Tegningsnavn</button>
+            <button id="flsStSplit" class="on" onclick="flsSetSplit(true)">Inndelt</button>
+          </div>
+        </div>
+        <div class="fls-fnrow"><div class="fls-fnpill" id="flsPill"></div></div>
+        <div class="fls-cols" id="flsCols"></div>
+        <div class="fls-unique" id="flsUnique"></div>
+      </div>
+
+      <div class="fls-tables" id="flsTables">
+        <div class="fls-ref"><h3>Fag (bokstav)</h3><table><tbody id="flsTFag">
+          <tr data-k="A"><td class="k">A</td><td>Arkitekt</td></tr>
+          <tr data-k="B"><td class="k">B</td><td>RIB</td></tr>
+          <tr data-k="C"><td class="k">C</td><td>VVS</td></tr>
+          <tr data-k="D"><td class="k">D</td><td>Elektro</td></tr>
+          <tr data-k="G"><td class="k">G</td><td>Utendørs</td></tr>
+          <tr data-k="H"><td class="k">H</td><td>RIBrann</td></tr>
+        </tbody></table><div class="cap">+ E, I, J, K ...</div></div>
+
+        <div class="fls-ref"><h3>Etasje</h3><table><tbody id="flsTEtasje">
+          <tr data-k="U00"><td class="k">U00</td><td>Underetasje</td></tr>
+          <tr data-k="01"><td class="k">01</td><td>Plan 1. etasje</td></tr>
+          <tr data-k="02"><td class="k">02</td><td>Plan 2. etasje</td></tr>
+          <tr data-k="T01"><td class="k">T01</td><td>Takplan 1</td></tr>
+          <tr data-k="T02"><td class="k">T02</td><td>Takplan 2</td></tr>
+        </tbody></table></div>
+
+        <div class="fls-ref"><h3>Type tegning</h3><table><tbody id="flsTType">
+          <tr data-k="10"><td class="k">10</td><td>Utendørs</td></tr>
+          <tr data-k="20"><td class="k">20</td><td>Plantegning</td></tr>
+          <tr data-k="30"><td class="k">30</td><td>Komplettering</td></tr>
+          <tr data-k="40"><td class="k">40</td><td>Snitt, fasade</td></tr>
+          <tr data-k="50"><td class="k">50</td><td>Detaljer</td></tr>
+          <tr data-k="70"><td class="k">70</td><td>Prinsipp</td></tr>
+        </tbody></table></div>
+
+        <div class="fls-ref"><h3>Systemkode</h3><table><tbody id="flsTSys">
+          <tr data-k="200"><td class="k">200</td><td>ARK</td></tr>
+          <tr data-k="220"><td class="k">220</td><td>RIB</td></tr>
+          <tr data-k="300"><td class="k">300</td><td>RIV rør</td></tr>
+          <tr data-k="360"><td class="k">360</td><td>RIV vent</td></tr>
+          <tr data-k="400"><td class="k">400</td><td>RIE</td></tr>
+        </tbody></table></div>
+      </div>
+    </section>
+
+    <!-- Nummer-feltet -->
+    <section class="fl-section">
+      <h2 class="fl-h2">«Nummer» kobler filene automatisk</h2>
+      <div class="fl-cards">
+        <div class="fl-card">
+          <h3><span class="fl-ic">🔗</span> Standard Dalux-felt</h3>
+          <p>«Nummer» er et standard-felt i Dalux, ikke noe du lager selv. Det er tekststrengen Dalux matcher på for automatiske hyperlenker. Klikker du et nummer i en tegning, hopper du rett til riktig fil.</p>
+        </div>
+        <div class="fl-card">
+          <h3><span class="fl-ic">⚠️</span> Må være unikt</h3>
+          <p>Er nummeret ikke unikt, kobler Dalux til første treff, og du havner på feil fil. Lenkene virker også fra Lokasjoner og fra felt-appen, og bare til filer du har tilgang til.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Animasjon 2: Dalux fil-liste (gevinsten) -->
+    <section class="fl-section">
+      <h2 class="fl-h2">Slik bruker du det i Box</h2>
+      <p class="fl-lead">Fordi navnemalen fyller metadata automatisk, filtrerer og søker du, i stedet for å lete i mapper.</p>
+
+      <div class="fll-panel">
+        <div class="fll-filterbar">
+          <div class="fll-frow"><span class="fll-flabel">Fag</span><div id="fllFagChips"></div></div>
+          <div class="fll-frow"><span class="fll-flabel">Etasje</span><div id="fllEtChips"></div></div>
+        </div>
+        <div class="fll-count" id="fllCount"></div>
+        <table>
+          <thead><tr><th>Nummer</th><th>Fag</th><th>Type</th><th>Etasje</th><th>Beskrivelse</th></tr></thead>
+          <tbody id="fllRows"></tbody>
+        </table>
+      </div>
+      <p class="fll-foot">Samme metadata driver <b>hyperlenkene</b>: klikk et nummer i en tegning, og du hopper rett til riktig fil.</p>
+    </section>
+
+  </div>
+</div>
+
+<!-- FILES PAGE 2: Filer og versjonshåndtering (kommer) -->
+<div class="page files-placeholder" id="filesPage2">
   <div class="files-soon-card">
-    <div class="files-soon-icon">📁</div>
-    <h1>Mappestruktur og filhåndtering</h1>
+    <div class="files-soon-icon">🗂️</div>
+    <h1>Filer og versjonshåndtering</h1>
     <p class="files-soon-lead">Denne delen er ikke ferdig ennå.</p>
-    <p class="files-soon-desc">Når den er klar vil den dekke organisering av mapper, navnekonvensjoner, metadata-felter og hvordan dette spiller sammen med statusområdene i Box.</p>
+    <p class="files-soon-desc">Når den er klar vil den dekke versjonssett som erstatter fasemapper, sammenligning mot tidligere versjoner, Microsoft 365, og publisering fra Filer til Utgitte filer.</p>
     <div class="files-soon-list">
-      <div class="files-soon-item"><span class="files-soon-bullet">•</span>Eksempel på mappestruktur per fag</div>
-      <div class="files-soon-item"><span class="files-soon-bullet">•</span>Navnekonvensjon og automatiske hyperlinker</div>
-      <div class="files-soon-item"><span class="files-soon-bullet">•</span>Metadata-felter og filtrering</div>
+      <div class="files-soon-item"><span class="files-soon-bullet">•</span>Versjonssett i stedet for fasemapper</div>
+      <div class="files-soon-item"><span class="files-soon-bullet">•</span>Sammenligning mot tidligere versjoner</div>
+      <div class="files-soon-item"><span class="files-soon-bullet">•</span>Publisering til Utgitte filer</div>
     </div>
-    <button class="ctrl-btn" onclick="backToBoxSelector()" style="margin-top:8px">← Tilbake til Box</button>
+    <button class="ctrl-btn" onclick="showFilesPage(1)" style="margin-top:8px">← Tilbake til Side 1</button>
   </div>
 </div>
 </div>
@@ -3321,6 +3605,13 @@ function openBoxTrack(track){
   document.getElementById(trackMap[track]).classList.add('active');
   activeBoxTrack=track;
   if(track==='iso'){showBoxPage(1);}
+  if(track==='files'){
+    filesActivePage=1;
+    document.getElementById('filesPage1').classList.add('visible');
+    document.getElementById('filesPage2').classList.remove('visible');
+    document.querySelectorAll('#filesNav .page-btn').forEach((b,i)=>b.classList.toggle('active',i===0));
+    flInitFiles();
+  }
 }
 function backToBoxSelector(){
   document.querySelectorAll('.box-track').forEach(t=>t.classList.remove('active'));
@@ -4112,6 +4403,146 @@ function showBoxPage(n){
   if(n===3)initDocFlow();
 }
 
+// ==========================================================
+// MAPPESTRUKTUR-TRACK (Side 1): filnavn-splitt + fil-liste
+// ==========================================================
+let filesActivePage=1;
+function showFilesPage(n){
+  if(n===filesActivePage)return;
+  [1,2].forEach(i=>document.getElementById('filesPage'+i).classList.toggle('visible',i===n));
+  document.querySelectorAll('#filesNav .page-btn').forEach((b,i)=>b.classList.toggle('active',i+1===n));
+  filesActivePage=n;
+}
+
+// --- Animasjon 1: filnavn-splitt (port av _proto_split) ---
+const FLS_EX={
+  enkel:{ note:'<b>Nummer</b> er standard-feltet Dalux bruker til automatiske koblinger. Hold det unikt, så lenker tegninger og dokumenter seg selv.', parts:[
+    {label:'Fag', val:'RIB'},
+    {label:'Nummer', val:'1042'},
+    {label:'Beskrivelse', val:'Fundamentplan', besk:true},
+  ]},
+  detaljert:{ note:'Flere bindestreker = flere metadatafelt å filtrere og sortere på. For hyperlenking holder det med ett unikt <b>Nummer</b>, som i Enkel.', parts:[
+    {label:'Bygg', val:'128'},
+    {label:'Etasje', val:'02', hl:['flsTEtasje','02']},
+    {label:'Fag', val:'B', hl:['flsTFag','B']},
+    {label:'Type', val:'20', hl:['flsTType','20']},
+    {label:'Systemkode', val:'220', hl:['flsTSys','220']},
+    {label:'Løpenr', val:'001'},
+    {label:'Beskrivelse', val:'Plantegning 2. etasje', besk:true},
+  ]},
+};
+let flsCurrent='enkel', flsSplit=true;
+function flsClearHl(){ document.querySelectorAll('#flsTables tr').forEach(r=>r.classList.remove('hl')); }
+function flsBuild(){
+  const ex=FLS_EX[flsCurrent];
+  const pill=document.getElementById('flsPill'); pill.innerHTML='';
+  const cols=document.getElementById('flsCols'); cols.innerHTML='';
+  ex.parts.forEach((p,i)=>{
+    if(i>0){ const d=document.createElement('span'); d.className='fls-delim'; d.textContent='-'; pill.appendChild(d); }
+    const s=document.createElement('span'); s.className='fls-seg fls-c'+(i%7); s.id='flsSeg'+i; s.textContent=p.val; pill.appendChild(s);
+    const col=document.createElement('div'); col.className='fls-col'+(p.besk?' besk':'');
+    col.innerHTML='<div class="fls-collabel" id="flsLbl'+i+'">'+p.label+'</div><div class="fls-cell fls-c'+(i%7)+'" id="flsCell'+i+'"></div>';
+    cols.appendChild(col);
+  });
+}
+function flsApplySplit(){
+  const ex=FLS_EX[flsCurrent];
+  document.getElementById('flsStName').classList.toggle('on', !flsSplit);
+  document.getElementById('flsStSplit').classList.toggle('on', flsSplit);
+  document.querySelectorAll('#flsPill .fls-delim').forEach(d=>d.style.opacity = flsSplit ? '.2' : '1');
+  const uq=document.getElementById('flsUnique'); uq.innerHTML=ex.note; uq.classList.toggle('show', flsSplit);
+  const hasTables = ex.parts.some(p=>p.hl);
+  document.getElementById('flsTables').classList.toggle('show', flsSplit && hasTables);
+  flsClearHl();
+  ex.parts.forEach((p,i)=>{
+    const seg=document.getElementById('flsSeg'+i), cell=document.getElementById('flsCell'+i), lbl=document.getElementById('flsLbl'+i);
+    if(flsSplit){
+      const sr=seg.getBoundingClientRect(), cr=cell.getBoundingClientRect();
+      const dx=(cr.left+cr.width/2)-(sr.left+sr.width/2);
+      const dy=(cr.top+cr.height/2)-(sr.top+sr.height/2);
+      seg.style.transitionDelay=(i*0.07)+'s';
+      seg.style.transform='translate('+dx+'px,'+dy+'px)';
+      setTimeout(()=>{ cell.classList.add('filled'); lbl.classList.add('show');
+        if(p.hl){ const r=document.querySelector('#'+p.hl[0]+' tr[data-k="'+p.hl[1]+'"]'); if(r) r.classList.add('hl'); }
+      }, 520 + i*70);
+    } else {
+      seg.style.transitionDelay='0s';
+      seg.style.transform='none';
+      cell.classList.remove('filled'); lbl.classList.remove('show');
+    }
+  });
+}
+function flsSetSplit(on){ flsSplit=on; flsApplySplit(); }
+function flsSetExample(key){
+  flsCurrent=key; flsSplit=true;
+  document.getElementById('flsTgEnkel').classList.toggle('on', key==='enkel');
+  document.getElementById('flsTgDet').classList.toggle('on', key==='detaljert');
+  flsBuild();
+  flsSetSplit(false);
+  setTimeout(()=>flsSetSplit(true), 450);
+}
+
+// --- Animasjon 2: Dalux fil-liste (port av _proto_dalux) ---
+const FLL_FILES=[
+  {nr:'128-01-A-20-200-001',  fag:'ARK', type:'Plantegning', et:'01',  besk:'Plan 1. etasje'},
+  {nr:'128-02-A-20-200-002',  fag:'ARK', type:'Plantegning', et:'02',  besk:'Plan 2. etasje'},
+  {nr:'128-T01-A-20-200-003', fag:'ARK', type:'Plantegning', et:'T01', besk:'Takplan'},
+  {nr:'128-01-A-40-200-010',  fag:'ARK', type:'Fasade',      et:'01',  besk:'Fasade sør'},
+  {nr:'128-02-A-40-200-011',  fag:'ARK', type:'Snitt',       et:'02',  besk:'Snitt B-B'},
+  {nr:'128-01-A-50-200-020',  fag:'ARK', type:'Detalj',      et:'01',  besk:'Detalj inngangsparti'},
+  {nr:'128-01-A-60-200-030',  fag:'ARK', type:'Skjema',      et:'01',  besk:'Dørskjema'},
+  {nr:'128-U00-B-20-220-001', fag:'RIB', type:'Plantegning', et:'U00', besk:'Fundament underetasje'},
+  {nr:'128-01-B-20-220-002',  fag:'RIB', type:'Plantegning', et:'01',  besk:'Dekkeplan 1. etasje'},
+  {nr:'128-02-B-20-220-003',  fag:'RIB', type:'Plantegning', et:'02',  besk:'Fundamentplan 2. etasje'},
+  {nr:'128-02-B-40-220-010',  fag:'RIB', type:'Snitt',       et:'02',  besk:'Snitt A-A'},
+  {nr:'128-01-B-50-220-020',  fag:'RIB', type:'Detalj',      et:'01',  besk:'Armeringsdetalj'},
+  {nr:'128-U00-C-20-300-001', fag:'RIV', type:'Plantegning', et:'U00', besk:'Ventilasjon underetasje'},
+  {nr:'128-02-C-20-360-002',  fag:'RIV', type:'Plantegning', et:'02',  besk:'Ventilasjon 2. etasje'},
+  {nr:'128-01-C-70-300-010',  fag:'RIV', type:'Prinsipp',    et:'01',  besk:'Prinsipp røropplegg'},
+  {nr:'128-02-C-60-360-020',  fag:'RIV', type:'Skjema',      et:'02',  besk:'Ventilasjonsskjema'},
+  {nr:'128-01-D-20-400-001',  fag:'RIE', type:'Plantegning', et:'01',  besk:'Kursopplegg 1. etasje'},
+  {nr:'128-02-D-20-400-002',  fag:'RIE', type:'Plantegning', et:'02',  besk:'Belysning 2. etasje'},
+  {nr:'128-01-D-60-400-010',  fag:'RIE', type:'Skjema',      et:'01',  besk:'Strømskjema'},
+  {nr:'128-02-D-70-400-020',  fag:'RIE', type:'Prinsipp',    et:'02',  besk:'Prinsipp nødlys'},
+];
+const FLL_FAG=['Alle','ARK','RIB','RIE','RIV'];
+const FLL_ET =['Alle','U00','01','02','T01'];
+let fllFag='Alle', fllEt='Alle';
+function fllChipHtml(val,active,group){
+  return '<button class="fll-chip'+(val===active?' on':'')+'" onclick="fllSetFilter(\''+group+'\',\''+val+'\')">'+val+'</button>';
+}
+function fllRenderChips(){
+  document.getElementById('fllFagChips').innerHTML=FLL_FAG.map(v=>fllChipHtml(v,fllFag,'fag')).join('');
+  document.getElementById('fllEtChips').innerHTML =FLL_ET.map(v=>fllChipHtml(v,fllEt,'et')).join('');
+}
+function fllSetFilter(group,val){ if(group==='fag') fllFag=val; else fllEt=val; fllRender(); }
+function fllRender(){
+  fllRenderChips();
+  const shown=FLL_FILES.filter(f=>(fllFag==='Alle'||f.fag===fllFag)&&(fllEt==='Alle'||f.et===fllEt));
+  const tb=document.getElementById('fllRows');
+  if(shown.length){
+    tb.innerHTML=shown.map(f=>
+      '<tr><td class="nr">'+f.nr+'</td>'+
+      '<td><span class="fll-tag '+f.fag.toLowerCase()+'">'+f.fag+'</span></td>'+
+      '<td>'+f.type+'</td><td>'+f.et+'</td><td>'+f.besk+'</td></tr>'
+    ).join('');
+  } else {
+    tb.innerHTML='<tr><td colspan="5" class="fll-empty">Ingen treff</td></tr>';
+  }
+  document.getElementById('fllCount').innerHTML='Viser <b>'+shown.length+'</b> av '+FLL_FILES.length+' tegninger';
+}
+
+// Init + replay når tracket åpnes (rects krever synlig layout)
+function flInitFiles(){
+  flsCurrent='enkel';
+  document.getElementById('flsTgEnkel').classList.add('on');
+  document.getElementById('flsTgDet').classList.remove('on');
+  flsBuild();
+  flsSetSplit(false);
+  setTimeout(()=>flsSetSplit(true), 500);
+  fllRender();
+}
+
 let brukergrupperActivePage=1;
 function showBrukergrupperPage(n){
   if(n===brukergrupperActivePage)return;
@@ -4684,8 +5115,10 @@ function getNavContext(){
   if(activeModule==='box'){
     const commTrack=document.getElementById('boxTrackComm');
     const isoTrack=document.getElementById('boxTrackIso');
+    const filesTrack=document.getElementById('boxTrackFiles');
     if(commTrack&&commTrack.classList.contains('active')) return {current:commActivePage, max:2, fn:showCommPage};
     if(isoTrack&&isoTrack.classList.contains('active')) return {current:boxActivePage, max:3, fn:showBoxPage};
+    if(filesTrack&&filesTrack.classList.contains('active')) return {current:filesActivePage, max:2, fn:showFilesPage};
   }
   if(activeCommonTrack==='brukergrupper'){
     return {current:brukergrupperActivePage, max:3, fn:showBrukergrupperPage};
@@ -4752,6 +5185,8 @@ const _origShowBoxPage=showBoxPage;
 showBoxPage=function(n){_origShowBoxPage(n);updateArrows();};
 const _origShowCommPage=showCommPage;
 showCommPage=function(n){_origShowCommPage(n);updateArrows();};
+const _origShowFilesPage=showFilesPage;
+showFilesPage=function(n){_origShowFilesPage(n);updateArrows();};
 const _origOpenModule=openModule;
 openModule=function(m){_origOpenModule(m);setTimeout(updateArrows,50);};
 const _prevOpenBoxTrack=openBoxTrack;
@@ -4789,6 +5224,10 @@ window.addEventListener('resize', ()=>{
     }
     if(document.getElementById('trackBrukergrupper').classList.contains('active')){
       applyBgLayout();
+    }
+    if(document.getElementById('boxTrackFiles').classList.contains('active') && filesActivePage===1 && flsSplit){
+      flsSetSplit(false);
+      requestAnimationFrame(()=>requestAnimationFrame(()=>flsSetSplit(true)));
     }
   }, 120);
 });
